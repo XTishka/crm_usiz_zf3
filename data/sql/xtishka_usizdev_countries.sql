@@ -1,0 +1,6 @@
+INSERT INTO xtishka_usizdev.countries (country_name, description, country_code, locale, updated, created) VALUES ('Украина', '', 'ua', 'uk_UA', '2017-10-30 21:35:44', '2017-10-30 21:35:44');
+INSERT INTO xtishka_usizdev.countries (country_name, description, country_code, locale, updated, created) VALUES ('Россия', '', 'ru', 'ru_RU', '2017-10-30 21:47:05', '2017-10-30 21:47:05');
+INSERT INTO xtishka_usizdev.countries (country_name, description, country_code, locale, updated, created) VALUES ('Польша', '', 'pl', 'pl_PL', '2017-10-30 21:52:14', '2017-10-30 21:52:14');
+INSERT INTO xtishka_usizdev.countries (country_name, description, country_code, locale, updated, created) VALUES ('Молдавия', '', 'md', 'md_MD', '2017-10-31 11:49:39', '2017-10-31 11:49:08');
+INSERT INTO xtishka_usizdev.countries (country_name, description, country_code, locale, updated, created) VALUES ('Венгрия', '', 'hu', 'hu_HU', '2017-10-31 12:07:21', '2017-10-31 12:07:21');
+INSERT INTO xtishka_usizdev.countries (country_name, description, country_code, locale, updated, created) VALUES ('Румыния', '', 'ro', 'ro_RO', '2017-10-31 12:08:18', '2017-10-31 12:08:14');

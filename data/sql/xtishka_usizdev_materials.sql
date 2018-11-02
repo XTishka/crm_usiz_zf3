@@ -1,0 +1,3 @@
+INSERT INTO xtishka_usizdev.materials (type_id, material_name, description, fraction, updated, created) VALUES (1, 'Известковый камень (40-80)', '', '{"max": 80, "min": 40}', '2017-10-17 12:44:27', '2017-10-17 12:44:27');
+INSERT INTO xtishka_usizdev.materials (type_id, material_name, description, fraction, updated, created) VALUES (3, 'Уголь (семечка)', '', '{"max": 0, "min": 0}', '2017-10-12 13:50:00', '2017-10-12 13:50:00');
+INSERT INTO xtishka_usizdev.materials (type_id, material_name, description, fraction, updated, created) VALUES (1, 'Известковый камень (25-30)', '', '{"max": 30, "min": 25}', '2017-10-16 17:14:43', '2017-10-16 17:14:43');

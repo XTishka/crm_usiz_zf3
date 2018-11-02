@@ -1,0 +1,119 @@
+<div class="layout-toolbar">
+    <div class="row middle-md">
+        <div class="col-md">
+            <h1>
+                <i class="fa fa-plus-circle fa-fw"></i>
+                <?= $title = $this->translate('Additional contractors') ?>
+            </h1>
+            <?php echo $this->headTitle($title) ?>
+        </div>
+        <div class="col-md end-md">
+            <a href="<?= $this->url('contractorAdditional/edit') ?>" class="btn btn-primary">
+                <i class="fa fa-plus-circle fa-fw"></i>
+                <?= $this->translate('Add new contractor') ?>
+            </a>
+        </div>
+    </div>
+</div>
+
+<?= $this->partial('partial/messenger', ['messenger' => $this->messenger]); ?>
+
+<?php /** @var \Zend\Paginator\Paginator $paginator */ ?>
+<?php if ($paginator->count()): ?>
+
+    <div class="panel">
+        <div class="panel-header">
+            <div class="row middle-md">
+                <div class="col-md">
+                    <div class="panel-title">
+                        <i class="fa fa-navicon fa-fw"></i>
+                        <?= $this->translate('Additional contractor list') ?>
+                    </div>
+                </div>
+                <div class="col-md end-md">
+                    <?= $this->paginationControl($this->paginator, 'Sliding', 'partial/paginator', ['route' => 'contractorAdditional']) ?>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body">
+            <table class="table-data">
+                <thead>
+                <tr>
+                    <th class="text-left"><?= $this->translate('Contractor name') ?></th>
+                    <th class="text-center" style="width:7rem"><?= $this->translate('Register code') ?></th>
+                    <th class="text-right" style="width:130px"><?= $this->translate('Updated') ?></th>
+                    <th class="text-right" style="width:130px"><?= $this->translate('Created') ?></th>
+                    <th class="text-right" style="width:48px"><?= $this->translate('Tools') ?></th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php /** @var \Contractor\Entity\ContractorAbstract $contractor */ ?>
+                <?php foreach ($this->paginator as $contractor): ?>
+                    <tr>
+                        <td class="text-left">
+                            <a href="<?= $this->url('contractorAdditional/edit', ['id' => $contractor->getContractorId()]) ?>"><?= $contractor->getContractorName() ?></a>
+                            <div class="hint"><?= $contractor->getPerson()->toString() ?></div>
+                        </td>
+                        <td class="text-center"><?= $contractor->getRegisterCode() ?></td>
+                        <td class="text-right"><?= $this->dateFormat($contractor->getUpdated(), IntlDateFormatter::LONG) ?>
+                            <div class="hint"><?= $this->dateFormat($contractor->getUpdated(), IntlDateFormatter::NONE, IntlDateFormatter::LONG) ?></div>
+                        </td>
+                        <td class="text-right"><?= $this->dateFormat($contractor->getCreated(), IntlDateFormatter::LONG) ?>
+                            <div class="hint"><?= $this->dateFormat($contractor->getCreated(), IntlDateFormatter::NONE, IntlDateFormatter::LONG) ?></div>
+                        </td>
+                        <td class="text-right">
+                            <div class="dropdown">
+                                <button class="dropdown-toggle btn btn-default"><i class="fa fa-navicon"></i></button>
+                                <ul class="dropdown-list">
+                                    <li>
+                                        <a href="<?= $this->url('contractorAdditional/edit', ['id' => $contractor->getContractorId()]) ?>">
+                                            <i class="fa fa-pencil fa-fw"></i>
+                                            <?= $this->translate('Edit contractor') ?>
+                                        </a>
+                                    </li>
+                                    <li class="dropdown-list-separator"></li>
+                                    <li>
+                                        <a href="<?= $this->url('contractorAdditional/delete', ['id' => $contractor->getContractorId()]) ?>"
+                                           data-modal="confirm">
+                                            <i class="fa fa-trash fa-fw"></i><?= $this->translate('Delete contractor') ?>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                <?php endforeach ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+<?php else: ?>
+    <div class="layout-not-found">
+        <h3><?= $this->translate('No contractors') ?></h3>
+        <p><?= $this->translate('Do you want to add a new additional contractor?') ?></p>
+        <a href="<?= $this->url('contractorAdditional/edit') ?>" class="btn btn-lg btn-success">
+            <i class="fa fa-plus-circle fa-fw"></i>
+            <?= $this->translate('Add new contractor') ?>
+        </a>
+    </div>
+<?php endif ?>
+
+<?php
+$this->headLink()->appendStylesheet($this->basePath('css/dropdown.css'));
+$this->inlineScript()->appendFile($this->basePath('js/dropdown.min.js'));
+$this->headLink()->appendStylesheet($this->basePath('/css/modal.css'));
+$this->inlineScript()->appendFile($this->basePath('/js/modal.js'));
+$this->inlineScript()->captureStart();
+echo /** @lang JavaScript */
+<<<JS
+$('.dropdown').dropdown();
+$.modalConfig({
+    title      : '{$this->translate('Confirmation of deletion')}',
+    message    : '{$this->translate('Are you sure you want to delete this entry?')}',
+    cancelText : '{$this->translate('Cancel')}',
+    confirmText: '{$this->translate('Confirm')}'
+});
+JS;
+$this->inlineScript()->captureEnd();
+?>

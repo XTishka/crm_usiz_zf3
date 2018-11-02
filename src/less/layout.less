@@ -1,0 +1,126 @@
+html, body {
+  box-sizing  : border-box;
+  display     : block;
+  font-family : "Istok Web", sans-serif;
+  font-size   : 14px;
+  font-style  : normal;
+  line-height : 1.32rem;
+  color       : #323232;
+  margin      : 0;
+  padding     : 0;
+  height      : 100%;
+  min-height  : 100%;
+}
+
+.layout-col-wrapper {
+  display        : flex;
+  flex-direction : column;
+  min-height     : 100%;
+}
+
+.layout-row-wrapper {
+  display        : flex;
+  flex-direction : row;
+  flex           : 1 1 auto;
+  min-height     : 100%;
+}
+
+.layout-header {
+  background      : #323b44 url("../img/logo.png") no-repeat 1.32rem center;
+  background-size : 3rem;
+  padding         : 0.5rem 1rem 0.5rem 5rem;
+  color           : #e8e8e8;
+  height          : auto;
+  flex            : 0 0 auto;
+  box-sizing      : border-box;
+}
+
+.layout-site-name {
+  font-size   : 1.32rem;
+  line-height : 1;
+  color       : #929292;
+  font-weight : 700;
+  text-shadow : 0 -1px 0 rgba(0, 0, 0, 0.5);
+}
+
+.layout-middle {
+  flex    : 1 1 auto;
+  display : flex;
+}
+
+.layout-sidebar {
+  background-color : #36404a;
+  min-width        : 240px;
+  max-width        : 320px;
+  color            : #e8e8e8;
+  padding          : 1rem 0;
+}
+
+.layout-content {
+  flex             : 1 1 auto;
+  padding          : 1rem;
+  position         : relative;
+  background-color : #f7f7f7;
+}
+
+.layout-toolbar {
+  background-color : #e8e8e8;
+  margin           : -1rem -1rem 1rem;
+  padding          : 1rem;
+  border-bottom    : 1px solid #bbbbbb;
+  box-shadow       : 1px 0 3px rgba(0, 0, 0, 0.35);
+}
+
+.layout-toolbar h1 {
+  margin         : 0;
+  font-size      : 18px;
+  font-weight    : 500;
+  text-transform : uppercase;
+  color          : #575757;
+}
+
+.layout-not-found {
+  font-family     : Roboto, sans-serif;
+  background      : url("../img/empty.svg") no-repeat center top;
+  background-size : 200px;
+  color           : #929292;
+  padding-top     : 172px;
+  text-align      : center;
+  display         : inline-block;
+  position        : absolute;
+  top             : 50%;
+  left            : 50%;
+  margin-top      : -155px;
+  margin-left     : -125px;
+}
+
+.layout-not-found h3 {
+  font-weight    : 500;
+  font-size      : 20px;
+  text-transform : none;
+  color          : #575757;
+  margin         : 1rem 0;
+}
+
+.layout-not-found p {
+  margin : 1rem 0 2rem;
+}
+
+.datepicker-inline {
+  font-weight   : 400;
+  margin        : 0;
+  border-radius : 3px;
+}
+
+.datepicker-inline .datepicker {
+  width: 100%;
+}
+
+.amount-current {
+
+}
+
+.amount-previous {
+  font-size: small;
+  color: #929292;
+}

@@ -1,0 +1,220 @@
+<div class="layout-toolbar">
+    <h1><i class="fa fa-table fa-fw"></i><?=
+        $title = $this->translate('Purchase wagons report') ?></h1>
+    <?php $this->headTitle($title) ?>
+</div>
+
+<?= $this->partial('partial/messenger', ['messenger' => $this->messenger]); ?>
+
+<div class="panel">
+    <div class="panel-header">
+        <div class="panel-title">
+            <i class="fa fa-navicon fa-fw"></i>
+            <?= $this->translate('Select report params') ?>
+        </div>
+    </div>
+    <div class="panel-body">
+        <?= $this->form()->openTag($this->form) ?>
+
+        <div class="row">
+            <div class="col-md">
+                <div class="form-row">
+                    <?= $this->formLabel($this->form->get('company_id')) ?>
+                    <?= $this->formSelect($this->form->get('company_id')) ?>
+                    <?= $this->formElementErrors($this->form->get('company_id')) ?>
+                </div>
+                <div class="form-row">
+                    <?= $this->formLabel($this->form->get('provider_id')) ?>
+                    <?= $this->formSelect($this->form->get('provider_id')) ?>
+                    <?= $this->formElementErrors($this->form->get('provider_id')) ?>
+                </div>
+                <div class="form-row">
+                    <?= $this->formLabel($this->form->get('carrier_id')) ?>
+                    <?= $this->formSelect($this->form->get('carrier_id')) ?>
+                    <?= $this->formElementErrors($this->form->get('carrier_id')) ?>
+                </div>
+                <div class="form-row">
+                    <?= $this->formLabel($this->form->get('material_id')) ?>
+                    <?= $this->formSelect($this->form->get('material_id')) ?>
+                    <?= $this->formElementErrors($this->form->get('material_id')) ?>
+                </div>
+                <div class="form-row">
+                    <?= $this->formLabel($this->form->get('status')) ?>
+                    <?= $this->formSelect($this->form->get('status')) ?>
+                    <?= $this->formElementErrors($this->form->get('status')) ?>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="row">
+                    <div class="col-md">
+                        <?= $this->formLabel($this->form->get('period_begin')) ?>
+                        <?= $this->formHidden($this->form->get('period_begin')) ?>
+                        <?= $this->formElementErrors($this->form->get('period_begin')) ?>
+                    </div>
+                    <div class="col-md">
+                        <?= $this->formLabel($this->form->get('period_end')) ?>
+                        <?= $this->formHidden($this->form->get('period_end')) ?>
+                        <?= $this->formElementErrors($this->form->get('period_end')) ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-row">
+            <?= $this->formSubmit($this->form->get('submit')) ?>
+            <?= $this->formSubmit($this->form->get('html')) ?>
+        </div>
+        <?= $this->form()->closeTag() ?>
+    </div>
+</div>
+
+<?php if (count($this->wagons)): ?>
+    <div class="panel">
+        <div class="panel-header">
+            <div class="panel-title">
+                <i class="fa fa-navicon fa-fw"></i>
+                <?= $this->translate('Report data') ?>
+            </div>
+        </div>
+        <div class="panel-body">
+            <table class="table-data">
+                <?php
+                $transportPrice = 0;
+                $transportPriceWithoutTax = 0;
+                $contractPrice = 0;
+                $contractPriceWithoutTax = 0;
+                $materialPrice = 0;
+                $materialPriceWithoutTax = 0;
+                $totalPrice = 0;
+                $totalPriceWithoutTax = 0;
+                ?>
+                <thead>
+                <tr>
+                    <th>Дата</th>
+                    <th style="width:120px">Номер вагона</th>
+                    <th style="width:220px">Поставщик</th>
+                    <th style="width:120px">Перевозчик</th>
+                    <th>Номенклатура</th>
+                    <th class="text-right" style="width:100px">Загр/выгр, т.</th>
+                    <th class="text-right">Стоимость перевозки за 1т.</th>
+                    <th class="text-right">Тариф с/без НДС</th>
+                    <th class="text-right">Цена по договору с/без НДС</th>
+                    <th class="text-right">Чистая цена с/без НДС</th>
+                    <th class="text-right">Итого с/без НДС</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($this->wagons as $wagon): ?>
+                    <tr>
+                        <td>
+                            <?= ($wagon['loading_date'])->format('d.m.Y') ?>
+                            <?php if($wagon['unloading_date']): ?>
+                            <div class="hint"><?= ($wagon['unloading_date'])->format('d.m.Y') ?></div>
+                            <?php endif ?>
+                        </td>
+                        <td>
+                            <?= $wagon['wagon_number'] ?>
+                            <div class="hint"><?= $wagon['station'] ?></div>
+                        </td>
+                        <td><?= $wagon['provider'] ?></td>
+                        <td>
+                            <?= $wagon['carrier'] ?>
+                            <div class="hint"><?= $this->translate(ucfirst($wagon['status'])) ?></div>
+                        </td>
+                        <td><?= $wagon['material'] ?></td>
+                        <td class="text-right">
+                            <?= number_format($wagon['loading_weight'], 2, ',', ' ') ?>
+                            <div class="hint"><?= number_format($wagon['unloading_weight'], 2, ',', ' ') ?></div>
+                        </td>
+                        <td class="text-right"><?= number_format($wagon['price_per_ton'], 2, ',', ' ') ?></td>
+                        <td class="text-right"><?= number_format($wagon['transport_price'], 2, ',', ' ') ?>
+                            <div class="hint"><?= number_format($wagon['transport_price_without_tax'], 2, ',', ' ') ?></div>
+                            <?php $transportPrice += $wagon['transport_price'] ?>
+                            <?php $transportPriceWithoutTax += $wagon['transport_price_without_tax'] ?>
+                        </td>
+                        <td class="text-right"><?= number_format($wagon['contract_price'], 2, ',', ' ') ?>
+                            <div class="hint"><?= number_format($wagon['contract_price_without_tax'], 2, ',', ' ') ?></div>
+                            <?php $contractPrice += $wagon['contract_price'] ?>
+                            <?php $contractPriceWithoutTax += $wagon['contract_price_without_tax'] ?>
+                        </td>
+                        <td class="text-right"><?= number_format($wagon['material_price'], 2, ',', ' ') ?>
+                            <div class="hint"><?= number_format($wagon['material_price_without_tax']) ?></div>
+                            <?php $materialPrice += $wagon['material_price'] ?>
+                            <?php $materialPriceWithoutTax += $wagon['material_price_without_tax'] ?>
+                        </td>
+                        <td class="text-right"><?= number_format($wagon['total_price'], 2, ',', ' ') ?>
+                            <div class="hint"><?= number_format($wagon['total_price_without_tax'], 2, ',', ' ') ?></div>
+                            <?php $totalPrice += $wagon['total_price'] ?>
+                            <?php $totalPriceWithoutTax += $wagon['total_price_without_tax'] ?>
+                        </td>
+                    </tr>
+                <?php endforeach ?>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <th colspan="7" class="text-right">
+                        <?= $this->translate('Total values') ?>:
+                    </th>
+                    <th class="text-right">
+                        <?= number_format($transportPrice, 2, ',', ' ') ?>
+                        <div class="hint"><?= number_format($transportPriceWithoutTax, 2, ',', ' ') ?></div>
+                    </th>
+                    <th class="text-right">
+                        <?= number_format($contractPrice, 2, ',', ' ') ?>
+                        <div class="hint"><?= number_format($contractPriceWithoutTax, 2, ',', ' ') ?></div>
+                    </th>
+                    <th class="text-right">
+                        <?= number_format($materialPrice, 2, ',', ' ') ?>
+                        <div class="hint"><?= number_format($materialPriceWithoutTax, 2, ',', ' ') ?></div>
+                    </th>
+                    <th class="text-right">
+                        <?= number_format($totalPrice, 2, ',', ' ') ?>
+                        <div class="hint"><?= number_format($totalPriceWithoutTax, 2, ',', ' ') ?></div>
+                    </th>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+<?php endif ?>
+
+
+<?php
+$this->headLink()->appendStylesheet('/css/datepicker.min.css');
+$this->inlineScript()->appendFile($this->basePath('/js/vendor/datepicker.min.js'));
+
+$this->inlineScript()->captureStart();
+echo /** @lang JavaScript */
+<<<JS
+$(document).ready(function() {
+  var periodBegin = $('input[name=period_begin]'),
+        periodEnd   = $('input[name=period_end]'),
+        beginPts    = periodBegin.val().split('.'),
+        endPts      = periodEnd.val().split('.'),
+        dpBegin     = periodBegin.datepicker({
+            inline   : true,
+            startDate: (beginPts.length === 3) ?
+                new Date(parseInt(beginPts[2]), parseInt(beginPts[1]) - 1, 1) :
+                new Date(),
+            onSelect : function (fd, date) {
+                periodEnd.data('datepicker').update('minDate', date);
+                periodEnd.focus();
+            }
+        }).data('datepicker'),
+        dpEnd       = periodEnd.datepicker({
+            inline   : true,
+            startDate: (endPts.length === 3) ?
+                new Date(parseInt(endPts[2]), parseInt(endPts[1]) - 1, 1) :
+                new Date(),
+            onSelect : function (fd, date) {
+                periodBegin.data('datepicker').update('maxDate', date);
+            }
+        }).data('datepicker');
+    if (beginPts.length === 3) {
+        dpBegin.selectDate(new Date(beginPts[2], beginPts[1] - 1, beginPts[0]));
+    }
+    if (endPts.length === 3) {
+        dpEnd.selectDate(new Date(parseInt(endPts[2]), parseInt(endPts[1]) - 1, parseInt(endPts[0])));
+    }
+})
+JS;
+echo $this->inlineScript()->captureEnd();

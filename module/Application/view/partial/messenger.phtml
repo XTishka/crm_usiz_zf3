@@ -1,0 +1,19 @@
+<?php
+/** @var \Zend\Mvc\Plugin\FlashMessenger\FlashMessenger $messenger */
+if ($this->messenger instanceof Zend\Mvc\Plugin\FlashMessenger\FlashMessenger):
+    $classes = [
+        $this->messenger::NAMESPACE_DEFAULT => 'default',
+        $this->messenger::NAMESPACE_ERROR   => 'error',
+        $this->messenger::NAMESPACE_INFO    => 'info',
+        $this->messenger::NAMESPACE_SUCCESS => 'success',
+        $this->messenger::NAMESPACE_WARNING => 'warning']; ?>
+    <?php foreach ($classes as $namespace => $class): ?>
+    <?php if ($this->messenger->hasMessages($namespace)): ?>
+        <ul class="alert alert-<?= $class ?>">
+            <?php foreach ($this->messenger->getMessages($namespace) as $message): ?>
+                <li><?= $this->translate($message) ?></li>
+            <?php endforeach ?>
+        </ul>
+    <?php endif ?>
+<?php endforeach ?>
+<?php endif ?>

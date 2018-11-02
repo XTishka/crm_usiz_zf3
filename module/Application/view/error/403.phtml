@@ -1,0 +1,7 @@
+<div class="container">
+    <h1 class="text-center"><?= $title = $this->translate('Error: 403 Forbidden') ?></h1>
+    <?php $this->headTitle($title) ?>
+    <p class="text-center"><img class="status-error-image" src="<?= $this->basePath('/img/403.png') ?>" alt="Error: 403 Forbidden"></p>
+    <p class="text-center"><?= $this->translate('Unfortunately, you do not have permissions to view this page.') ?></p>
+    <p class="text-center"><a class="btn btn-lg btn-danger" href="<?= $this->url('user/login') ?>"><?= $this->translate('Sign In') ?></a></p>
+</div>

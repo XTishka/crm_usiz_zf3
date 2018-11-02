@@ -1,0 +1,399 @@
+<?php
+/**
+ * @var \Contractor\Entity\ContractorCompany $company
+ */
+?>
+    <div class="layout-toolbar">
+        <div class="row middle-md">
+            <div class="col-md">
+                <h1><i class="fa fa-dollar fa-fw"></i>
+                    <?= $title = sprintf('%s - %s', $this->translate('Finances'), $company->getContractorName()) ?></h1>
+                <?php echo $this->headTitle($title) ?>
+            </div>
+            <div class="col-md end-md">
+                <?= $this->partial('partial/dashboard-menu', ['company' => $company]) ?>
+            </div>
+        </div>
+    </div>
+
+<?= $this->partial('partial/messenger', ['messenger' => $this->messenger]); ?>
+
+    <div class="row top-md">
+        <div class="col-md">
+
+            <div class="panel">
+                <div class="panel-header">
+                    <div class="row">
+                        <div class="col-md">
+                            <div class="panel-title">
+                                <i class="fa fa-inbox fa-fw"></i>
+                                <?= $this->translate('Financial assets') ?>
+                            </div>
+                        </div>
+                        <div class="col-md end-md" style="position:relative">
+                            <i class="fa fa-calendar" style="font-size:14px;position:absolute;right:114px;top:2px;"></i>
+                            <input id="js-finance-calendar" type="text" style="width:128px;text-align:center;padding-left:26px"
+                                   placeholder="<?= $this->translate('Finance of date') ?>" value="<?= $this->escapeHtml($this->date) ?>"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <table class="table-data">
+                        <thead>
+                        <tr>
+                            <th class="text-left"><?= $this->translate('Contractor') ?></th>
+                            <th class="text-left"><?= $this->translate('Materials in warehouse') ?></th>
+                            <th class="text-right"><?= $this->translate('Weight') ?></th>
+                            <th class="text-right"><?= $this->translate('Price') ?></th>
+                        </tr>
+                        </thead>
+                        <?php
+                        $materialAmount = 0;
+                        /** @var ArrayObject $material */
+                        foreach ($this->warehouseBalance as $material): ?>
+                            <tr>
+                                <td>
+                                    <?= $material['contractor'] ?>
+                                </td>
+                                <td>
+                                    <a data-extended="true"
+                                       href="<?= $this->url('api/materialAssets', ['company' => $company->getContractorId(), 'material' => $material->offsetGet('material_id')], ['query' => ['date' => $this->date]]) ?>">
+                                        <?= $this->escapeHtml($material->offsetGet('material_name')) ?>
+                                    </a>
+                                </td>
+                                <td class="text-right">
+                                    <?= $this->numberFormat($material->offsetGet('weight'), NumberFormatter::DECIMAL, NumberFormatter::TYPE_DEFAULT, null, 3, [
+                                        NumberFormatter::POSITIVE_SUFFIX => sprintf(' %s.', $this->translate('tons'))]) ?>
+                                </td>
+                                <td class="text-right">
+                                    <?= $this->currencyFormat($material->offsetGet('amount')) ?>
+                                </td>
+                            </tr>
+                            <?php $materialAmount += $material->offsetGet('amount') ?>
+                        <?php endforeach ?>
+
+                        <tr>
+                            <th colspan="3"><?= $this->translate('Expected materials') ?></th>
+                        </tr>
+                        <?php foreach ($this->expectedMaterials as $material): ?>
+                            <tr>
+                                <td colspan="2"><?= $this->escapeHtml($material['material_name']) ?></td>
+                                <td class="text-right">
+                                    <?= $this->numberFormat($material['weight'], NumberFormatter::DECIMAL, NumberFormatter::TYPE_DEFAULT, null, 3, [
+                                        NumberFormatter::POSITIVE_SUFFIX => sprintf(' %s.', $this->translate('tons'))]) ?>
+                                </td>
+                                <td class="text-right"><?= $this->currencyFormat($material['amount']) ?></td>
+                            </tr>
+                            <?php $materialAmount += $material['amount'] ?>
+                        <?php endforeach ?>
+
+
+                        <caption><?= sprintf('%s: %s',
+                                $this->translate('Total raw materials for the amount of'),
+                                $this->currencyFormat($materialAmount)) ?></caption>
+                    </table>
+
+                    <table class="table-data">
+                        <tr>
+                            <td>
+                                <a data-extended="true"
+                                   href="<?= $this->url('api/companyDebits', ['company' => $company->getContractorId()], ['query' => ['date' => $this->date]]) ?>">
+                                    <?= $this->translate('Company balance') ?>:
+                                </a>
+                            </td>
+                            <td class="text-right"><?= $this->currencyFormat($this->checkingAccount->getTotal()) ?></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a data-extended="true"
+                                   href="<?= $this->url('api/bankBalances', ['company' => $company->getContractorId()], ['query' => ['date' => $this->date]]) ?>">
+                                    <?= $this->translate('Bank balances') ?>:
+                                </a>
+                            </td>
+                            <td class="text-right"><?= $this->currencyFormat($this->bankTotalSum) ?></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="text-right">
+                                <?php if ($this->checkingAccount->getTotal() > $this->bankTotalSum): ?>
+                                    <?php $value = bcsub($this->checkingAccount->getTotal(), $this->bankTotalSum, 2) ?>
+                                    <span class="text-error">В банке не хватает <?= $this->currencyFormat($value) ?></span>
+                                <?php elseif ($this->checkingAccount->getTotal() < $this->bankTotalSum): ?>
+                                    <?php $value = bcsub($this->bankTotalSum, $this->checkingAccount->getTotal(), 2) ?>
+                                    <span class="text-error">На расчетном счете не хватает <?= $this->currencyFormat($value) ?></span>
+                                <?php else: ?>
+                                    <span class="text-success">Полное совпадение</span>
+                                <?php endif ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><a data-extended="true"
+                                   href="<?= $this->url('api/customerDebts', ['company' => $company->getContractorId()], ['query' => ['date' => $this->date]]) ?>">
+                                    <?= $this->translate('Company receivable sum') ?>:</a></td>
+                            <td class="text-right"><?= $this->currencyFormat($this->accountsReceivable->getTotal()) ?></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a data-extended="true"
+                                   href="<?= $this->url('api/companyPrepayments', ['company' => $company->getContractorId()], ['query' => ['date' => $this->date]]) ?>">
+                                    <?= $this->translate('Company prepayment sum') ?>:</a>
+                            </td>
+                            <td class="text-right"><?= $this->currencyFormat($this->providersReceivable->getTotal()) ?></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a data-extended="true"
+                                   href="<?= $this->url('api/companyToPlantPrepayments', ['company' => $company->getContractorId()], ['query' => ['date' => $this->date]]) ?>">
+                                    <?= $this->translate('Prepayment to plant sum') ?>:</a>
+                            </td>
+                            <td class="text-right"><?= $this->currencyFormat($this->companyToPlantPrepaymentSum->offsetGet('amount')) ?></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a data-extended="true"
+                                   href="<?= $this->url('api/carriersReceivable', ['company' => $company->getContractorId()], ['query' => ['date' => $this->date]]) ?>">
+                                    <?= $this->translate('Carrier prepayment sum') ?>:</a>
+                            </td>
+                            <td class="text-right"><?= $this->currencyFormat($this->carriersReceivable->getTotal()) ?></td>
+                        </tr>
+                    </table>
+
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <i class="fa fa-inbox fa-fw"></i>
+                        <?= $this->translate('Financial liabilities') ?>
+                    </div>
+                </div>
+                <div class="panel-body">
+
+                    <table class="table-data text-error">
+
+                        <tr>
+                            <td>
+                                <a data-extended="true" href="<?= $this->url('api/companyCorporates',
+                                    ['company' => $company->getContractorId()],
+                                    ['query' => ['date' => $this->date]]) ?>"><?= $this->translate('Charter capital') ?>:</a>
+                            </td>
+                            <td class="text-right"><?= $this->currencyFormat($this->internalPayableSum->offsetGet('amount')) ?></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a data-extended="true" href="<?= $this->url('api/customerPrepayments',
+                                    ['company' => $company->getContractorId()],
+                                    ['query' => ['date' => $this->date]]) ?>"><?= $this->translate('Customer prepayment sum') ?>:</a>
+                            </td>
+                            <td class="text-right"><?= $this->currencyFormat($this->customerPayable->getTotal()) ?></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a data-extended="true"
+                                   href="<?= $this->url('api/companyPayables',
+                                       ['company' => $company->getContractorId()],
+                                       ['query' => ['date' => $this->date]]) ?>"><?= $this->translate('Company payable sum') ?>:</a>
+                            </td>
+                            <td class="text-right"><?= $this->currencyFormat($this->accountsPayable->getTotal()) ?></td>
+                        </tr>
+                    </table>
+
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="col-md">
+
+            <div class="panel">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <i class="fa fa-info-circle fa-fw"></i>
+                        <?= $this->translate('Extended information') ?>
+                    </div>
+                </div>
+                <div class="panel-body" id="ajaxContent">
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <br>
+    <div class="row">
+
+        <div class="col-md">
+
+            <div class="panel">
+                <div class="panel-header">
+                    <div class="row middle-md">
+                        <div class="col-md">
+                            <div class="panel-title">
+                                <i class="fa fa-navicon fa-fw"></i>
+                                <?= $this->translate('Finance transactions') ?>
+                                &nbsp;
+                                <div class="dropdown">
+                                    <button class="dropdown-toggle btn btn-success btn-sm">
+                                        <i class="fa fa-plus-circle"></i>
+                                        <?= $this->translate('Create transaction') ?>
+                                    </button>
+                                    <a class="btn btn-primary btn-sm"
+                                       href="<?= $this->url('transaction/import', ['company' => $company->getContractorId()]) ?>">
+                                        <i class="fa fa-cloud-upload fa-fw"></i>
+                                        <?= $this->translate('Import transactions') ?></a>
+                                    <ul class="dropdown-list">
+                                        <li>
+                                            <a href="<?= $this->url('transaction/provider/edit', [], ['query' => ['company' => $company->getContractorId()]]) ?>">
+                                                <i class="fa fa-download fa-fw"></i>
+                                                <?= $this->translate('Provider contractor') ?></a>
+                                        </li>
+                                        <li>
+                                            <a href="<?= $this->url('transaction/customer/edit', [], ['query' => ['company' => $company->getContractorId()]]) ?>">
+                                                <i class="fa fa-upload fa-fw"></i>
+                                                <?= $this->translate('Customer contractor') ?></a>
+                                        </li>
+                                        <li>
+                                            <a href="<?= $this->url('transaction/carrier/edit', [], ['query' => ['company' => $company->getContractorId()]]) ?>">
+                                                <i class="fa fa-truck fa-fw"></i>
+                                                <?= $this->translate('Carrier contractor') ?></a>
+                                        </li>
+                                        <li>
+                                            <a href="<?= $this->url('transaction/additional/edit', [], ['query' => ['company' => $company->getContractorId()]]) ?>">
+                                                <i class="fa fa-plus-circle fa-fw"></i>
+                                                <?= $this->translate('Additional contractor') ?></a>
+                                        </li>
+                                        <li>
+                                            <a href="<?= $this->url('transaction/corporate/edit', [], ['query' => ['company' => $company->getContractorId()]]) ?>">
+                                                <i class="fa fa-building fa-fw"></i>
+                                                <?= $this->translate('Corporate contractor') ?>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="<?= $this->url('transaction/plant/edit', [], ['query' => ['company' => $company->getContractorId()]]) ?>">
+                                                <i class="fa fa-industry fa-fw"></i>
+                                                <?= $this->translate('Plant contractor') ?>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md end-md">
+                            <ul class="nav-tab" id="transactionMenu">
+                                <li class="active">
+                                    <a href="<?= $this->url('api/providerTransactions', ['company' => $company->getContractorId()], ['query' => ['date' => $this->date]]) ?>"><?= $this->translate('Providers') ?></a>
+                                </li>
+                                <div class="dropdown">
+                                        <span class="dropdown-toggle">
+                                            <i class="fa fa-angle-down fa-fw"></i>
+                                        </span>
+                                    <?= $this->contractorProviderMenu('api/providerTransactions', ['company' => $company->getContractorId()], 'dropdown-list') ?>
+                                </div>
+                                <li>
+                                    <a href="<?= $this->url('api/customerTransactions', ['company' => $company->getContractorId()], ['query' => ['date' => $this->date]]) ?>"><?= $this->translate('Customers') ?></a>
+                                </li>
+                                <div class="dropdown">
+                                        <span class="dropdown-toggle">
+                                            <i class="fa fa-angle-down fa-fw"></i>
+                                        </span>
+                                    <?= $this->contractorCustomerMenu('api/customerTransactions', ['company' => $company->getContractorId()], 'dropdown-list') ?>
+                                </div>
+                                <li>
+                                    <a href="<?= $this->url('api/carrierTransactions', ['company' => $company->getContractorId()], ['query' => ['date' => $this->date]]) ?>"><?= $this->translate('Carriers') ?></a>
+                                </li>
+                                <div class="dropdown">
+                                        <span class="dropdown-toggle">
+                                            <i class="fa fa-angle-down fa-fw"></i>
+                                        </span>
+                                    <?= $this->contractorCarrierMenu('api/carrierTransactions', ['company' => $company->getContractorId()], 'dropdown-list') ?>
+                                </div>
+                                <li>
+                                    <a href="<?= $this->url('api/additionalTransactions', ['company' => $company->getContractorId()], ['query' => ['date' => $this->date]]) ?>"><?= $this->translate('Additional') ?></a>
+                                </li>
+                                <div class="dropdown">
+                                        <span class="dropdown-toggle">
+                                            <i class="fa fa-angle-down fa-fw"></i>
+                                        </span>
+                                    <?= $this->contractorAdditionalMenu('api/additionalTransactions', ['company' => $company->getContractorId()], 'dropdown-list') ?>
+                                </div>
+                                <li>
+                                    <a href="<?= $this->url('api/corporateTransactions', ['company' => $company->getContractorId()], ['query' => ['date' => $this->date]]) ?>"><?= $this->translate('Corporates') ?></a>
+                                </li>
+                                <div class="dropdown">
+                                        <span class="dropdown-toggle">
+                                            <i class="fa fa-angle-down fa-fw"></i>
+                                        </span>
+                                    <?= $this->contractorCorporateMenu('api/corporateTransactions', ['company' => $company->getContractorId()], 'dropdown-list') ?>
+                                </div>
+                                <li>
+                                    <a href="<?= $this->url('api/plantTransactions', ['company' => $company->getContractorId()], ['query' => ['date' => $this->date]]) ?>"><?= $this->translate('Plants') ?></a>
+                                </li>
+                                <div class="dropdown">
+                                        <span class="dropdown-toggle">
+                                            <i class="fa fa-angle-down fa-fw"></i>
+                                        </span>
+                                    <?= $this->contractorPlantMenu('api/plantTransactions', ['company' => $company->getContractorId()], 'dropdown-list') ?>
+                                </div>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body" id="transactionContent"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+<?php
+$this->headLink()->appendStylesheet($this->basePath('css/dropdown.css'));
+$this->inlineScript()->appendFile($this->basePath('js/dropdown.min.js'));
+$this->headLink()->appendStylesheet($this->basePath('/css/modal.css'));
+$this->inlineScript()->appendFile($this->basePath('/js/modal.js'));
+$this->headLink()->appendStylesheet('/css/datepicker.min.css');
+$this->inlineScript()->appendFile($this->basePath('/js/vendor/datepicker.min.js'));
+$this->inlineScript()->captureStart();
+echo /** @lang JavaScript */
+<<<JS
+
+$('#js-finance-calendar').datepicker({
+    maxDate: new Date(),
+    dateFormat: 'dd.mm.yyyy',
+    onSelect: function(formattedDate, date, inst) {
+        $(location).attr('href','?date=' + formattedDate) 
+    }
+});
+
+$('a[data-extended]').on('click', function(e) {
+    e.preventDefault();
+    $.get(this.href, function(data) {
+        $('#ajaxContent').html(data);
+    });
+});
+
+$('.dropdown').dropdown();
+
+$('#transactionMenu').on('click', 'a', function(e) {
+    e.preventDefault();
+    $(this).parent('li').addClass('active').siblings('li').removeClass('active');
+    var content = $('#transactionContent');
+    $.ajax(this.href, {
+        type: 'get',
+        beforeSend: function() {
+            content.addClass('loading');
+        },
+        complete: function() {
+            content.removeClass('loading');
+        },
+        success: function(data) {
+            content.html(data);
+        }
+    });
+}).find('li.active a').click();
+
+
+JS;
+$this->inlineScript()->captureEnd();
+?>

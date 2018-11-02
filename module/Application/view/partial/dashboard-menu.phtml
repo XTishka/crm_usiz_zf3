@@ -1,0 +1,41 @@
+<?php
+/** @var \Contractor\Entity\ContractorCompany $company */
+?>
+<ul class="nav-tab">
+    <?php if ($company->getContractorType() != $company::TYPE_PLANT): ?>
+        <li>
+            <a href="<?= $this->url('dashboard', ['company' => $company->getContractorId()]) ?>">
+                <i class="fa fa-industry fa-fw"></i>
+                <?= $this->translate('Manufacturing') ?>
+            </a>
+        </li>
+    <?php endif ?>
+    <li>
+        <a href="<?= $this->url($company->getContractorType() == $company::TYPE_PLANT ? 'plantDashboard/finance' : 'dashboard/finance', ['company' => $company->getContractorId(), 'plant' => $company->getContractorId()]) ?>">
+            <i class="fa fa-dollar fa-fw"></i>
+            <?= $this->translate('Finances') ?>
+        </a>
+    </li>
+    <li>
+        <a href="<?= $this->url($company->getContractorType() == $company::TYPE_PLANT ? 'plantDashboard/bank' : 'dashboard/bank', ['company' => $company->getContractorId(), 'plant' => $company->getContractorId()]) ?>">
+            <i class="fa fa-bank fa-fw"></i>
+            <?= $this->translate('Banks') ?>
+        </a>
+    </li>
+    <?php if ($company->getContractorType() != $company::TYPE_PLANT): ?>
+        <li>
+            <a href="<?= $this->url('dashboard/purchaseContract', ['company' => $company->getContractorId()]) ?>">
+                <i class="fa fa-download fa-fw"></i>
+                <?= $this->translate('Purchase contracts') ?>
+            </a>
+        </li>
+    <?php endif ?>
+    <?php if ($company->getContractorType() != $company::TYPE_PLANT): ?>
+        <li>
+            <a href="<?= $this->url('dashboard/saleContract', ['company' => $company->getContractorId()]) ?>">
+                <i class="fa fa-upload fa-fw"></i>
+                <?= $this->translate('Sale contracts') ?>
+            </a>
+        </li>
+    <?php endif ?>
+</ul>

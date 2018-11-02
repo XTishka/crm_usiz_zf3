@@ -1,0 +1,32 @@
+<?php $ulClass = $this->navigation()->menu()->getUlClass() ?>
+<ul<?= trim($ulClass) ? sprintf(' class="%s"', $ulClass) : null ?>>
+    <?php /** @var Zend\Navigation\Page\AbstractPage $page */ ?>
+    <?php foreach ($this->container as $page):
+        $customProperties = $page->getCustomProperties();
+        if ($page->isVisible() && $this->navigation()->accept($page)): ?>
+            <?php $classes = [];
+            if ($page->isActive(true)) {
+                $classes[] = $this->navigation()->menu()->getLiActiveClass();
+            }
+            if (trim($page->getClass())) {
+                $classes[] = $page->getClass();
+            }
+            $classAttribute = count($classes) ? sprintf(' class="%s"', join(' ', $classes)) : '';
+            ?>
+            <li<?= $classAttribute ?>>
+                <?php if ('#none' == $page->getHref()): ?>
+                    <span><?= (key_exists('icon', $customProperties) ? sprintf('<i class="%s"></i>', $customProperties['icon']) : null);
+                        echo $this->translate($page->getLabel()) ?></span>
+                <?php else: ?>
+                    <a href="<?= $page->getHref() ?>" target="<?= $page->getTarget() ?>"><?php
+                        echo(key_exists('icon', $customProperties) ? sprintf('<i class="%s"></i>', $customProperties['icon']) : null);
+                        echo $this->translate($page->getLabel()) ?></a>
+                <?php endif;
+                if ($page->hasPages(true)):
+                    $this->navigation()->menu()->setUlClass('');
+                    echo $this->partial('partial/menu', ['container' => $page->getPages()]);
+                endif ?>
+            </li>
+        <?php endif;
+    endforeach ?>
+</ul>

@@ -1,0 +1,31 @@
+<?php if ($this->paginator->count()): ?>
+    <table class="table-data">
+        <thead>
+        <tr>
+            <th class="text-left"><?= $this->translate('Bank') ?></th>
+            <th class="text-right" style="width:10rem"><?= $this->translate('Amount') ?></th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php $total = 0; /** @var ArrayObject $row */ ?>
+        <?php foreach ($this->paginator as $row): ?>
+            <?php $total += $row->offsetGet('amount') ?>
+            <tr>
+                <td class="text-left hint"><?= $this->escapeHtml($row->offsetGet('name')) ?></td>
+                <td class="text-right"><?= $this->currencyFormat($row->offsetGet('amount')) ?></td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+        <tfoot>
+        <tr>
+            <th><?= $this->translate('Total sum') ?>:</th>
+            <th class="text-right"><?= $this->currencyFormat($total) ?></th>
+        </tr>
+        </tfoot>
+    </table>
+<?php else: ?>
+    <div class="text-center">
+        <img src="<?= $this->basePath('img/empty.svg') ?>" alt="Empty folder" style="max-width:200px">
+        <h3><?= $this->translate('Nothing found') ?></h3>
+    </div>
+<?php endif ?>

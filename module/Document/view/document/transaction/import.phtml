@@ -1,0 +1,45 @@
+<?php
+/**
+ * @var \Zend\Form\Form                         $form
+ * @var \Contractor\Entity\ContractorCompany    $company
+ * @var \Document\Domain\PurchaseContractEntity $contract
+ */
+?>
+<div class="layout-toolbar">
+    <div class="row middle-md">
+        <div class="col-md">
+            <h1><i class="fa fa-dashboard fa-fw"></i>
+                <?= $title = sprintf('%s: %s - %s', $this->translate('Dashboard'), $company->getContractorName(), $this->translate('Finance transactions data import')) ?>
+            </h1>
+            <?php echo $this->headTitle($title) ?>
+        </div>
+        <div class="col-md end-md">
+            <?= $this->partial('partial/dashboard-menu', ['company' => $company]) ?>
+        </div>
+    </div>
+</div>
+
+<div class="panel">
+    <div class="panel-header">
+        <div class="panel-title">
+            <i class="fa fa-upload fa-fw"></i>
+            <?= $this->translate('Upload finance transactions data') ?>
+        </div>
+    </div>
+    <div class="panel-body">
+        <?php
+        $form->setAttribute('action', $this->url('transaction/import', ['company'  => $company->getContractorId()]));
+
+        $form->prepare(); ?>
+        <?= $this->form()->openTag($form) ?>
+
+        <div class="form-row">
+            <?= $this->formLabel($form->get('file')) ?>
+            <?= $this->formFile($form->get('file')) ?>
+            <?= $this->formElementErrors($form->get('file')) ?>
+        </div>
+
+        <?= $this->formSubmit($form->get('import')) ?>
+        <?= $this->form()->closeTag() ?>
+    </div>
+</div>

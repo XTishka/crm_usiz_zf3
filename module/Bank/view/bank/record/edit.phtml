@@ -1,0 +1,115 @@
+<?php
+/**
+ * @var \Contractor\Entity\ContractorCompany $company
+ */
+?>
+<div class="layout-toolbar">
+    <div class="row middle-md">
+        <div class="col-md">
+            <h1><i class="fa fa-dashboard fa-fw"></i>
+                <?= $title = sprintf('%s: %s - %s', $this->translate('Dashboard'), $company->getContractorName(), $this->translate('Editing of purchase contract data')) ?>
+            </h1>
+            <div class="hint"><?= $company->getContractorType() ?></div>
+            <?php echo $this->headTitle($title) ?>
+        </div>
+        <div class="col-md end-md">
+            <?= $this->partial('partial/dashboard-menu', ['company' => $company]) ?>
+        </div>
+    </div>
+</div>
+
+
+<?php
+/**
+ * @var \Zend\Form\Element\Collection $collection
+ * @var \Zend\Form\Form               $form
+ * @var \Zend\Form\Fieldset           $fieldset
+ */
+$form->setAttribute('action', $this->url('dashboard/bank/edit', ['company' => $company->getContractorId()]));
+$form->prepare();
+echo $this->form()->openTag($form) ?>
+
+<?= $this->formHidden($form->get('csrf')) ?>
+<?= $this->formHidden($form->get('record_id')) ?>
+<?= $this->formHidden($form->get('company_id')) ?>
+
+<?= $this->partial('partial/messenger', ['messenger' => $this->messenger]); ?>
+
+<div class="panel">
+    <div class="panel-header">
+        <div class="panel-title">
+            <i class="fa fa-tag fa-fw"></i>
+            <?= $this->translate('Common data') ?>
+        </div>
+    </div>
+    <div class="panel-body">
+
+        <div class="row">
+            <div class="col-md">
+
+                <div class="form-row">
+                    <?= $this->formLabel($form->get('bank_id')) ?>
+                    <?= $this->formSelect($form->get('bank_id')) ?>
+                    <?= $this->formElementErrors($form->get('bank_id')) ?>
+                </div>
+
+
+                <div class="form-row">
+                    <?= $this->formLabel($form->get('amount')) ?>
+                    <?= $this->formNumber($form->get('amount')) ?>
+                    <?= $this->formElementErrors($form->get('amount')) ?>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-md">
+                        <?= $this->formSubmit($form->get('save')) ?>
+                        <a href="<?= $this->url('dashboard/bank', ['company' => $company->getContractorId()]) ?>" class="btn btn-default">
+                            <i class="fa fa-close fa-fw"></i>
+                            <?= $this->translate('Cancel') ?>
+                        </a>
+                    </div>
+                    <div class="col-md-2 end-md">
+                        <?php if ($recordId = $form->get('record_id')->getValue()): ?>
+                            <a href="<?= $this->url('dashboard/bank/delete', ['id' => $recordId, 'company' => $company->getContractorId()]) ?>"
+                               class="btn btn-danger">
+                                <i class="fa fa-trash fa-fw"></i>
+                                <?= $this->translate('Delete') ?>
+                            </a>
+                        <?php endif ?>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-2">
+                <div class="form-row">
+                    <?= $this->formLabel($form->get('date')) ?>
+                    <?= $this->formHidden($form->get('date')) ?>
+                    <?= $this->formElementErrors($form->get('date')) ?>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+<?= $this->form()->closeTag() ?>
+
+<?php
+$this->headLink()->appendStylesheet('/css/datepicker.min.css');
+$this->inlineScript()->appendFile($this->basePath('/js/vendor/datepicker.min.js'));
+$this->inlineScript()->captureStart();
+echo <<<JS
+$(document).ready(function () {
+        
+    function parseDate(input) {
+        var parts = input.match(/(\d+)/g);
+        return new Date(parts[2], parts[1]-1, parts[0]);
+    }
+    
+    var inputDate = $('input[name=date]');
+    inputDate.datepicker({inline: true}).data('datepicker').selectDate(parseDate(inputDate.val()));
+});
+JS;
+$this->inlineScript()->captureEnd() ?>

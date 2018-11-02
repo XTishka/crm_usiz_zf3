@@ -1,0 +1,290 @@
+<?php
+/**
+ * @var \Zend\Form\Element\Collection $collection
+ * @var \Zend\Form\Form $form
+ * @var \Zend\Form\Fieldset $fieldset
+ */
+$form->setAttribute('action', $this->url('contractorPlant/edit'));
+$form->prepare();
+echo $this->form()->openTag($form) ?>
+
+<div class="layout-toolbar">
+    <div class="row middle-md">
+        <div class="col-md">
+            <h1>
+                <i class="fa fa-pencil fa-fw"></i>
+                <?= $title = $this->translate('Editing of company contractor data') ?>
+            </h1>
+            <?php echo $this->headTitle($title) ?>
+        </div>
+        <div class="col-md end-md">
+            <?= $this->formSubmit($form->get('save_and_remain')) ?>
+            <?= $this->formSubmit($form->get('save_and_exit')) ?>
+            <a href="<?= $this->url('contractorPlant') ?>" class="btn btn-danger">
+                <i class="fa fa-close fa-fw"></i>
+                <?= $this->translate('Cancel') ?>
+            </a>
+        </div>
+    </div>
+</div>
+
+<?= $this->partial('partial/messenger', ['messenger' => $this->messenger]); ?>
+
+<div class="row">
+    <div class="col-md">
+
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-title">
+                    <i class="fa fa-tag fa-fw"></i>
+                    <?= $this->translate('Common data') ?>
+                </div>
+            </div>
+            <div class="panel-body">
+                <?= $this->formHidden($form->get('csrf')) ?>
+                <?= $this->formHidden($form->get('contractor_id')) ?>
+                <div class="form-row">
+                    <?= $this->formLabel($form->get('contractor_name')) ?>
+                    <?= $this->formText($form->get('contractor_name')) ?>
+                    <?= $this->formElementErrors($form->get('contractor_name')) ?>
+                </div>
+
+                <div class="form-row">
+                    <?= $this->formLabel($form->get('full_name')) ?>
+                    <?= $this->formText($form->get('full_name')) ?>
+                    <?= $this->formElementErrors($form->get('full_name')) ?>
+                </div>
+
+                <div class="form-row">
+                    <?= $this->formLabel($form->get('register_code')) ?>
+                    <?= $this->formText($form->get('register_code')) ?>
+                    <?= $this->formElementErrors($form->get('register_code')) ?>
+                </div>
+
+                <div class="form-row">
+                    <?= $this->formLabel($form->get('bank_account')) ?>
+                    <?= $this->formText($form->get('bank_account')) ?>
+                    <?= $this->formElementErrors($form->get('bank_account')) ?>
+                </div>
+
+                <!-- Person fieldset begin -->
+                <?= $this->formLabel($form->get('person')) ?>
+                <div class="row">
+                    <?php $fieldset = $form->get('person') ?>
+                    <div class="col-md-4">
+                        <div class="form-row">
+                            <?= $this->formText($fieldset->get('first_name')) ?>
+                            <?= $this->formElementErrors($fieldset->get('first_name')) ?>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-row">
+                            <?= $this->formText($fieldset->get('middle_name')) ?>
+                            <?= $this->formElementErrors($fieldset->get('middle_name')) ?>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-row">
+                            <?= $this->formText($fieldset->get('last_name')) ?>
+                            <?= $this->formElementErrors($fieldset->get('last_name')) ?>
+                        </div>
+                    </div>
+                </div>
+                <!-- Person fieldset end -->
+
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-title">
+                    <i class="fa fa-envelope fa-fw"></i>
+                    <?= $this->translate('Email addresses') ?>
+                </div>
+            </div>
+            <div class="panel-body">
+                <!-- Email address collection begin -->
+                <section class="rower-section">
+                    <?php $collection = $form->get('emails') ?>
+                    <?php foreach ($collection as $fieldset): ?>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-row">
+                                    <?= $this->formText($fieldset->get('email')) ?>
+                                    <?= $this->formElementErrors($fieldset->get('email')) ?>
+                                </div>
+                            </div>
+                            <div class="col-md">
+                                <div class="form-row">
+                                    <?= $this->formText($fieldset->get('description')) ?>
+                                    <?= $this->formElementErrors($fieldset->get('description')) ?>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <div class="form-row">
+                                    <?= $this->formButton($fieldset->get('remove')) ?>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach ?>
+                    <script class="rower-template" type="text/html">
+                        <?php $template = $collection->getTemplateElement() ?>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-row">
+                                    <?= $this->formText($template->get('email')) ?>
+                                    <?= $this->formElementErrors($template->get('email')) ?>
+                                </div>
+                            </div>
+                            <div class="col-md">
+                                <div class="form-row">
+                                    <?= $this->formText($template->get('description')) ?>
+                                    <?= $this->formElementErrors($template->get('description')) ?>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <div class="form-row">
+                                    <?= $this->formButton($template->get('remove')) ?>
+                                </div>
+                            </div>
+                        </div>
+                    </script>
+                </section>
+                <!-- Email address collection end -->
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-title">
+                    <i class="fa fa-phone fa-fw"></i>
+                    <?= $this->translate('Phone numbers') ?>
+                </div>
+            </div>
+            <div class="panel-body">
+                <!-- Phone number collection begin -->
+                <section class="rower-section">
+                    <?php $collection = $form->get('phones') ?>
+                    <?php foreach ($collection as $fieldset): ?>
+                        <div class="row">
+                            <div class="col-md-1">
+                                <div class="form-row">
+                                    <?= $this->formSelect($fieldset->get('country')) ?>
+                                    <?= $this->formElementErrors($fieldset->get('country')) ?>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-row">
+                                    <?= $this->formText($fieldset->get('number')) ?>
+                                    <?= $this->formElementErrors($fieldset->get('number')) ?>
+                                </div>
+                            </div>
+                            <div class="col-md">
+                                <div class="form-row">
+                                    <?= $this->formText($fieldset->get('description')) ?>
+                                    <?= $this->formElementErrors($fieldset->get('description')) ?>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <div class="form-row">
+                                    <?= $this->formButton($fieldset->get('remove')) ?>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach ?>
+                    <script class="rower-template" type="text/html">
+                        <?php $template = $collection->getTemplateElement() ?>
+                        <div class="row">
+                            <div class="col-md-1">
+                                <div class="form-row">
+                                    <?= $this->formSelect($template->get('country')) ?>
+                                    <?= $this->formElementErrors($template->get('country')) ?>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-row">
+                                    <?= $this->formText($template->get('number')) ?>
+                                    <?= $this->formElementErrors($template->get('number')) ?>
+                                </div>
+                            </div>
+                            <div class="col-md">
+                                <div class="form-row">
+                                    <?= $this->formText($template->get('description')) ?>
+                                    <?= $this->formElementErrors($template->get('description')) ?>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <div class="form-row">
+                                    <?= $this->formButton($template->get('remove')) ?>
+                                </div>
+                            </div>
+                        </div>
+                    </script>
+                </section>
+                <!-- Phone number collection end -->
+            </div>
+        </div>
+
+    </div>
+    <div class="col-md-3">
+
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-title">
+                    <i class="fa fa-map-marker fa-fw"></i>
+                    <?= $this->translate('Post address') ?>
+                </div>
+            </div>
+            <div class="panel-body">
+                <!-- Address fieldset begin -->
+                <?php $fieldset = $form->get('address') ?>
+                <div class="form-row">
+                    <?= $this->formLabel($fieldset->get('street_name')) ?>
+                    <?= $this->formText($fieldset->get('street_name')) ?>
+                    <?= $this->formElementErrors($fieldset->get('street_name')) ?>
+                </div>
+                <div class="form-row">
+                    <?= $this->formLabel($fieldset->get('street_number')) ?>
+                    <?= $this->formText($fieldset->get('street_number')) ?>
+                    <?= $this->formElementErrors($fieldset->get('street_number')) ?>
+                </div>
+                <div class="form-row">
+                    <?= $this->formLabel($fieldset->get('city')) ?>
+                    <?= $this->formText($fieldset->get('city')) ?>
+                    <?= $this->formElementErrors($fieldset->get('city')) ?>
+                </div>
+                <div class="form-row">
+                    <?= $this->formLabel($fieldset->get('state')) ?>
+                    <?= $this->formText($fieldset->get('state')) ?>
+                    <?= $this->formElementErrors($fieldset->get('state')) ?>
+                </div>
+                <div class="form-row">
+                    <?= $this->formLabel($fieldset->get('post_code')) ?>
+                    <?= $this->formText($fieldset->get('post_code')) ?>
+                    <?= $this->formElementErrors($fieldset->get('post_code')) ?>
+                </div>
+                <div class="form-row">
+                    <?= $this->formLabel($fieldset->get('country')) ?>
+                    <?= $this->formSelect($fieldset->get('country')) ?>
+                    <?= $this->formElementErrors($fieldset->get('country')) ?>
+                </div>
+                <!-- Address fieldset end -->
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<?= $this->form()->closeTag() ?>
+
+<?php
+$this->inlineScript()->appendFile($this->basePath('/js/rower.min.js'));
+$this->inlineScript()->captureStart();
+echo <<<JS
+$('.rower-section').rower({
+    addButtonClass  : 'btn btn-primary',
+    rowSelector     : '.row',
+    templateSelector: '.rower-template'
+});
+JS;
+$this->inlineScript()->captureEnd() ?>

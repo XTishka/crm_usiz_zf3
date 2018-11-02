@@ -1,0 +1,426 @@
+<?php
+/**
+ * @var \Contractor\Entity\ContractorCompany $company
+ */
+?>
+    <div class="layout-toolbar">
+        <div class="row middle-md">
+            <div class="col-md">
+                <h1><i class="fa fa-industry fa-fw"></i>
+                    <?= $title = sprintf('%s - %s', $this->translate('Manufacturing'), $company->getContractorName()) ?></h1>
+                <?php echo $this->headTitle($title) ?>
+            </div>
+            <div class="col-md end-md">
+                <?= $this->partial('partial/dashboard-menu', ['company' => $company]) ?>
+            </div>
+        </div>
+    </div>
+
+<?= $this->partial('partial/messenger', ['messenger' => $this->messenger]); ?>
+
+    <div class="row">
+        <div class="col-md">
+
+            <div class="panel">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <i class="fa fa-inbox fa-fw"></i>
+                        <?= $this->translate('Product warehouse state') ?>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <table class="table-data">
+                        <thead>
+                        <tr>
+                            <th><?= $this->translate('Warehouse') ?></th>
+                            <th class="text-right"><?= $this->translate('Weight, tons') ?></th>
+                        </tr>
+                        </thead>
+                        <?php foreach ($this->products as $product): ?>
+                            <tr>
+                                <td>
+                                    <?= $this->escapeHtml($product['warehouse_name']) ?>
+                                </td>
+                                <td class="text-right">
+                                    <?= $this->numberFormat($product['weight'], NumberFormatter::DECIMAL, NumberFormatter::TYPE_DEFAULT, null, 3) ?>
+                                </td>
+                            </tr>
+                        <?php endforeach ?>
+                    </table>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <i class="fa fa-clock-o fa-fw"></i>
+                        <?= $this->translate('Expected raw material data') ?>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <table class="table-data">
+                        <thead>
+                        <tr>
+                            <th><?= $this->translate('Material') ?></th>
+                            <th style="width:10em" class="text-right"><?= $this->translate('Weight, tons') ?></th>
+                            <th style="width:8em" class="text-right"><?= $this->translate('Price per ton') ?></th>
+                            <th style="width:10em" class="text-right" style="width:12rem"><?= $this->translate('Total price') ?></th>
+                        </tr>
+                        </thead>
+                        <?php foreach ($this->expectedMaterials as $material): ?>
+                            <tr>
+                                <td><?= $this->escapeHtml($material['material_name']) ?></td>
+                                <td class="text-right"><?= $this->numberFormat($material['weight'], NumberFormatter::DECIMAL, NumberFormatter::TYPE_DEFAULT, null, 3) ?></td>
+                                <td class="text-right"><?= $this->currencyFormat(round($material['amount'] / $material['weight'], 2)) ?></td>
+                                <td class="text-right"><?= $this->currencyFormat($material['amount']) ?></td>
+                            </tr>
+                        <?php endforeach ?>
+                    </table>
+
+                    <table class="table-data">
+                        <thead>
+                        <tr>
+                            <th><?= $this->translate('Contract number') ?></th>
+                            <th style="width:10em" class="text-right"><?= $this->translate('Weight, tons') ?></th>
+                            <th style="width:8em" class="text-right"><?= $this->translate('Price per ton') ?></th>
+                            <th style="width:10em" class="text-right" style="width:12rem"><?= $this->translate('Price') ?></th>
+                        </tr>
+                        </thead>
+                        <?php foreach ($this->expectedWagons as $wagon): ?>
+                            <tr>
+                                <td>
+                                    <a href="<?= $this->url('purchaseContract/advanced', ['id' => $wagon['contract_id']]) ?>">
+                                        <?= $this->escapeHtml($wagon['contract_number']) ?>
+                                    </a>
+                                </td>
+                                <td class="text-right"><?= $this->numberFormat($wagon['weight'], NumberFormatter::DECIMAL, NumberFormatter::TYPE_DEFAULT, null, 3) ?></td>
+                                <td class="text-right"><?= $this->currencyFormat(round($wagon['amount'] / $wagon['weight'], 2)) ?></td>
+                                <td class="text-right"><?= $this->currencyFormat($wagon['amount']) ?></td>
+                            </tr>
+                        <?php endforeach ?>
+                    </table>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <i class="fa fa-inbox fa-fw"></i>
+                        <?= $this->translate('Material warehouse state') ?>
+                    </div>
+                </div>
+
+                <div class="panel-body">
+                    <table class="table-data">
+                        <thead>
+                        <tr>
+                            <th><?= sprintf('%s \ %s', $this->translate('Material'), $this->translate('Provider')) ?></th>
+                            <?php /* <th style="width:12rem"><?= $this->translate('Warehouse') ?></th> */ ?>
+                            <th style="width:10em" class="text-right"><?= $this->translate('Weight, tons') ?></th>
+                            <th style="width:8em" class="text-right"><?= $this->translate('Price per ton') ?></th>
+                            <th style="width:10em" class="text-right" style="width:12rem"><?= $this->translate('Total price') ?></th>
+                        </tr>
+                        </thead>
+                        <?php
+                        $index = 0;
+                        $section = '';
+                        $totalLimeWeight = 0;
+                        $totalLimePrice = 0;
+                        $totalCoalWeight = 0;
+                        $totalCoalPrice = 0;
+
+                        foreach ($this->materials as $material): ?>
+                            <?php
+                            if (0 < $material['dropout'] || false !== mb_strpos($material['material_name'], 'Извест', 0, 'UTF-8')) {
+                                $totalLimeWeight = bcadd($totalLimeWeight, $material['weight'], 4);
+                                $totalLimePrice = bcadd($totalLimePrice, $material['price'], 2);
+                            } else {
+                                $totalCoalWeight = bcadd($totalCoalWeight, $material['weight'], 4);
+                                $totalCoalPrice = bcadd($totalCoalPrice, $material['price'], 2);
+                            }
+                            ?>
+                            <?php if ($index && $section != $material['material_name']): ?>
+                                <tr>
+                                    <td colspan="4">
+                                        <hr class="content-divider">
+                                    </td>
+                                </tr>
+                                <?php $section = $material['material_name'] ?>
+                            <?php endif ?>
+                            <tr>
+                                <td>
+                                    <?= $this->escapeHtml($material['material_name']) ?>
+                                    <div class="hint"><?= $this->escapeHtml($material['contractor_name']) ?>
+                                    </div>
+                                </td>
+                                <?php /*<td><?= $this->escapeHtml($material['warehouse_name']) ?></td>*/ ?>
+                                <td class="text-right">
+                                    <?= $this->numberFormat($material['weight'], NumberFormatter::DECIMAL, NumberFormatter::TYPE_DEFAULT, null, 3) ?>
+                                </td>
+                                <td class="text-right">
+                                    <?= $this->currencyFormat(bcdiv($material['price'], $material['weight'], 2)) ?>
+                                </td>
+                                <td class="text-right"><?= $this->currencyFormat($material['price']) ?></td>
+                            </tr>
+                            <?php $index++ ?>
+                        <?php endforeach ?>
+                        <tfoot>
+                        <tr>
+                            <th class="text-left"><?= $this->translate('Total calcareous stone') ?>:</th>
+                            <th class="text-right"><?= $this->numberFormat($totalLimeWeight, NumberFormatter::DECIMAL, NumberFormatter::TYPE_DEFAULT, null, 3) ?></th>
+                            <th>&nbsp;</th>
+                            <th class="text-right"><?= $this->currencyFormat($totalLimePrice) ?></th>
+                        </tr>
+                        <tr>
+                            <th class="text-left"><?= $this->translate('Total coal') ?>:</th>
+                            <th class="text-right"><?= $this->numberFormat($totalCoalWeight, NumberFormatter::DECIMAL, NumberFormatter::TYPE_DEFAULT, null, 3) ?></th>
+                            <th>&nbsp;</th>
+                            <th class="text-right"><?= $this->currencyFormat($totalCoalPrice) ?></th>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <i class="fa fa-info-circle fa-fw"></i>
+                        <?= $this->translate('Total material balances') ?>
+                    </div>
+                </div>
+                <div class="panel-body">
+
+                    <table class="table-data">
+                        <thead>
+                        <tr>
+                            <th><?= $this->translate('Material') ?></th>
+                            <th style="width:10em" class="text-right"><?= $this->translate('Weight, tons') ?></th>
+                            <th style="width:8em" class="text-right"><?= $this->translate('Price per ton') ?></th>
+                            <th style="width:10em" class="text-right" style="width:12rem"><?= $this->translate('Total price') ?></th>
+                        </tr>
+                        </thead>
+                        <?php
+                        $index = 0;
+                        $section = '';
+                        $totalLimeWeight = 0;
+                        $totalLimePrice = 0;
+                        $totalCoalWeight = 0;
+                        $totalCoalPrice = 0;
+                        ?>
+                        <?php foreach ($this->totalMaterials as $material): ?>
+                            <?php
+                            if (false !== mb_strpos($material['material_name'], 'Извест', 0, 'UTF-8')) {
+                                $totalLimeWeight = bcadd($totalLimeWeight, $material['weight'], 4);
+                                $totalLimePrice = bcadd($totalLimePrice, $material['amount'], 2);
+                            } else {
+                                $totalCoalWeight = bcadd($totalCoalWeight, $material['weight'], 4);
+                                $totalCoalPrice = bcadd($totalCoalPrice, $material['amount'], 2);
+                            }
+                            ?>
+                            <?php if ($index && $section != $material['material_name']): ?>
+                                <tr>
+                                    <td colspan="4">
+                                        <hr class="content-divider">
+                                    </td>
+                                </tr>
+                                <?php $section = $material['material_name'] ?>
+                            <?php endif ?>
+                            <tr>
+                                <td><?= $this->escapeHtml($material['material_name']) ?></td>
+                                <td class="text-right">
+                                    <?= $this->numberFormat($material['weight'], NumberFormatter::DECIMAL, NumberFormatter::TYPE_DEFAULT, null, 3) ?>
+                                </td>
+                                <td class="text-right"><?= $this->currencyFormat(round($material['amount'] / $material['weight'], 2)) ?></td>
+                                <td class="text-right"><?= $this->currencyFormat($material['amount']) ?></td>
+                            </tr>
+                            <?php $index++; ?>
+                        <?php endforeach ?>
+                        <tfoot>
+                        <tr>
+                            <th class="text-left"><?= $this->translate('Total calcareous stone') ?>:</th>
+                            <th class="text-right"><?= $this->numberFormat($totalLimeWeight, NumberFormatter::DECIMAL, NumberFormatter::TYPE_DEFAULT, null, 3) ?></th>
+                            <th>&nbsp;</th>
+                            <th class="text-right"><?= $this->currencyFormat($totalLimePrice) ?></th>
+                        </tr>
+                        <tr>
+                            <th class="text-left"><?= $this->translate('Total coal') ?>:</th>
+                            <th class="text-right"><?= $this->numberFormat($totalCoalWeight, NumberFormatter::DECIMAL, NumberFormatter::TYPE_DEFAULT, null, 3) ?></th>
+                            <th>&nbsp;</th>
+                            <th class="text-right"><?= $this->currencyFormat($totalCoalPrice) ?></th>
+                        </tr>
+                        </tfoot>
+                    </table>
+
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md">
+
+            <div class="panel">
+                <div class="panel-header">
+                    <div class="row middle-md">
+                        <div class="col-md">
+                            <div class="panel-title">
+                                <i class="fa fa-navicon fa-fw"></i>
+                                <?= $this->translate('Furnace logs') ?>
+                            </div>
+                        </div>
+                        <div class="col-md end-md">
+                            <div class="dropdown">
+                                <a href="#date" class="dropdown-toggle btn btn-warning btn-sm">
+                                    <i class="fa fa-calendar fa-fw"></i>
+                                    <?= $this->translate('Select month') ?>
+                                </a>
+                                <ul class="dropdown-list">
+                                    <li id="skipDatePicker"></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body" id="skipContents">
+                    <?php reset($furnaces) ?>
+                    <?php $header = array_shift($furnaces); ?>
+                    <table class="table-data">
+                        <thead>
+                        <tr>
+                            <?php foreach ($header as $key => $column): ?>
+                                <?php if (0 < $key): ?>
+                                    <th class="text-center"><?= $this->translate($column) ?></th>
+                                <?php else: ?>
+                                    <th class="text-left"><?= $this->translate($column) ?></th>
+                                <?php endif ?>
+                            <?php endforeach ?>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php
+                        $totalWeight = [];
+                        $totalMaterialWeight = 0;
+                        $totalCoalWeight = 0;
+                        $totalDropoutWeight = 0;
+                        $totalProductWeight = 0;
+                        ?>
+                        <?php foreach ($furnaces as $row): ?>
+                            <tr>
+                                <?php foreach ($row as $key => $column): ?>
+                                    <?php if ($column instanceof DateTime): ?>
+                                        <?php $date = $column->format('d.m.Y') ?>
+                                        <td class="text-left"><?= $this->dateFormat($column, IntlDateFormatter::LONG) ?></td>
+                                    <?php else: ?>
+                                        <?php
+                                        if (!key_exists($key, $totalWeight)) {
+                                            $totalWeight[$key] = ['weight_material' => 0, 'weight_coal' => 0];
+                                        }
+                                        ?>
+                                        <td class="text-center">
+                                            <?php if (is_array($column)): ?>
+                                                <?php if ('success' == $column['status']): ?>
+                                                    <a href="<?= $this->url('furnace/loading', ['id' => $column['skip_id']], ['query' => ['company' => $company->getContractorId(), 'furnace' => $column['furnace_id'], 'date' => $date ?? null]]) ?>">
+                                <span class="text-success"><?= sprintf('%s / %s',
+                                        $this->numberFormat($column['weight_material']),
+                                        $this->numberFormat($column['weight_coal'])) ?></span>
+                                                    </a>
+                                                    <?php
+                                                    $totalMaterialWeight += $column['weight_material'];
+                                                    $totalCoalWeight += $column['weight_coal'];
+                                                    $totalDropoutWeight += key_exists('dropout_weight', $column) ? $column['dropout_weight'] : 0;
+                                                    $totalProductWeight += key_exists('product_weight', $column) ? $column['product_weight'] : 0;
+
+                                                    $totalWeight[$key]['weight_material'] += $column['weight_material'];
+                                                    $totalWeight[$key]['weight_coal'] += $column['weight_coal'];
+                                                    ?>
+                                                <?php else: ?>
+                                                    <a href="<?= $this->url('furnace/loading', [], ['query' => [
+                                                        'company' => $company->getContractorId(),
+                                                        'furnace' => $column['furnace_id'],
+                                                        'date'    => $date ?? null]]) ?>">
+                                                        <span class="text-error"><i class="fa fa-warning"></i></span>
+                                                    </a>
+                                                <?php endif ?>
+                                            <?php endif ?>
+                                        </td>
+                                    <?php endif ?>
+                                <?php endforeach ?>
+                            </tr>
+                        <?php endforeach ?>
+                        <tfoot>
+                        <tr>
+                            <th><?= $this->translate('Total weight') ?>:</th>
+                            <?php foreach ($totalWeight as $value): ?>
+                                <th class="text-center">
+                                    <?= sprintf('%s / %s',
+                                        $this->numberFormat($value['weight_material'], NumberFormatter::DECIMAL, NumberFormatter::TYPE_DEFAULT, null, 3),
+                                        $this->numberFormat($value['weight_coal'], NumberFormatter::DECIMAL, NumberFormatter::TYPE_DEFAULT, null, 3, [
+                                            NumberFormatter::POSITIVE_SUFFIX => sprintf(' %s.', $this->translate('tons'))])) ?>
+
+                                </th>
+                            <?php endforeach ?>
+                        </tr>
+                        </tfoot>
+                        </tbody>
+                    </table>
+                    <table class="table-data">
+                        <tbody>
+                        <tr>
+                            <th><?= $this->translate('Total calcareous stone') ?>:</th>
+                            <td class="text-right"><?= $this->numberFormat($totalMaterialWeight, NumberFormatter::DECIMAL, NumberFormatter::TYPE_DEFAULT, null, 3, [NumberFormatter::POSITIVE_SUFFIX => sprintf(' %s.', $this->translate('tons'))]) ?></td>
+                        </tr>
+                        <tr>
+                            <th><?= $this->translate('Total coal') ?>:</th>
+                            <td class="text-right"><?= $this->numberFormat($totalCoalWeight, NumberFormatter::DECIMAL, NumberFormatter::TYPE_DEFAULT, null, 3, [NumberFormatter::POSITIVE_SUFFIX => sprintf(' %s.', $this->translate('tons'))]) ?></td>
+                        </tr>
+                        <tr>
+                            <th><?= $this->translate('Total finished products') ?>:</th>
+                            <td class="text-right"><?= $this->numberFormat($totalProductWeight, NumberFormatter::DECIMAL, NumberFormatter::TYPE_DEFAULT, null, 3, [NumberFormatter::POSITIVE_SUFFIX => sprintf(' %s.', $this->translate('tons'))]) ?></td>
+                        </tr>
+                        <tr>
+                            <th><?= $this->translate('Total drop-out') ?>:</th>
+                            <td class="text-right"><?= $this->numberFormat($totalDropoutWeight, NumberFormatter::DECIMAL, NumberFormatter::TYPE_DEFAULT, null, 3, [NumberFormatter::POSITIVE_SUFFIX => sprintf(' %s.', $this->translate('tons'))]) ?></td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+<?php
+$this->headLink()->appendStylesheet($this->basePath('css/dropdown.css'));
+$this->inlineScript()->appendFile($this->basePath('js/dropdown.min.js'));
+$this->headLink()->appendStylesheet('/css/datepicker.min.css');
+$this->inlineScript()->appendFile($this->basePath('/js/vendor/datepicker.min.js'));
+$this->inlineScript()->captureStart();
+echo <<<JS
+$('.dropdown').dropdown({autoHide: false});
+$('#skipDatePicker').datepicker({
+    maxDate: new Date(),
+    view: 'months',
+    minView: 'months',
+    dateFormat: 'mm.yyyy',
+    onSelect: function(formattedDate, date, inst) {
+        $('.dropdown > .dropdown-list').slideUp();
+        let skipContents = $('#skipContents');
+        $.ajax('{$this->url('furnace/api', ['id' => $company->getContractorId()])}', {
+            data      : {date: formattedDate},
+            type      : 'get',
+            success   : function (res) {
+                skipContents.html(res);
+            },
+            beforeSend: function () {
+                skipContents.addClass('loading');
+            },
+            complete  : function () {
+                setTimeout(function() {
+                    skipContents.removeClass('loading');
+                }, 1000);
+            }
+        });
+    }
+});
+JS;
+$this->inlineScript()->captureEnd() ?>

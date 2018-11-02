@@ -1,0 +1,242 @@
+<div class="layout-toolbar">
+    <div class="row middle-md">
+        <div class="col-md">
+            <h1>
+                <i class="fa fa-pie-chart fa-fw"></i>
+                <?= $title = $this->translate('Rates') ?>
+            </h1>
+            <?php echo $this->headTitle($title) ?>
+        </div>
+        <div class="col-md end-md">
+            <a href="<?= $this->url('rate/edit') ?>" class="btn btn-primary">
+                <i class="fa fa-plus-circle fa-fw"></i>
+                <?= $this->translate('Add new rate') ?>
+            </a>
+        </div>
+    </div>
+</div>
+
+<?= $this->partial('partial/messenger', ['messenger' => $this->messenger]); ?>
+
+<div class="row">
+    <div class="col-md">
+
+        <?php /** @var \Zend\Paginator\Paginator $paginator */ ?>
+        <?php if ($paginator->count()): ?>
+
+            <div class="panel">
+                <div class="panel-header">
+                    <div class="row middle-md">
+                        <div class="col-md">
+                            <div class="panel-title">
+                                <i class="fa fa-navicon fa-fw"></i>
+                                <?= $this->translate('Rate list') ?>
+                            </div>
+                        </div>
+                        <div class="col-md end-md">
+                            <?= $this->paginationControl($this->paginator, 'Sliding', 'partial/paginator', ['route' => 'rate']) ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <table class="table-data">
+                        <thead>
+                        <tr>
+                            <th class="text-center" style="width:3em"><?= $this->translate('ID') ?></th>
+                            <th class="text-left"><?= $this->translate('Carrier name') ?></th>
+                            <th class="text-center" style="width:3rem;"><?= $this->translate('Type') ?></th>
+                            <th class="text-left" style="width:12rem;"><?= $this->translate('Plant name') ?></th>
+                            <th class="text-left" style="width:12rem"><?= $this->translate('Direction') ?></th>
+                            <th class="text-left"><?= $this->translate('Type of rate') ?></th>
+                            <th class="text-right" style="width:130px"><?= $this->translate('Period') ?></th>
+                            <th class="text-right" style="width:48px"><?= $this->translate('Tools') ?></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php /** @var \Transport\Domain\RateEntity $rate */ ?>
+                        <?php foreach ($this->paginator as $rate): ?>
+                            <tr>
+                                <td class="text-center"><?= $rate->getRateId() ?></td>
+                                <td class="text-left">
+                                    <div class="text-nowrap"><?= $rate->getCarrierName() ?> (<?= $rate->getStationName() ?>)</div>
+                                    <div class="hint text-nowrap">
+                                        <?php if ($rate->getRateType() == $rate::TYPE_FIXED_BETWEEN_WEIGHT): ?>
+                                            <?= $this->translate('Fixed rate with between weight and price per wagon') ?>
+                                        <?php elseif ($rate->getRateType() == $rate::TYPE_FIXED_STATIC_WEIGHT): ?>
+                                            <?= $this->translate('Fixed rate with static weight and price per wagon') ?>
+                                        <?php elseif ($rate->getRateType() == $rate::TYPE_FLOAT_BETWEEN_WEIGHT): ?>
+                                            <?= $this->translate('Float rate with between weight and price per ton') ?>
+                                        <?php endif ?>
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <?php if ('train' == $rate->getCarrierType()): ?>
+                                        <i class="fa fa-train" title="<?= $this->translate('Railway transport') ?>"></i>
+                                    <?php elseif ('truck' == $rate->getCarrierType()): ?>
+                                        <i class="fa fa-truck" title="<?= $this->translate('Motor transport') ?>"></i>
+                                    <?php endif ?>
+                                </td>
+                                <td class="text-left">
+                                    <?= $rate->getPlantName() ?>
+                                    <div class="hint"><?= $rate->getCompanyName() ?></div>
+                                </td>
+                                <td class="text-left">
+                                    <?php if ($rate::DIRECTION_INBOUND === $rate->getDirection()): ?>
+                                        <?= $this->translate('Inbound direction') ?>
+                                    <?php elseif ($rate::DIRECTION_OUTGOING === $rate->getDirection()): ?>
+                                        <?= $this->translate('Outgoing direction') ?>
+                                    <?php endif ?>
+                                </td>
+                                <td class="text-left">
+                                    <?php
+                                    switch ($rate->getRateType()) {
+                                        case \Document\Service\Rate\AdapterFactory::ADAPTER_FIXED:
+                                            echo $this->translate('Fixed rate adapter');
+                                            break;
+                                        case \Document\Service\Rate\AdapterFactory::ADAPTER_FLOAT:
+                                            echo $this->translate('Float rate adapter');
+                                            break;
+                                        case \Document\Service\Rate\AdapterFactory::ADAPTER_MIXED:
+                                            echo $this->translate('Mixed rate adapter');
+                                            break;
+                                    }
+                                    ?>
+                                </td>
+                                <td class="text-right"><?= $this->dateFormat($rate->getPeriodBegin(), IntlDateFormatter::LONG) ?>
+                                    <div class="hint"><?= $this->dateFormat($rate->getPeriodEnd(), IntlDateFormatter::LONG) ?></div>
+                                </td>
+                                <td class="text-right">
+                                    <div class="dropdown">
+                                        <button class="dropdown-toggle btn btn-default"><i class="fa fa-navicon"></i></button>
+                                        <ul class="dropdown-list">
+                                            <li>
+                                                <a href="<?= $this->url('rate/edit', ['id' => $rate->getRateId()]) ?>">
+                                                    <i class="fa fa-pencil fa-fw"></i>
+                                                    <?= $this->translate('Edit rate') ?>
+                                                </a>
+                                            </li>
+                                            <li class="dropdown-list-separator"></li>
+                                            <li>
+                                                <a href="<?= $this->url('rate/delete', ['id' => $rate->getRateId()]) ?>"
+                                                   data-modal="confirm">
+                                                    <i class="fa fa-trash fa-fw"></i>
+                                                    <?= $this->translate('Delete rate') ?>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endforeach ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        <?php else: ?>
+            <div class="layout-not-found">
+                <h3><?= $this->translate('No rates') ?></h3>
+                <p><?= $this->translate('Do you want to add a new rate?') ?></p>
+                <a href="<?= $this->url('rate/edit') ?>" class="btn btn-lg btn-success">
+                    <i class="fa fa-plus-circle fa-fw"></i>
+                    <?= $this->translate('Add new rate') ?>
+                </a>
+            </div>
+        <?php endif ?>
+
+
+    </div>
+    <div class="col-md-3">
+
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-title">
+                    <i class="fa fa-filter fa-fw"></i>
+                    <?= $this->translate('Rate filter') ?>
+                </div>
+            </div>
+            <div class="panel-body">
+                <?php
+                /** @var \Zend\Form\Form $filterForm */
+                $filterForm->prepare();
+                $filterForm->setAttribute('action', $this->url('rate')) ?>
+                <?= $this->form()->openTag($filterForm) ?>
+                <div class="form-row">
+                    <?= $this->formLabel($filterForm->get('plant_id')) ?>
+                    <?= $this->formSelect($filterForm->get('plant_id')) ?>
+                </div>
+                <div class="form-row">
+                    <?= $this->formLabel($filterForm->get('company_id')) ?>
+                    <?= $this->formSelect($filterForm->get('company_id')) ?>
+                </div>
+                <div class="form-row">
+                    <?= $this->formLabel($filterForm->get('station_id')) ?>
+                    <?= $this->formSelect($filterForm->get('station_id')) ?>
+                </div>
+                <div class="form-row">
+                    <?= $this->formLabel($filterForm->get('direction')) ?>
+                    <?= $this->formSelect($filterForm->get('direction')) ?>
+                </div>
+                <div class="form-row">
+                    <div class="row">
+                        <div class="col-md">
+                            <?= $this->formSubmit($filterForm->get('filter')) ?>
+                        </div>
+                        <div class="col-md end-md">
+                            <a class="btn btn-danger" href="<?= $this->url('rate/clearFilter') ?>"><?= $this->translate('Reset filter') ?></a>
+                        </div>
+                    </div>
+                </div>
+                <?= $this->form()->closeTag() ?>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<?php
+$this->headLink()->appendStylesheet($this->basePath('css/dropdown.css'));
+$this->inlineScript()->appendFile($this->basePath('js/dropdown.min.js'));
+$this->headLink()->appendStylesheet($this->basePath('/css/modal.css'));
+$this->inlineScript()->appendFile($this->basePath('/js/modal.js'));
+$this->inlineScript()->captureStart();
+echo /** @lang JavaScript */
+<<<JS
+$('.dropdown').dropdown();
+$.modalConfig({
+    title      : '{$this->translate('Confirmation of deletion')}',
+    message    : '{$this->translate('Are you sure you want to delete this entry?')}',
+    cancelText : '{$this->translate('Cancel')}',
+    confirmText: '{$this->translate('Confirm')}'
+});
+$(document).ready(function() {
+    let form = $('#formRateFilter');
+    form.on('submit', function(e) {
+        e.preventDefault();
+        window.location.search = '?' + $(this).find(':input').filter(function () {
+                return $.trim(this.value).length > 0
+            }).serialize();
+    });
+    
+    let plantSelect   = $('select[name=plant_id]'),
+        companySelect = $('select[name=company_id]').attr('disabled', true),
+        companyFilter = function (plant, reset) {
+            if (plant) {
+                let options = companySelect.find('option').hide();
+                options.filter('[data-plant=' + plant + ']').show();
+                companySelect.removeAttr('disabled');
+            } else {
+                companySelect.attr('disabled', true)
+            }
+            if (reset) {
+                companySelect.prop('selectedIndex', 0);
+            }
+        };
+    plantSelect.on('change', function () {
+        companyFilter(this.value, true);
+    }).val() && companyFilter(plantSelect.val());
+    
+});
+JS;
+echo $this->inlineScript()->captureEnd();

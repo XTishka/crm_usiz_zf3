@@ -1,0 +1,134 @@
+.nav-tab {
+  list-style     : none;
+  padding        : 0;
+  margin         : -.5rem 0;
+  display        : inline-flex;
+  flex-direction : row;
+  vertical-align : middle;
+}
+
+.nav-tab > li {
+  margin-bottom : -3px;
+  border-bottom : 3px solid transparent;
+}
+
+.nav-tab > li:not(:first-child) {
+  margin-left : 0.5rem;
+}
+
+.nav-tab > li.active {
+  border-bottom-color : #4eb5e6;
+  box-sizing          : border-box;
+}
+
+.nav-tab > li > a,
+.nav-tab > li > a:visited {
+  display         : block;
+  padding         : 0.5rem 1rem;
+  text-decoration : none;
+  color           : #323232;
+  box-shadow      : inset 0 2px 3px rgba(0, 0, 0, 0.15);
+  border-radius   : 3px 3px 0 0;
+}
+
+.nav-sidebar {
+  list-style : none;
+  padding    : 0;
+  margin     : 24px 0;
+}
+
+.nav-sidebar > li a,
+.nav-sidebar > li a:visited,
+.nav-sidebar > li span {
+  display         : block;
+  box-sizing      : border-box;
+  padding         : 12px 16px;
+  outline         : none;
+  color           : #929292;
+  text-decoration : none;
+  position        : relative;
+  cursor          : pointer;
+  transition      : background-color .5s, color .5s;
+}
+
+.nav-sidebar > li a:hover,
+.nav-sidebar > li span:hover {
+  background-color : rgba(0, 0, 0, 0.1);
+  color            : #ffffff;
+}
+
+.nav-sidebar > li a i.fa,
+.nav-sidebar > li span i.fa {
+  color : #929292 !important;
+}
+
+.nav-sidebar > li span:after {
+  font       : normal normal normal 16px/1 FontAwesome;
+  content    : '\f107';
+  position   : absolute;
+  right      : 16px;
+  top        : 50%;
+  margin-top : -8px;
+}
+
+.nav-sidebar > li.active span:after {
+  animation                 : animationRotateFrames linear .25s;
+  animation-iteration-count : 1;
+  animation-fill-mode       : forwards;
+}
+
+@keyframes animationRotateFrames {
+  0% {
+    transform  : rotate(0deg);
+    margin-top : -8px;
+  }
+  100% {
+    transform  : rotate(180deg);
+    margin-top : -6px;
+  }
+}
+
+.nav-sidebar > li.active > a,
+.nav-sidebar > li.active > a:visited,
+.nav-sidebar > li.active > span {
+  background-color : #323b44;
+  box-shadow       : inset 4px 0 0 #ca3c3c;
+  color            : #ffffff;
+}
+
+.nav-sidebar li.active > a,
+.nav-sidebar li.active > span {
+  color : #ffffff;
+}
+
+.nav-sidebar li.active > a > i.fa,
+.nav-sidebar li.active > span > i.fa {
+  color : #929292;
+}
+
+.nav-sidebar li i.fa {
+  vertical-align : middle;
+  margin         : -3px 12px 0 0;
+  opacity        : .75;
+}
+
+.nav-sidebar > li ul {
+  background-color : rgba(0, 0, 0, 0.15);
+  list-style       : none;
+  margin           : 0;
+  padding          : 0;
+}
+
+.nav-sidebar > li ul > li a,
+.nav-sidebar > li ul > li a:visited,
+.nav-sidebar > li ul > li span {
+  padding     : 12px 16px;
+  position    : relative;
+  white-space : nowrap;
+}
+
+.nav-sidebar > li ul > li.active a,
+.nav-sidebar > li ul > li.active a:visited,
+.nav-sidebar > li ul > li.active span {
+  background-color : rgba(0, 0, 0, 0.1);
+}

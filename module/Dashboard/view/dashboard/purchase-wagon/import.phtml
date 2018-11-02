@@ -1,0 +1,148 @@
+<?php
+/**
+ * @var \Zend\Form\Form                         $form
+ * @var \Contractor\Entity\ContractorCompany    $company
+ * @var \Document\Domain\PurchaseContractEntity $contract
+ */
+?>
+<div class="layout-toolbar">
+    <div class="row middle-md">
+        <div class="col-md">
+            <h1><i class="fa fa-dashboard fa-fw"></i>
+                <?= $title = sprintf('%s: %s - %s', $this->translate('Dashboard'), $company->getContractorName(), $this->translate('Wagons data import')) ?>
+            </h1>
+            <?php echo $this->headTitle($title) ?>
+        </div>
+        <div class="col-md end-md">
+            <?= $this->partial('partial/dashboard-menu', ['company' => $company]) ?>
+        </div>
+    </div>
+</div>
+
+<div class="panel">
+    <div class="panel-header">
+        <div class="panel-title">
+            <i class="fa fa-upload fa-fw"></i>
+            <?= $this->translate('Upload wagon data') ?>
+        </div>
+    </div>
+    <div class="panel-body">
+        <?php
+        $form->setAttribute('action', $this->url('dashboard/purchaseWagon/import', [
+            'company'  => $company->getContractorId(),
+            'contract' => $contract->getContractId(),
+        ]));
+
+        //$form->setAttribute('style', 'display:inline');
+        $form->prepare(); ?>
+        <?= $this->form()->openTag($form) ?>
+        <?= $this->formHidden($form->get('contract_id')) ?>
+
+        <?php if ($contract::CONDITIONS_TYPE_CPT != $contract->getConditions()): ?>
+            <div id="carrierAndRate">
+
+                <div class="form-row">
+                    <?= $this->formLabel($form->get('carrier_id')) ?>
+                    <?= $this->formSelect($form->get('carrier_id')) ?>
+                    <?= $this->formElementErrors($form->get('carrier_id')) ?>
+                </div>
+
+                <div class="form-row">
+                    <?= $this->formLabel($form->get('rate_id')) ?>
+                    <?= $this->formSelect($form->get('rate_id')) ?>
+                    <?= $this->formElementErrors($form->get('rate_id')) ?>
+                </div>
+
+                <div class="form-row">
+                    <label>
+                        <input type="checkbox" id="js_actual_rates">
+                        <?= $this->translate('Show only actual rates') ?>
+                    </label>
+                </div>
+
+            </div>
+        <?php endif ?>
+
+        <div class="form-row">
+            <?= $this->formLabel($form->get('file')) ?>
+            <?= $this->formFile($form->get('file')) ?>
+            <?= $this->formElementErrors($form->get('file')) ?>
+        </div>
+
+        <?= $this->formSubmit($form->get('import')) ?>
+        <?= $this->form()->closeTag() ?>
+    </div>
+</div>
+
+<?php
+$this->inlineScript()->captureStart();
+echo <<<JS
+$(document).ready(function () {
+    
+    var aSel = $('select[name=carrier_id]'),
+        bSel = $('select[name=rate_id]'),
+        cBox = $('#carrierAndRate');
+    
+    $.ajax('/carrier/value-options', {
+        data      : {
+            carrier_type: '{$contract->getCarrierType()}',
+        },
+        type      : 'post',
+        success   : function (res) {
+            aSel.empty();
+            if (!res.length) return;
+            $.each(res, function (key, obj) {
+                $(document.createElement('option')).attr(obj.attributes).val(obj.value).text(obj.label).appendTo(aSel);
+            }) && aSel.prop({
+                disabled     : false,
+                selectedIndex: 0
+            }).val('{$form->get('carrier_id')->getValue()}').change();
+        },
+        beforeSend: function () {
+            aSel.closest('.panel-body').addClass('loading');
+        },
+        complete  : function () {
+            setTimeout(function () {
+                aSel.closest('.panel-body').removeClass('loading');
+            }, 1000);
+        }
+    });
+    
+    var loadRates = function () {
+        bSel.prop('disabled', true);
+        $.ajax('/rate/ajax-rates', {
+            data      : {
+                direction: 'inboundDirection',
+                carrier: aSel.val(),
+                company: '{$company->getContractorId()}',
+                station: '{$contract->getStationId()}',
+                period: $('#js_actual_rates:checked').length ? 1 : 0},
+            type      : 'post',
+            success   : function (res) {
+                bSel.empty();
+                if (!res.length) return;
+                $.each(res, function (key, obj) {
+                    $(document.createElement('option')).attr(obj.attributes).val(obj.value).text(obj.label).appendTo(bSel);
+                }) && bSel.prop({
+                    disabled     : false,
+                    selectedIndex: 0
+                }).val('{$form->get('rate_id')->getValue()}');
+            },
+            beforeSend: function () {
+                aSel.closest('.panel-body').addClass('loading');
+            },
+            complete  : function () {
+                setTimeout(function () {
+                    aSel.closest('.panel-body').removeClass('loading');
+                }, 1000);
+            }
+        });
+    };
+    
+    aSel.on('change', loadRates);
+    $('#js_actual_rates').on('change', loadRates);
+    
+});
+JS;
+$this->inlineScript()->captureEnd() ?>
+

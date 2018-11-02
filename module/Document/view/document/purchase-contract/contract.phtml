@@ -1,0 +1,139 @@
+<div class="panel">
+    <div class="panel-header">
+        <div class="panel-title">
+            <i class="fa fa-info-circle fa-fw text-sub"></i>
+            <?= $this->translate('Contract information') ?>
+        </div>
+    </div>
+    <div class="panel-body">
+
+        <?php /** @var \Document\Domain\PurchaseContractEntity $contract */ ?>
+
+        <div class="row">
+
+            <div class="col-md">
+
+                <table class="table-data">
+                    <tr>
+                        <td class="text-left">
+                            <i class="fa fa-database fa-fw text-sub"></i>
+                            <?= $this->translate('Material name') ?>:
+                        </td>
+                        <td class="text-right"><?= $contract->getMaterialName() ?></td>
+                    </tr>
+                    <tr>
+                        <td class="text-left">
+                            <i class="fa fa-file-text fa-fw text-sub"></i>
+                            <?= $this->translate('Contract number') ?>:
+                        </td>
+                        <td class="text-right"><?= $contract->getContractNumber() ?></td>
+                    </tr>
+                    <tr>
+                        <td class="text-left">
+                            <i class="fa fa-building fa-fw text-sub"></i>
+                            <?= $this->translate('Company') ?>:
+                        </td>
+                        <td class="text-right"><?= $contract->getCompanyName() ?></td>
+                    </tr>
+                    <tr>
+                        <td class="text-left">
+                            <i class="fa fa-inbox fa-fw text-sub"></i>
+                            <?= $this->translate('Warehouse') ?>:
+                        </td>
+                        <td class="text-right"><?= $contract->getWarehouseName() ?></td>
+                    </tr>
+                </table>
+
+            </div>
+
+            <div class="col-md">
+
+                <table class="table-data">
+                    <tr>
+                        <td class="text-left">
+                            <i class="fa fa-truck fa-fw text-sub"></i>
+                            <?= $this->translate('Carrier type') ?>:
+                        </td>
+                        <td class="text-right">
+                            <?php if ('train' == $contract->getCarrierType()): ?>
+                                <?= $this->translate('Railway transport') ?>
+                            <?php elseif ('truck' == $contract->getCarrierType()): ?>
+                                <?= $this->translate('Motor transport') ?>
+                            <?php endif ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-left">
+                            <i class="fa fa-retweet fa-fw text-sub"></i>
+                            <?= $this->translate('Conditions of delivery') ?>:
+                        </td>
+                        <td class="text-right text-nowrap">
+                            <?php if ($contract::CONDITIONS_TYPE_FCA == $contract->getConditions()): ?>
+                                <?= sprintf('%s (%s)', $this->translate('FCA'), $this->translate('Free Carrier')) ?>
+                            <?php elseif ($contract::CONDITIONS_TYPE_CPT == $contract->getConditions()): ?>
+                                <?= sprintf('%s (%s)', $this->translate('CPT'), $this->translate('Carriage Paid To')) ?>
+                            <?php elseif ($contract::CONDITIONS_TYPE_CPT_RETURN == $contract->getConditions()): ?>
+                                <?= sprintf('%s (%s)', $this->translate('CPT(r)'), $this->translate('Carriage Paid To and Return')) ?>
+                            <?php endif ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-left">
+                            <i class="fa fa-flag fa-fw text-sub"></i>
+                            <?= $this->translate('Country of purchase') ?>:
+                        </td>
+                        <td class="text-right">
+                            <?= $contract->getCountryName() ?>
+                            <img alt="<?= $contract->getCountry() ?>" class="flag-icon"
+                                 src="<?= $this->basePath(sprintf('/img/flags/%s.png', $contract->getCountry())) ?>">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-left">
+                            <i class="fa fa-download fa-fw text-sub"></i>
+                            <?= $this->translate('Provider') ?>:
+                        </td>
+                        <td class="text-right"><?= $contract->getProviderName() ?></td>
+                    </tr>
+                </table>
+
+            </div>
+
+            <div class="col-md">
+
+                <table class="table-data">
+                    <tr>
+                        <td class="text-left">
+                            <i class="fa fa-usd fa-fw text-sub"></i>
+                            <?= $this->translate('Price without VAT') ?>:
+                        </td>
+                        <td class="text-right"><?= $this->currencyFormat($contract->getPrice()) ?></td>
+                    </tr>
+                    <tr>
+                        <td class="text-left">
+                            <i class="fa fa-percent fa-fw text-sub"></i>
+                            <?= $this->translate('Price with VAT') ?>:
+                        </td>
+                        <td class="text-right"><?= $this->currencyFormat($contract->getPrice(true)) ?></td>
+                    </tr>
+                    <tr>
+                        <td class="text-left">
+                            <i class="fa fa-calendar fa-fw text-sub"></i>
+                            <?= $this->translate('Updated') ?>:
+                        </td>
+                        <td class="text-right"><?= $this->dateFormat($contract->getUpdated(), IntlDateFormatter::MEDIUM, IntlDateFormatter::MEDIUM) ?></td>
+                    </tr>
+                    <tr>
+                        <td class="text-left">
+                            <i class="fa fa-calendar-plus-o fa-fw text-sub"></i>
+                            <?= $this->translate('Created') ?>:
+                        </td>
+                        <td class="text-right"><?= $this->dateFormat($contract->getCreated(), IntlDateFormatter::MEDIUM, IntlDateFormatter::MEDIUM) ?></td>
+                    </tr>
+                </table>
+
+            </div>
+        </div>
+
+    </div>
+</div>

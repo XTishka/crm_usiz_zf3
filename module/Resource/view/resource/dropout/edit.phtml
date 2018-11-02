@@ -1,0 +1,144 @@
+<?php
+/**
+ * @var \Zend\Form\Element\Collection $collection
+ * @var \Zend\Form\Form               $form
+ * @var \Zend\Form\Fieldset           $fieldset
+ */
+$form->setAttribute('action', $this->url('dropout/edit'));
+$form->prepare();
+echo $this->form()->openTag($form) ?>
+
+<div class="layout-toolbar">
+    <div class="row middle-md">
+        <div class="col-md">
+            <h1>
+                <i class="fa fa-pencil fa-fw"></i>
+                <?= $title = $this->translate('Editing the drop-out rate data') ?>
+            </h1>
+            <?php echo $this->headTitle($title) ?>
+        </div>
+        <div class="col-md end-md">
+            <?= $this->formSubmit($form->get('save')) ?>
+            <a href="<?= $this->url('dropout') ?>" class="btn btn-danger">
+                <i class="fa fa-close fa-fw"></i>
+                <?= $this->translate('Cancel') ?>
+            </a>
+        </div>
+    </div>
+</div>
+
+<?= $this->partial('partial/messenger', ['messenger' => $this->messenger]); ?>
+
+<div class="row">
+    <div class="col-md">
+
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-title">
+                    <i class="fa fa-tag fa-fw"></i>
+                    <?= $this->translate('Common data') ?>
+                </div>
+            </div>
+            <div class="panel-body">
+                <?= $this->formHidden($form->get('csrf')) ?>
+                <?= $this->formHidden($form->get('dropout_id')) ?>
+
+                <div class="form-row">
+                    <?= $this->formLabel($form->get('provider_id')) ?>
+                    <?= $this->formSelect($form->get('provider_id')) ?>
+                    <?= $this->formElementErrors($form->get('provider_id')) ?>
+                </div>
+
+                <div class="form-row">
+                    <?= $this->formLabel($form->get('material_id')) ?>
+                    <?= $this->formSelect($form->get('material_id')) ?>
+                    <?= $this->formElementErrors($form->get('material_id')) ?>
+                </div>
+
+                <div class="form-row">
+                    <?= $this->formLabel($form->get('value')) ?>
+                    <?= $this->formNumber($form->get('value')) ?>
+                    <?= $this->formElementErrors($form->get('value')) ?>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-5">
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-title">
+                    <i class="fa fa-calendar fa-fw"></i>
+                    <?= $this->translate('Period') ?>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md">
+                        <div class="form-row">
+                            <div style="margin-bottom:12px">
+                                <?= $this->formLabel($form->get('period_begin')) ?>
+                            </div>
+                            <?= $this->formHidden($form->get('period_begin')) ?>
+                            <?= $this->formElementErrors($form->get('period_begin')) ?>
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-row">
+                            <div style="margin-bottom:12px">
+                                <?= $this->formLabel($form->get('period_end')) ?>
+                            </div>
+                            <?= $this->formHidden($form->get('period_end')) ?>
+                            <?= $this->formElementErrors($form->get('period_end')) ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<?= $this->form()->closeTag() ?>
+
+<?php
+$this->headLink()->appendStylesheet('/css/datepicker.min.css');
+$this->inlineScript()->appendFile($this->basePath('/js/vendor/datepicker.min.js'));
+$this->inlineScript()->captureStart();
+echo /** @lang JavaScript */
+<<<JS
+$(document).ready(function () {
+
+    var periodBegin = $('input[name=period_begin]'),
+        periodEnd   = $('input[name=period_end]'),
+        beginPts    = periodBegin.val().split('.'),
+        endPts      = periodEnd.val().split('.'),
+        dpBegin     = periodBegin.datepicker({
+            inline   : true,
+            startDate: (beginPts.length === 3) ?
+                new Date(parseInt(beginPts[2]), parseInt(beginPts[1]) - 1, 1) :
+                new Date(),
+            onSelect : function (fd, date) {
+                periodEnd.data('datepicker').update('minDate', date);
+                periodEnd.focus();
+            }
+        }).data('datepicker'),
+        dpEnd       = periodEnd.datepicker({
+            inline   : true,
+            startDate: (endPts.length === 3) ?
+                new Date(parseInt(endPts[2]), parseInt(endPts[1]) - 1, 1) :
+                new Date(),
+            onSelect : function (fd, date) {
+                periodBegin.data('datepicker').update('maxDate', date);
+            }
+        }).data('datepicker');
+    if (beginPts.length === 3) {
+        dpBegin.selectDate(new Date(beginPts[2], beginPts[1] - 1, beginPts[0]));
+    }
+    if (endPts.length === 3) {
+        dpEnd.selectDate(new Date(parseInt(endPts[2]), parseInt(endPts[1]) - 1, parseInt(endPts[0])));
+    }
+    
+});
+JS;
+$this->inlineScript()->captureEnd() ?>

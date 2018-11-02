@@ -1,0 +1,278 @@
+<?php
+/**
+ * @var \Contractor\Entity\ContractorCompany $company
+ */
+?>
+    <div class="layout-toolbar">
+        <div class="row middle-md">
+            <div class="col-md">
+                <h1><i class="fa fa-dashboard fa-fw"></i>
+                    <?= $title = sprintf('%s: %s - %s', $this->translate('Dashboard'), $company->getContractorName(), $this->translate('Manage of sale contract')) ?>
+                </h1>
+                <div class="hint"><?= $company->getContractorType() ?></div>
+                <?php echo $this->headTitle($title) ?>
+            </div>
+            <div class="col-md end-md">
+                <?= $this->partial('partial/dashboard-menu', ['company' => $company]) ?>
+            </div>
+        </div>
+    </div>
+
+<?= $this->partial('partial/messenger', ['messenger' => $this->messenger]); ?>
+
+    <div class="row">
+        <div class="col-md">
+
+            <div class="panel">
+                <div class="panel-header">
+                    <div class="row middle-md">
+                        <div class="col-md">
+                            <div class="panel-title">
+                                <a id="delete-selected" class="btn btn-danger btn-sm"
+                                   title="<?= $this->translate('Delete wagons') ?>"
+                                   href="<?= $this->url('dashboard/saleWagon/delete', ['company' => $company->getContractorId(), 'contract' => $contract->getContractId(), 'id' => 0]) ?>">
+                                    <i class="fa fa-trash fa-fw"></i></a>
+
+                                <i class="fa fa-truck fa-fw"></i>
+                                <?= $this->translate('Wagons data') ?>
+                            </div>
+                        </div>
+                        <div class="col-md end-md">
+
+                            <a class="btn btn-sm btn-primary" href="<?= $this->url('dashboard/saleWagon/import', [
+                                'company'  => $company->getContractorId(),
+                                'contract' => $this->contract->getContractId()]) ?>">
+                                <i class="fa fa-upload fa-fw"></i>
+                                <?= $this->translate('Import from Excel') ?>
+                            </a>
+                            <a class="btn btn-sm btn-primary" href="<?= $this->url('dashboard/saleWagon/export', [
+                                'company'  => $company->getContractorId(),
+                                'contract' => $this->contract->getContractId()], ['query' => $_GET]) ?>">
+                                <i class="fa fa-download fa-fw"></i>
+                                <?= $this->translate('Export to Excel') ?>
+                            </a>
+
+                            <a class="btn btn-sm btn-primary" href="<?= $this->url('dashboard/saleWagon/loading', [
+                                'company'  => $company->getContractorId(),
+                                'contract' => $this->contract->getContractId()]) ?>">
+                                <i class="fa fa-plus-circle fa-fw"></i>
+                                <?= $this->translate('Add new wagon') ?>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <?php /** @var \Zend\Form\Form $filterForm */
+                    $filterForm = $this->filterForm;
+                    $filterForm->setAttribute('action', $this->url('dashboard/saleContract/advanced', [], [], true));
+                    $filterForm->setAttribute('method', 'get');
+                    $filterForm->prepare();
+                    echo $this->form()->openTag($filterForm);
+                    echo $this->form()->closeTag() ?>
+
+                    <?php if ($this->wagons && $this->wagons->count()): ?>
+                        <table class="table-data">
+                            <?php /** @var \Document\Domain\SaleWagonEntity $wagon */ ?>
+                            <?php $this->placeholder('table_body')->captureStart() ?>
+                            <tbody>
+                            <?php foreach ($this->wagons as $wagon): ?>
+                                <tr>
+                                    <td><input type="checkbox" name="wagon[<?= $wagon->getWagonId() ?>]" data-id="<?= $wagon->getWagonId() ?>"></td>
+                                    <td class="text-left">
+                                        <?= $wagon->getWagonNumber() ?>
+                                        <div class="hint"><?= $wagon->getCarrierName() ?></div>
+                                    </td>
+                                    <td class="text-right">
+                                        <?= $this->currencyFormat($wagon->getProductPrice(), 'UAH') ?>
+                                    </td>
+                                    <td class="text-right">
+                                        <?= $this->numberFormat($wagon->getLoadingWeight(),
+                                            NumberFormatter::DECIMAL, NumberFormatter::TYPE_DEFAULT, null, 3,
+                                            [NumberFormatter::POSITIVE_SUFFIX => sprintf(' %s.', $this->translate('tons'))]) ?>
+                                    </td>
+                                    <td class="text-right">
+                                        <?= $this->dateFormat($wagon->getLoadingDate(), IntlDateFormatter::LONG) ?>
+                                    </td>
+                                    <td class="text-right">
+                                        <div class="dropdown">
+                                            <button class="dropdown-toggle btn btn-default"><i class="fa fa-navicon"></i></button>
+                                            <ul class="dropdown-list">
+                                                <li>
+                                                    <a href="<?= $this->url('dashboard/saleWagon/edit', ['contract' => $wagon->getContractId(), 'id' => $wagon->getWagonId(), 'company' => $company->getContractorId()]) ?>">
+                                                        <i class="fa fa-pencil fa-fw"></i>
+                                                        <?= $this->translate('Edit wagon') ?>
+                                                    </a>
+                                                </li>
+                                                <li class="dropdown-list-separator"></li>
+                                                <li>
+                                                    <a href="<?= $this->url('dashboard/saleWagon/delete', ['contract' => $wagon->getContractId(), 'id' => $wagon->getWagonId(), 'company' => $company->getContractorId()]) ?>"
+                                                       data-modal="confirm"><i class="fa fa-trash fa-fw"></i>
+                                                        <?= $this->translate('Delete wagon') ?>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <?php endforeach ?>
+                            </tbody>
+                            <?php $this->placeholder('table_body')->captureEnd() ?>
+
+                            <thead>
+                            <tr>
+                                <th class="text-center" style="width:1.5rem"><input type="checkbox" name="wagon_all"></th>
+                                <th class="text-left"><?= sprintf('%s / %s', $this->translate('Wagon number'), $this->translate('Carrier')) ?></th>
+                                <th class="text-right"><?= sprintf('%s / %s', $this->translate('Product'), $this->translate('Transport')) ?></th>
+                                <th class="text-right"><?= $this->translate('Loading weight') ?></th>
+                                <th class="text-right" style="width:12em"><?= $this->translate('Loading date') ?></th>
+                                <th class="text-right" style="width:4rem"><?= $this->translate('Tools') ?></th>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>
+                                    <div class="row" style="max-width:320px">
+                                        <div class="col-md-4">
+                                            <?= $this->formText($filterForm->get('number')) ?>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <?= $this->formSelect($filterForm->get('carrier')) ?>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td><?= $this->formText($filterForm->get('loading_date')) ?></td>
+                                <td class="text-right">
+                                    <div class="btn-group">
+                                        <a class="btn btn-primary"
+                                           href="<?= $this->url('dashboard/saleContract/advanced', ['id' => $this->contract->getContractId(), 'company' => $company->getContractorId()]) ?>">
+                                            <i class="fa fa-refresh"></i></a>
+                                        <button class="btn btn-primary" form="wagon-filter"><i class="fa fa-search"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>&nbsp;</th>
+                                <th><?= sprintf('Всего вагонов: %d', $this->wagons->count()) ?></th>
+                                <th class="text-right"><?= $this->currencyFormat($this->wagons->getTotalProductPrice(), 'UAH') ?></th>
+                                <th class="text-right"><?= $this->numberFormat($this->wagons->getTotalLoadingWeight(),
+                                        NumberFormatter::DECIMAL, NumberFormatter::TYPE_DEFAULT, null, 3,
+                                        [NumberFormatter::POSITIVE_SUFFIX => sprintf(' %s.', $this->translate('tons'))]) ?></th>
+                                <th>&nbsp;</th>
+                            </tr>
+                            </thead>
+
+                            <?= $this->placeholder('table_body') ?>
+
+                            <tfoot>
+                            <tr>
+                                <th>&nbsp;</th>
+                                <th><?= sprintf('Всего вагонов: %d', $this->wagons->count()) ?></th>
+                                <th class="text-right"><?= $this->currencyFormat($this->wagons->getTotalProductPrice(), 'UAH') ?></th>
+                                <th class="text-right"><?= $this->numberFormat($this->wagons->getTotalLoadingWeight(),
+                                        NumberFormatter::DECIMAL, NumberFormatter::TYPE_DEFAULT, null, 3,
+                                        [NumberFormatter::POSITIVE_SUFFIX => sprintf(' %s.', $this->translate('tons'))]) ?></th>
+                                <th>&nbsp;</th>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    <?php else: ?>
+                        <div class="text-center">
+                            <br><br>
+                            <img src="<?= $this->basePath('img/empty.svg') ?>" alt="Empty folder" style="max-width:200px">
+                            <h3><?= $this->translate('No wagons') ?></h3>
+                            <p><?= $this->translate('Do you want to add a new wagon?') ?></p>
+                            <a href="<?= $this->url('dashboard/saleWagon/loading', [
+                                'company'  => $company->getContractorId(),
+                                'contract' => $this->contract->getContractId()]) ?>"
+                               class="btn btn-success">
+                                <i class="fa fa-plus-circle fa-fw"></i>
+                                <?= $this->translate('Add new wagon') ?>
+                            </a>
+                            <br><br>
+                        </div>
+                    <?php endif ?>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-4" style="max-width:480px">
+            <div class="panel">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <i class="fa fa-info-circle fa-fw text-sub"></i>
+                        <?= $this->translate('Contract information') ?>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <?= $this->partial('dashboard/sale-contract/contract', ['contract' => $this->contract]); ?>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<?php
+$this->headLink()->appendStylesheet('/css/datepicker.min.css');
+$this->inlineScript()->appendFile($this->basePath('/js/vendor/datepicker.min.js'));
+$this->headLink()->appendStylesheet($this->basePath('css/dropdown.css'));
+$this->inlineScript()->appendFile($this->basePath('js/dropdown.min.js'));
+$this->headLink()->appendStylesheet($this->basePath('/css/modal.css'));
+$this->inlineScript()->appendFile($this->basePath('/js/modal.js'));
+$this->inlineScript()->captureStart();
+echo /** @lang JavaScript */
+<<<JS
+$('.dropdown').dropdown();
+
+$(document).ready(function () {
+    $('#wagon-filter').on('submit', function (e) {
+        e.preventDefault();
+        window.location.search = '?' + $(':input[form=wagon-filter]').filter(function () {
+            return $.trim(this.value).length > 0
+        }).serialize();
+    });
+});
+
+var loadDateInput = $('input[name=loading_date]'),
+    unloadDateInput = $('input[name=unloading_date]');
+loadDateInput.datepicker({
+    dateFormat: 'yyyy-mm-dd',
+    minDate: new Date(loadDateInput.data('date-min')),
+    maxDate: new Date(loadDateInput.data('date-max')),
+    multipleDatesSeparator: ' - ',
+    range: true,
+    dateFormat: 'dd.mm.yyyy',
+    onSelect: function (formattedDate, date, inst) {
+        //inst.hide();
+    }
+});
+
+$.modalConfig({
+    title      : '{$this->translate('Confirmation of deletion')}',
+    message    : '{$this->translate('Are you sure you want to delete this entry?')}',
+    cancelText : '{$this->translate('Cancel')}',
+    confirmText: '{$this->translate('Confirm')}'
+});
+
+var buttonSelected = $('#delete-selected').attr('disabled', true),
+    wagonAll = $('input[name=wagon_all]'),
+    wagonIds = $('input[type=checkbox][name^="wagon["]');
+wagonAll.on('click', function() {
+    wagonIds.prop('checked', $(this).prop('checked')).trigger('change');
+});
+
+wagonIds.on('change', function() {
+  buttonSelected.attr('disabled', !wagonIds.filter(':checked').length);
+});
+
+buttonSelected.on('click', function(e) {
+    e.preventDefault();
+    if('disabled'!==$(this).attr('disabled')) {
+        var ids = wagonIds.filter(':checked').map(function() {
+            return $(this).data('id');
+        }).toArray().join(',');
+        window.location = $(this).attr('href') + '?ids=' + ids;
+    }
+});
+
+JS;
+echo $this->inlineScript()->captureEnd();

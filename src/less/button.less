@@ -1,0 +1,156 @@
+.gradientGenerator (@color, @index: 0) when (@index < 1) {
+  @keyframeSel: percentage(@index);
+  @{keyframeSel} {
+    background-image: radial-gradient(circle at center, rgba(0, 0, 0, 0.250 - (0.25 * @index)) @keyframeSel, @color @keyframeSel, @color 100%);
+  }
+  .gradientGenerator(@color, @index + 0.05);
+}
+
+.btn, .btn:visited {
+  background-color: #dedede;
+  //background-size : 32px;
+  border: none;
+  border-radius: 3px;
+  color: #626262;
+  text-decoration: none;
+  display: inline-block;
+  box-sizing: border-box;
+  line-height: 1;
+  padding: 8px 0.85rem 9px;
+  font-family: "Istok Web", sans-serif;
+  font-size: 14px;
+  text-transform: none;
+  cursor: pointer;
+  outline: none;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow-x: hidden;
+  max-width: 100%;
+  vertical-align: middle;
+  text-shadow: none;
+}
+
+.btn-group {
+  display: inline-flex;
+  flex-wrap: nowrap;
+  align-items: start;
+}
+
+.btn-group .btn {
+  border-radius: 0;
+  flex: 0 0 auto;
+}
+
+.btn-group .btn:first-child {
+  border-radius: 3px 0 0 3px;
+}
+
+.btn-group .btn:not(:last-child) {
+  border-right: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.btn-group .btn:not(:first-child) {
+  border-left: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.btn-group .btn:last-child {
+  border-radius: 0 3px 3px 0;
+}
+
+.btn[type=submit] {
+  padding-top: 0.66rem;
+}
+
+.btn::-moz-focus-inner {
+  border: none;
+}
+
+.btn-default {
+  //background-color : #323b44;
+  background-color: #dedede;
+  //color            : #ffffff;
+}
+
+.btn-lg {
+  font-size: 18px;
+  padding: 1rem 1.5rem;
+}
+
+.btn-sm {
+  font-size: 12px;
+  padding: 0.5rem 1rem;
+}
+
+.btn-sm > .fa {
+  margin-left: -0.25rem;
+  vertical-align: middle;
+}
+
+.btn:hover {
+  animation: defaultGradient .5s;
+}
+
+.btn[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn[disabled]:hover {
+  animation: none;
+}
+
+@keyframes defaultGradient {
+  .gradientGenerator(#dedede);
+}
+
+.btn-primary, .btn-primary:visited {
+  background-color: #3498db;
+  color: #ffffff !important;
+}
+
+.btn-primary:hover {
+  animation: primaryGradient .5s;
+}
+
+@keyframes primaryGradient {
+  .gradientGenerator(#3498db);
+}
+
+.btn-warning, .btn-warning:visited {
+  background-color: #f39c12;
+  color: #ffffff !important;
+}
+
+.btn-warning:hover {
+  animation: warningGradient .5s;
+}
+
+@keyframes warningGradient {
+  .gradientGenerator(#f39c12);
+}
+
+.btn-danger, .btn-danger:visited {
+  background-color: #e74c3c;
+  color: #ffffff !important;
+}
+
+.btn-danger:hover, .btn-danger:visited:hover {
+  animation: dangerGradient .5s;
+}
+
+@keyframes dangerGradient {
+  .gradientGenerator(#e74c3c);
+}
+
+.btn-success {
+  background-color: #98ca69;
+  color: #ffffff;
+}
+
+.btn-success:hover {
+  animation: successGradient .5s;
+}
+
+@keyframes successGradient {
+  .gradientGenerator(#98ca69);
+}

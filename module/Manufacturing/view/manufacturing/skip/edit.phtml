@@ -1,0 +1,285 @@
+<?php
+/**
+ * @var \Zend\Form\Element\Collection $collection
+ * @var \Zend\Form\Form               $form
+ * @var \Zend\Form\Fieldset           $fieldset
+ */
+$form->setAttribute('action', $this->url('furnace/loading', [], ['query' => ['company' => $this->companyId]]));
+$form->prepare();
+echo $this->form()->openTag($form);
+echo $this->formHidden($form->get('skip_id'));
+echo $this->formHidden($form->get('company_id')) ?>
+
+<div class="layout-toolbar">
+    <div class="row middle-md">
+        <div class="col-md">
+            <h1>
+                <i class="fa fa-pencil fa-fw"></i>
+                <?= $title = $this->translate('Editing of furnace skip data') ?>
+            </h1>
+            <?php echo $this->headTitle($title) ?>
+        </div>
+        <div class="col-md end-md">
+            <?= $this->formSubmit($form->get('start_producing')) ?>
+            <a href="#back" class="btn" onclick="window.history.back()">
+                <i class="fa fa-close fa-fw"></i>
+                <?= $this->translate('Cancel') ?>
+            </a>
+            <?php if ($skipId = $form->get('skip_id')->getValue()): ?>
+                <a href="<?= $this->url('furnace/unloading', ['id' => $skipId], ['query' => ['company' => $this->companyId]]) ?>"
+                   data-modal="confirm" class="btn btn-danger"><i class="fa fa-trash fa-fw"></i> <?= $this->translate('Delete skip') ?></a>
+            <?php endif ?>
+        </div>
+    </div>
+</div>
+
+<?= $this->partial('partial/messenger', ['messenger' => $this->messenger]); ?>
+
+
+<?php if ($this->errorMessage): ?>
+    <ul class="alert alert-error">
+        <li><?= $this->translate($this->errorMessage) ?></li>
+    </ul>
+<?php endif ?>
+
+<div class="panel">
+    <div class="panel-header">
+        <div class="panel-title">
+            <i class="fa fa-tag fa-fw"></i>
+            <?= $this->translate('Common data') ?>
+        </div>
+    </div>
+    <div class="panel-body">
+        <?= $this->formHidden($form->get('csrf')) ?>
+
+        <div class="row">
+            <div class="col-md">
+                <div class="form-row">
+                    <?= $this->formLabel($form->get('furnace_id')) ?>
+                    <?= $this->formSelect($form->get('furnace_id')) ?>
+                    <?= $this->formElementErrors($form->get('furnace_id')) ?>
+                </div>
+                <div class="form-row">
+                    <?= $this->formLabel($form->get('date')) ?>
+                    <?= $this->formText($form->get('date')) ?>
+                    <?= $this->formElementErrors($form->get('date')) ?>
+                </div>
+            </div>
+            <div class="col-md">
+                <div class="form-row">
+                    <?= $this->formLabel($form->get('material_warehouse_id')) ?>
+                    <?= $this->formSelect($form->get('material_warehouse_id')) ?>
+                    <?= $this->formElementErrors($form->get('material_warehouse_id')) ?>
+                </div>
+                <div class="form-row">
+                    <?= $this->formLabel($form->get('product_warehouse_id')) ?>
+                    <?= $this->formSelect($form->get('product_warehouse_id')) ?>
+                    <?= $this->formElementErrors($form->get('product_warehouse_id')) ?>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+<div class="panel">
+    <div class="panel-header">
+        <div class="panel-title">
+            <i class="fa fa-tag fa-fw"></i>
+            <?= $this->translate('Material data') ?>
+        </div>
+    </div>
+
+    <div class="panel-body rower-section">
+        <?php /** @var \Zend\Form\Element\Collection $collection */ ?>
+        <?php $collection = $form->get('materials') ?>
+        <?php /** @var \Zend\Form\Fieldset $fieldset */ ?>
+        <?php foreach ($collection as $fieldset): ?>
+            <div class="form-row">
+                <div class="row">
+                    <div class="col-lg">
+                        <?= $this->formLabel($fieldset->get('provider_id')) ?>
+                        <?= $this->formSelect($fieldset->get('provider_id')) ?>
+                        <?= $this->formElementErrors($fieldset->get('provider_id')) ?>
+                    </div>
+                    <div class="col-lg">
+                        <?= $this->formLabel($fieldset->get('material_id')) ?>
+                        <?= $this->formSelect($fieldset->get('material_id')) ?>
+                        <?= $this->formElementErrors($fieldset->get('material_id')) ?>
+                    </div>
+                    <div class="col-lg-1">
+                        <?= $this->formLabel($fieldset->get('weight')) ?>
+                        <?= $this->formNumber($fieldset->get('weight')) ?>
+                        <?= $this->formElementErrors($fieldset->get('weight')) ?>
+                    </div>
+                    <div class="col-lg-1">
+                        <?= $this->formLabel($fieldset->get('dropout')) ?>
+                        <?= $this->formNumber($fieldset->get('dropout')) ?>
+                        <?= $this->formElementErrors($fieldset->get('dropout')) ?>
+                    </div>
+                    <div class="col-lg-1"><br>
+                        <?= $this->formButton($fieldset->get('remove')) ?>
+                    </div>
+                </div>
+            </div>
+        <?php endforeach ?>
+        <!-- Email row template begin -->
+        <script class="rower-template" type="text/html">
+            <?php $template = $collection->getTemplateElement() ?>
+            <div class="form-row">
+                <div class="row">
+                    <div class="col-lg">
+                        <?= $this->formLabel($template->get('provider_id')) ?>
+                        <?= $this->formSelect($template->get('provider_id')) ?>
+                        <?= $this->formElementErrors($template->get('provider_id')) ?>
+                    </div>
+                    <div class="col-lg">
+                        <?= $this->formLabel($template->get('material_id')) ?>
+                        <?= $this->formSelect($template->get('material_id')->setAttribute('disabled', true)) ?>
+                        <?= $this->formElementErrors($template->get('material_id')) ?>
+                    </div>
+                    <div class="col-lg-1">
+                        <?= $this->formLabel($template->get('weight')) ?>
+                        <?= $this->formNumber($template->get('weight')) ?>
+                        <?= $this->formElementErrors($template->get('weight')) ?>
+                    </div>
+                    <div class="col-lg-1">
+                        <?= $this->formLabel($template->get('dropout')) ?>
+                        <?= $this->formNumber($template->get('dropout')) ?>
+                        <?= $this->formElementErrors($template->get('dropout')) ?>
+                    </div>
+                    <div class="col-lg-1"><br>
+                        <?= $this->formButton($template->get('remove')) ?>
+                    </div>
+                </div>
+            </div>
+        </script>
+        <!-- Email row template end -->
+    </div>
+
+</div>
+
+<?= $this->form()->closeTag() ?>
+
+<?php
+$this->headLink()->appendStylesheet('/css/datepicker.min.css');
+$this->inlineScript()->appendFile($this->basePath('/js/vendor/datepicker.min.js'));
+$this->inlineScript()->appendFile($this->basePath('/js/rower.min.js'));
+
+$this->headLink()->appendStylesheet($this->basePath('/css/modal.css'));
+$this->inlineScript()->appendFile($this->basePath('/js/modal.js'));
+
+$this->inlineScript()->captureStart();
+echo <<<JS
+$.modalConfig({
+    title      : '{$this->translate('Confirmation of deletion')}',
+    message    : '{$this->translate('Are you sure you want to delete this entry?')}',
+    cancelText : '{$this->translate('Cancel')}',
+    confirmText: '{$this->translate('Confirm')}'
+});
+
+$('input[name=date]').datepicker({
+    maxDate: new Date(), onSelect: function (formattedDate, date, inst) {
+        inst.hide();
+    }
+});
+
+$('.rower-section').rower({
+    addButtonClass: 'btn btn-primary',
+    rowSelector: '.row',
+    templateSelector: '.rower-template'
+});
+
+let changeVisibilityFields = function (element) {
+    let supId = $(element).val(),
+        furPlantId = $('select[name=furnace_id]').find('option:checked').data('plant'),
+        selMatId = $(element).closest('.row').find('select[name$="[material_id]"]'),
+        inWeight = $(element).closest('.row').find('input[name$="[weight]"]'),
+        inDropout = $(element).closest('.row').find('input[name$="[dropout]"]');
+    
+    if (supId.length) {
+        selMatId.find('option').hide().filter('option[data-provider=' + supId + '][data-plant='+furPlantId+'],option[value=""]').show();
+        selMatId.prop('disabled', false);
+        inWeight.prop('disabled', false);
+        inDropout.prop('disabled', false);
+    } else {
+        selMatId.prop('selectedIndex', 0);
+        selMatId.prop('disabled', true);
+        inWeight.prop('disabled', true);
+        inDropout.val(0).prop('disabled', true);
+    }
+};
+
+$('select[name$="[provider_id]"]').map(function() {
+  changeVisibilityFields(this);
+});
+
+$(document).on('change', 'select[name$="[provider_id]"]', function () {
+    changeVisibilityFields(this);
+}).each(function () {
+    changeVisibilityFields(this);
+});
+
+let changeVisibilityDropout = function (element) {
+    var readonly = !$(element).find('option:checked').data('dropout'),
+        provider = $(element).find('option:checked').data('provider'),
+        dropout  = $(element).closest('.row').find('input[name$="[dropout]"]').prop('readonly', readonly).val(0);
+    if (provider != undefined && 0 < provider) {
+        $.get('/dropout/ajax-value/' + provider, function(data) {
+            if (data.status === "success" && provider === data.provider && data.value > 0) {
+                dropout.val(data.value);
+                return true;
+            }
+        });
+    }
+};
+
+$(document).on('change', 'select[name$="[material_id]"]', function () {
+    changeVisibilityDropout(this);
+}).each(function () {
+    changeVisibilityDropout(this);
+});
+
+$(document).ready(function () {
+    let furSelect = $('select[name=furnace_id]'),
+        matSelect = $('select[name=material_warehouse_id]').attr('disabled', true),
+        proSelect = $('select[name=product_warehouse_id]').attr('disabled', true),
+        matFilter = function (plant, reset) {
+            if (plant) {
+                let options = matSelect.find('option').hide();
+                options.filter('[data-plant=' + plant + ']').prop('selected', true).show();
+                matSelect.removeAttr('disabled');
+            } else {
+                matSelect.attr('disabled', true)
+            }
+            if (reset) {
+                matSelect.prop('selectedIndex', 0);
+            }
+        },
+        proFilter = function (plant, reset) {
+            if (plant) {
+                let options = proSelect.find('option').hide();
+                options.filter('[data-plant=' + plant + ']').prop('selected', true).show();
+                proSelect.removeAttr('disabled');
+            } else {
+                proSelect.attr('disabled', true)
+            }
+            if (reset) {
+                proSelect.prop('selectedIndex', 0);
+            }
+        };
+    furSelect.on('change', function () {
+        let plant = $(this).find(':selected').data('plant');
+        matFilter(plant);
+        proFilter(plant);
+    }).val();
+
+    let plant = $(this).find(':selected').data('plant');
+    matFilter(plant);
+    proFilter(plant);
+
+});
+
+JS;
+$this->inlineScript()->captureEnd() ?>

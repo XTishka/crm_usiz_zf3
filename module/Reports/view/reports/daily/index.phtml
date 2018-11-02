@@ -1,0 +1,513 @@
+<div class="layout-toolbar">
+    <div class="row middle-md">
+        <div class="col-md">
+            <h1><i class="fa fa-table fa-fw"></i><?= $title = $this->translate('Daily report') ?></h1>
+            <?php $this->headTitle($title) ?>
+        </div>
+        <div class="col-md end-md">
+            <?= $this->form()->openTag($this->form) ?>
+
+            <?= $this->formLabel($this->form->get('company_id')) ?>
+            <?= $this->formSelect($this->form->get('company_id')) ?>
+            <?= $this->formElementErrors($this->form->get('company_id')) ?>
+
+            <?= $this->formLabel($this->form->get('date')) ?>
+            <?= $this->formText($this->form->get('date')) ?>
+            <?= $this->formElementErrors($this->form->get('date')) ?>
+
+            <?= $this->formSubmit($this->form->get('html')) ?>
+            <?= $this->formSubmit($this->form->get('submit')) ?>
+
+            <?= $this->form()->closeTag() ?>
+        </div>
+    </div>
+</div>
+
+<?= $this->partial('partial/messenger', ['messenger' => $this->messenger]); ?>
+
+<div class="panel panel-color-cyan">
+    <div class="panel-header">
+        <i class="fa fa-money fa-fw"></i>
+        <?= $this->translate('Active means') ?>
+        <?php $blockTotalSum = 0; ?>
+    </div>
+    <div class="panel-body">
+
+        <?php if (count($this->materials)): ?>
+            <div class="panel">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <i class="fa fa-navicon fa-fw"></i>
+                        <?= $this->translate('Materials') ?>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <table class="table-data table-grid">
+                        <thead>
+                        <tr class="text-center">
+                            <th rowspan="2" class="text-left">Известняк</th>
+                            <th style="width:200px" colspan="2">Склад</th>
+                            <th style="width:200px" colspan="2">В пути</th>
+                            <th style="width:200px" colspan="2">Итого</th>
+                            <th style="width:200px" colspan="2">Склад на начало месяца</th>
+                            <th style="width:100px">Оплачено/заявка</th>
+                            <th style="width:100px">Отгружено</th>
+                            <th style="width:100px">Остаток</th>
+                        </tr>
+                        <tr class="text-center">
+                            <th style="width:100px">т.</th>
+                            <th style="width:100px">грн.</th>
+                            <th style="width:100px">т.</th>
+                            <th style="width:100px">грн.</th>
+                            <th style="width:100px">т.</th>
+                            <th style="width:100px">грн.</th>
+                            <th style="width:100px">т.</th>
+                            <th style="width:100px">грн.</th>
+                            <th>т.</th>
+                            <th>т.</th>
+                            <th>т.</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php
+                        $warehouseWeightSum = 0;
+                        $warehousePriceSum = 0;
+                        $purchaseWeightSum = 0;
+                        $purchasePriceSum = 0;
+                        $totalWeightSum = 0;
+                        $totalPriceSum = 0;
+                        $monthWeightSum = 0;
+                        $monthPriceSum = 0;
+                        ?>
+                        <?php foreach ($this->materials as $material): ?>
+                            <?php if ('Уголь' != $material['materialType']): ?>
+                                <?php
+                                $warehouseWeightSum = bcadd($warehouseWeightSum, $material['warehouseWeight'], 4);
+                                $warehousePriceSum = bcadd($warehousePriceSum, $material['warehousePrice'], 4);
+                                $purchaseWeightSum = bcadd($purchaseWeightSum, $material['purchaseWeight'], 4);
+                                $purchasePriceSum = bcadd($purchasePriceSum, $material['purchasePrice'], 4);
+                                $totalWeightSum = bcadd($totalWeightSum, $material['totalWeight'], 4);
+                                $totalPriceSum = bcadd($totalPriceSum, $material['totalPrice'], 4);
+                                $monthWeightSum = bcadd($monthWeightSum, $material['monthWeight'], 4);
+                                $monthPriceSum = bcadd($monthPriceSum, $material['monthPrice'], 4);
+                                ?>
+                                <tr>
+                                    <th class="text-left"><?= $material['contractorName'] ?></th>
+                                    <td class="text-center"><?= number_format($material['warehouseWeight'], 3, ',', ' ') ?></td>
+                                    <td class="text-center"><?= number_format($material['warehousePrice'], 2, ',', ' ') ?></td>
+                                    <td class="text-center"><?= number_format($material['purchaseWeight'], 3, ',', ' ') ?></td>
+                                    <td class="text-center"><?= number_format($material['purchasePrice'], 2, ',', ' ') ?></td>
+                                    <td class="text-center"><?= number_format($material['totalWeight'], 3, ',', ' ') ?></td>
+                                    <td class="text-center"><?= number_format($material['totalPrice'], 2, ',', ' ') ?></td>
+                                    <td class="text-center"><?= number_format($material['monthWeight'], 3, ',', ' ') ?></td>
+                                    <td class="text-center"><?= number_format($material['monthPrice'], 2, ',', ' ') ?></td>
+                                    <td class="text-center">-</td>
+                                    <td class="text-center">-</td>
+                                    <td class="text-center">-</td>
+                                </tr>
+                            <?php endif ?>
+                        <?php endforeach ?>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <th class="text-left"><?= $this->translate('Total values') ?>:</th>
+                            <th class="text-center"><?= number_format($warehouseWeightSum, 2, ',', ' '); ?></th>
+                            <th class="text-center"><?= number_format($warehousePriceSum, 2, ',', ' '); ?></th>
+                            <th class="text-center"><?= number_format($purchaseWeightSum, 2, ',', ' '); ?></th>
+                            <th class="text-center"><?= number_format($purchasePriceSum, 2, ',', ' '); ?></th>
+                            <th class="text-center"><?= number_format($totalWeightSum, 2, ',', ' '); ?></th>
+                            <th class="text-center"><?= number_format($totalPriceSum, 2, ',', ' '); ?></th>
+                            <th class="text-center"><?= number_format($monthWeightSum, 2, ',', ' '); ?></th>
+                            <th class="text-center"><?= number_format($monthPriceSum, 2, ',', ' '); ?></th>
+                            <th class="text-center">-</th>
+                            <th class="text-center">-</th>
+                            <th class="text-center">-</th>
+                        </tr>
+                        </tfoot>
+                    </table>
+
+                    <table class="table-data table-grid">
+                        <thead>
+                        <tr class="text-center">
+                            <th rowspan="2" class="text-left">Уголь</th>
+                            <th style="width:200px" colspan="2">Склад</th>
+                            <th style="width:200px" colspan="2">В пути</th>
+                            <th style="width:200px" colspan="2">Итого</th>
+                            <th style="width:200px" colspan="2">Склад на начало месяца</th>
+                            <th style="width:100px">Оплачено/заявка</th>
+                            <th style="width:100px">Отгружено</th>
+                            <th style="width:100px">Остаток</th>
+                        </tr>
+                        <tr class="text-center">
+                            <th style="width:100px">т.</th>
+                            <th style="width:100px">грн.</th>
+                            <th style="width:100px">т.</th>
+                            <th style="width:100px">грн.</th>
+                            <th style="width:100px">т.</th>
+                            <th style="width:100px">грн.</th>
+                            <th style="width:100px">т.</th>
+                            <th style="width:100px">грн.</th>
+                            <th>т.</th>
+                            <th>т.</th>
+                            <th>т.</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php
+                        $warehouseWeightSum = 0;
+                        $warehousePriceSum = 0;
+                        $purchaseWeightSum = 0;
+                        $purchasePriceSum = 0;
+                        $totalWeightSum = 0;
+                        $totalPriceSum = 0;
+                        $monthWeightSum = 0;
+                        $monthPriceSum = 0;
+                        ?>
+                        <?php foreach ($this->materials as $material): ?>
+                            <?php if ('Уголь' == $material['materialType']): ?>
+                                <?php
+                                $warehouseWeightSum = bcadd($warehouseWeightSum, $material['warehouseWeight'], 4);
+                                $warehousePriceSum = bcadd($warehousePriceSum, $material['warehousePrice'], 4);
+                                $purchaseWeightSum = bcadd($purchaseWeightSum, $material['purchaseWeight'], 4);
+                                $purchasePriceSum = bcadd($purchasePriceSum, $material['purchasePrice'], 4);
+                                $totalWeightSum = bcadd($totalWeightSum, $material['totalWeight'], 4);
+                                $totalPriceSum = bcadd($totalPriceSum, $material['totalPrice'], 4);
+                                $monthWeightSum = bcadd($monthWeightSum, $material['monthWeight'], 4);
+                                $monthPriceSum = bcadd($monthPriceSum, $material['monthPrice'], 4);
+                                ?>
+                                <tr>
+                                    <th class="text-left"><?= $material['contractorName'] ?></th>
+                                    <td class="text-center"><?= number_format($material['warehouseWeight'], 3, ',', ' ') ?></td>
+                                    <td class="text-center"><?= number_format($material['warehousePrice'], 2, ',', ' ') ?></td>
+                                    <td class="text-center"><?= number_format($material['purchaseWeight'], 3, ',', ' ') ?></td>
+                                    <td class="text-center"><?= number_format($material['purchasePrice'], 2, ',', ' ') ?></td>
+                                    <td class="text-center"><?= number_format($material['totalWeight'], 3, ',', ' ') ?></td>
+                                    <td class="text-center"><?= number_format($material['totalPrice'], 2, ',', ' ') ?></td>
+                                    <td class="text-center"><?= number_format($material['monthWeight'], 3, ',', ' ') ?></td>
+                                    <td class="text-center"><?= number_format($material['monthPrice'], 2, ',', ' ') ?></td>
+                                    <td class="text-center">-</td>
+                                    <td class="text-center">-</td>
+                                    <td class="text-center">-</td>
+                                </tr>
+                            <?php endif ?>
+                        <?php endforeach ?>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <th class="text-left"><?= $this->translate('Total values') ?>:</th>
+                            <th class="text-center"><?= number_format($warehouseWeightSum, 2, ',', ' '); ?></th>
+                            <th class="text-center"><?= number_format($warehousePriceSum, 2, ',', ' '); ?></th>
+                            <th class="text-center"><?= number_format($purchaseWeightSum, 2, ',', ' '); ?></th>
+                            <th class="text-center"><?= number_format($purchasePriceSum, 2, ',', ' '); ?></th>
+                            <th class="text-center"><?= number_format($totalWeightSum, 2, ',', ' '); ?></th>
+                            <th class="text-center"><?= number_format($totalPriceSum, 2, ',', ' '); ?></th>
+                            <th class="text-center"><?= number_format($monthWeightSum, 2, ',', ' '); ?></th>
+                            <th class="text-center"><?= number_format($monthPriceSum, 2, ',', ' '); ?></th>
+                            <th class="text-center">-</th>
+                            <th class="text-center">-</th>
+                            <th class="text-center">-</th>
+                        </tr>
+                        </tfoot>
+                    </table>
+
+                </div>
+            </div>
+        <?php endif ?>
+
+
+        <div class="row">
+            <div class="col-md">
+                <div class="panel">
+                    <div class="panel-header">
+                        <i class="fa fa-money fa-fw"></i>
+                        <?= $this->translate('Company receivable sum') ?></div>
+                    <div class="panel-body">
+                        <?php if ($this->accountsReceivable && $this->accountsReceivable->count()): ?>
+                            <table class="table-data table-grid">
+                                <thead>
+                                <tr>
+                                    <th class="text-left"><?= $this->translate('Customer') ?></th>
+                                    <th class="text-right" style="width:10rem"><?= $this->translate('Amount') ?></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <?php /** @var ArrayObject $row */
+                                foreach ($this->accountsReceivable as $row): ?>
+                                    <tr>
+                                        <td class="text-left hint"><?= $this->escapeHtml($row->offsetGet('contractor_name')) ?></td>
+                                        <td class="text-right"><?= $this->currencyFormat($row->offsetGet('amount')) ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <th class="text-left"><?= $this->translate('Total values') ?>:</th>
+                                    <th class="text-right"><?= $this->currencyFormat($this->accountsReceivable->getTotal()) ?></th>
+                                </tr>
+                                </tfoot>
+                            </table>
+                            <?php $blockTotalSum = bcadd($blockTotalSum, $this->accountsReceivable->getTotal(), 2) ?>
+                        <?php else: ?>
+                            <div class="text-center">
+                                <img src="<?= $this->basePath('img/empty.svg') ?>" alt="Empty folder"
+                                     style="max-width:200px">
+                                <h3><?= $this->translate('Nothing found') ?></h3>
+                            </div>
+                        <?php endif ?>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md">
+                <div class="panel">
+                    <div class="panel-header">
+                        <i class="fa fa-money fa-fw"></i>
+                        <?= $this->translate('Company prepayment sum') ?></div>
+                    <div class="panel-body">
+                        <?php if ($this->providersReceivable && $this->providersReceivable->count()): ?>
+                            <table class="table-data table-grid">
+                                <thead>
+                                <tr>
+                                    <th class="text-left"><?= $this->translate('Customer') ?></th>
+                                    <th class="text-right" style="width:10rem"><?= $this->translate('Amount') ?></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <?php
+                                /** @var ArrayObject $row */ ?>
+                                <?php foreach ($this->providersReceivable as $row): ?>
+                                    <tr>
+                                        <td class="text-left hint"><?= $this->escapeHtml($row->offsetGet('contractor_name')) ?></td>
+                                        <td class="text-right"><?= $this->currencyFormat($row->offsetGet('amount')) ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <th class="text-left"><?= $this->translate('Total values') ?>:</th>
+                                    <th class="text-right"><?= $this->currencyFormat($this->providersReceivable->getTotal()) ?></th>
+                                </tr>
+                                </tfoot>
+                            </table>
+                            <?php $blockTotalSum = $this->providersReceivable->getTotal() ?>
+                        <?php else: ?>
+                            <div class="text-center">
+                                <img src="<?= $this->basePath('img/empty.svg') ?>" alt="Empty folder"
+                                     style="max-width:200px">
+                                <h3><?= $this->translate('Nothing found') ?></h3>
+                            </div>
+                        <?php endif ?>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md">
+                <div class="panel">
+                    <div class="panel-header">
+                        <i class="fa fa-money fa-fw"></i>
+                        <?= $this->translate('Bank accounts') ?></div>
+                    <div class="panel-body">
+                        <?php if ($this->bankRecords && $this->bankRecords->count()): ?>
+                            <table class="table-data table-grid">
+                                <thead>
+                                <tr>
+                                    <th class="text-left"><?= $this->translate('Bank') ?></th>
+                                    <th class="text-right" style="width:10rem"><?= $this->translate('Amount') ?></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <?php
+                                $totalAmount = 0;
+                                /** @var ArrayObject $row */ ?>
+                                <?php foreach ($this->bankRecords as $row): ?>
+                                    <tr>
+                                        <td class="text-left hint"><?= $this->escapeHtml($row->offsetGet('name')) ?></td>
+                                        <td class="text-right"><?= $this->currencyFormat($row->offsetGet('amount')) ?></td>
+                                    </tr>
+                                    <?php $totalAmount = bcadd($totalAmount, $row->offsetGet('amount'), 2) ?>
+                                <?php endforeach; ?>
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <th class="text-left"><?= $this->translate('Total values') ?>:</th>
+                                    <th class="text-right"><?= $this->currencyFormat($totalAmount) ?></th>
+                                </tr>
+                                <tr>
+                                    <th class="text-left"><?= $this->translate('Checking account') ?>:</th>
+                                    <th class="text-right"><?= $this->currencyFormat($this->checkingAccount->getTotal()) ?></th>
+                                </tr>
+                                <tr>
+                                    <?php if ($totalAmount == $this->checkingAccount->getTotal()): ?>
+                                        <th class="text-center text-success" colspan="2">
+                                            <i class="fa fa-check-circle fa-fw"></i>
+                                            <?= $this->translate('Checkout passed') ?>
+                                        </th>
+                                    <?php else: ?>
+                                        <th class="text-center text-error" colspan="2">
+                                            <i class="fa fa-close fa-fw"></i>
+                                            <?= $this->translate('Checkout failed') ?>:
+                                            <?= $this->currencyFormat(abs(bcsub($totalAmount, $this->checkingAccount->getTotal(), 2))) ?>
+                                        </th>
+                                    <?php endif ?>
+                                </tr>
+                                </tfoot>
+                            </table>
+                            <?php $blockTotalSum = bcadd($blockTotalSum, $totalAmount, 4) ?>
+                        <?php else: ?>
+                            <div class="text-center">
+                                <img src="<?= $this->basePath('img/empty.svg') ?>" alt="Empty folder"
+                                     style="max-width:200px">
+                                <h3><?= $this->translate('Nothing found') ?></h3>
+                            </div>
+                        <?php endif ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel-footer">
+        <div class="row">
+            <div class="col-md">
+                <?= $this->translate('Total values') ?>:
+            </div>
+            <div class="col-md end-md">
+                <?= $this->currencyFormat($blockTotalSum) ?>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="panel panel-color-carnation">
+    <div class="panel-header">
+        <i class="fa fa-money fa-fw"></i>
+        <?= $this->translate('Passive means') ?>
+        <?php $blockTotalSum = 0; ?>
+    </div>
+    <div class="panel-body">
+
+        <div class="row">
+            <div class="col-md">
+                <div class="panel">
+                    <div class="panel-header">
+                        <i class="fa fa-money fa-fw"></i>
+                        <?= $this->translate('Company payable sum') ?></div>
+                    <div class="panel-body">
+                        <?php if ($this->accountsPayable && $this->accountsPayable->count()): ?>
+                            <table class="table-data table-grid">
+                                <thead>
+                                <tr>
+                                    <th class="text-left"><?= $this->translate('Customer') ?></th>
+                                    <th class="text-right" style="width:10rem"><?= $this->translate('Amount') ?></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <?php /** @var ArrayObject $row */
+                                foreach ($this->accountsPayable as $row): ?>
+                                    <tr>
+                                        <td class="text-left hint"><?= $this->escapeHtml($row->offsetGet('contractor_name')) ?></td>
+                                        <td class="text-right"><?= $this->currencyFormat($row->offsetGet('amount')) ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <th class="text-left"><?= $this->translate('Total values') ?>:</th>
+                                    <th class="text-right"><?= $this->currencyFormat($this->accountsPayable->getTotal()) ?></th>
+                                </tr>
+                                </tfoot>
+                            </table>
+                            <?php $blockTotalSum = bcadd($blockTotalSum, $this->accountsPayable->getTotal(), 2) ?>
+                        <?php else: ?>
+                            <div class="text-center">
+                                <img src="<?= $this->basePath('img/empty.svg') ?>" alt="Empty folder"
+                                     style="max-width:200px">
+                                <h3><?= $this->translate('Nothing found') ?></h3>
+                            </div>
+                        <?php endif ?>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md">
+                <div class="panel">
+                    <div class="panel-header">
+                        <i class="fa fa-money fa-fw"></i>
+                        <?= $this->translate('Customer prepayment sum') ?></div>
+                    <div class="panel-body">
+                        <?php if ($this->customerPrepayments && $this->customerPrepayments->count()): ?>
+                            <table class="table-data table-grid">
+                                <thead>
+                                <tr>
+                                    <th class="text-left"><?= $this->translate('Customer') ?></th>
+                                    <th class="text-right" style="width:10rem"><?= $this->translate('Amount') ?></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <?php
+                                $totalAmount = 0;
+                                /** @var ArrayObject $row */ ?>
+                                <?php foreach ($this->customerPrepayments as $row): ?>
+                                    <tr>
+                                        <td class="text-left hint"><?= $this->escapeHtml($row->offsetGet('contractor_name')) ?></td>
+                                        <td class="text-right"><?= $this->currencyFormat($row->offsetGet('amount')) ?></td>
+                                    </tr>
+                                    <?php $totalAmount = bcadd($totalAmount, $row->offsetGet('amount')) ?>
+                                <?php endforeach; ?>
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <th class="text-left"><?= $this->translate('Total values') ?>:</th>
+                                    <th class="text-right"><?= $this->currencyFormat($totalAmount) ?></th>
+                                </tr>
+                                </tfoot>
+                            </table>
+                            <?php $blockTotalSum = bcadd($blockTotalSum, $totalAmount, 4) ?>
+                        <?php else: ?>
+                            <div class="text-center">
+                                <img src="<?= $this->basePath('img/empty.svg') ?>" alt="Empty folder"
+                                     style="max-width:200px">
+                                <h3><?= $this->translate('Nothing found') ?></h3>
+                            </div>
+                        <?php endif ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="panel-footer">
+        <div class="row">
+            <div class="col-md">
+                <?= $this->translate('Total values') ?>:
+            </div>
+            <div class="col-md end-md">
+                <?= $this->currencyFormat($blockTotalSum) ?>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<?php
+$this->headLink()->appendStylesheet('/css/datepicker.min.css');
+$this->inlineScript()->appendFile($this->basePath('/js/vendor/datepicker.min.js'));
+
+$this->inlineScript()->captureStart();
+echo /** @lang JavaScript */
+<<<JS
+$(document).ready(function () {
+    var date = $('input[name=date]'),
+        datePts = date.val().split('.'),
+        dpDate = date.datepicker({
+            inline: false,
+            startDate: (datePts.length === 3) ?
+                new Date(parseInt(datePts[2]), parseInt(datePts[1]) - 1, 1) : new Date()
+        }).data('datepicker');
+        if (datePts.length === 3) {
+            dpDate.selectDate(new Date(datePts[2], datePts[1] - 1, datePts[0]));
+        }
+});
+JS;
+echo $this->inlineScript()->captureEnd();

@@ -1,0 +1,57 @@
+<?php
+$this->headMeta()
+    ->appendName('viewport', 'width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0')
+    ->appendHttpEquiv('X-UA-Compatible', 'IE=edge');
+$this->headLink()
+    ->prependStylesheet($this->basePath('css/style.css'));
+$this->headScript()
+    ->prependFile($this->basePath('js/vendor/jquery.min.js'));
+echo $this->doctype() ?>
+<html lang="ru">
+<head>
+    <?= $this->headLink() . PHP_EOL ?>
+    <?= $this->headMeta() . PHP_EOL ?>
+    <?= $this->headScript() . PHP_EOL ?>
+    <?= $this->headTitle() . PHP_EOL ?>
+</head>
+<body>
+
+<div class="layout-col-wrapper">
+    <div class="layout-header">
+        <div class="row middle-md">
+            <div class="col-md">
+                <div class="layout-site-name">
+                    <?= $this->translate('Application name') ?>
+                </div>
+            </div>
+            <div class="col-md end-md">
+                <a href="<?= $this->url('logout') ?>" class="btn btn-default">
+                    <i class="fa fa-sign-out fa-fw"></i>
+                    <?= $this->translate('Sign Out') ?>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="layout-middle">
+        <div class="layout-row-wrapper">
+            <div class="layout-sidebar">
+                <?php $this->navigation()->menu()->setUlClass('nav-sidebar') ?>
+                <?php echo $this->navigation()->menu('Zend\Navigation\Default')->setPartial('partial/menu') ?>
+            </div>
+            <div class="layout-content">
+                <?= $this->content ?>
+            </div>
+        </div>
+    </div>
+</div>
+<?php
+$this->inlineScript()->appendFile($this->basePath('js/slide-menu.min.js'));
+$this->inlineScript()->captureStart();
+echo /** @lang JavaScript */
+<<<JS
+$('.nav-sidebar').slideMenu();
+JS;
+$this->inlineScript()->captureEnd();
+echo $this->inlineScript() ?>
+</body>
+</html>

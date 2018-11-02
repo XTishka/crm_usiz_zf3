@@ -1,0 +1,288 @@
+<?php
+/**
+ * @var \Zend\Form\Element\Collection $collection
+ * @var \Zend\Form\Form               $form
+ * @var \Zend\Form\Fieldset           $fieldset
+ */
+$form->setAttribute('action', $this->url('rate/add'));
+$form->prepare();
+echo $this->form()->openTag($form) ?>
+
+<div class="layout-toolbar">
+    <div class="row middle-md">
+        <div class="col-md">
+            <h1>
+                <i class="fa fa-pencil fa-fw"></i>
+                <?= $title = $this->translate('Editing of rate data') ?>
+            </h1>
+            <?php echo $this->headTitle($title) ?>
+        </div>
+        <div class="col-md end-md">
+            <?= $this->formSubmit($form->get('save_and_remain')) ?>
+            <?= $this->formSubmit($form->get('save_and_exit')) ?>
+            <a href="<?= $this->url('rate') ?>" class="btn btn-danger">
+                <i class="fa fa-close fa-fw"></i>
+                <?= $this->translate('Cancel') ?>
+            </a>
+        </div>
+    </div>
+</div>
+
+<?= $this->partial('partial/messenger', ['messenger' => $this->messenger]); ?>
+
+<div class="row">
+    <div class="col-md">
+
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-title">
+                    <i class="fa fa-tag fa-fw"></i>
+                    <?= $this->translate('Common data') ?>
+                </div>
+            </div>
+            <div class="panel-body">
+                <?= $this->formHidden($form->get('csrf')) ?>
+                <?= $this->formHidden($form->get('rate_id')) ?>
+
+                <div class="form-row">
+                    <?= $this->formLabel($form->get('plant_id')) ?>
+                    <?= $this->formSelect($form->get('plant_id')) ?>
+                    <?= $this->formElementErrors($form->get('plant_id')) ?>
+                </div>
+
+                <div class="form-row">
+                    <?= $this->formLabel($form->get('company_id')) ?>
+                    <?= $this->formSelect($form->get('company_id')) ?>
+                    <?= $this->formElementErrors($form->get('company_id')) ?>
+                </div>
+
+                <div class="form-row">
+                    <?= $this->formLabel($form->get('station_id')) ?>
+                    <?= $this->formSelect($form->get('station_id')) ?>
+                    <?= $this->formElementErrors($form->get('station_id')) ?>
+                </div>
+
+                <div class="form-row">
+                    <?= $this->formLabel($form->get('carrier_id')) ?>
+                    <?= $this->formSelect($form->get('carrier_id')) ?>
+                    <?= $this->formElementErrors($form->get('carrier_id')) ?>
+                </div>
+
+                <div class="form-row">
+                    <?= $this->formLabel($form->get('direction')) ?>
+                    <?= $this->formSelect($form->get('direction')) ?>
+                    <?= $this->formElementErrors($form->get('direction')) ?>
+                </div>
+
+                <div class="form-row">
+                    <?= $this->formLabel($form->get('rate_type')) ?>
+                    <?= $this->formSelect($form->get('rate_type')) ?>
+                    <?= $this->formElementErrors($form->get('rate_type')) ?>
+                </div>
+
+                <!-- Values collection begin -->
+                <section class="rower-section">
+                    <?php /** @var \Zend\Form\Element\Collection $collection */ ?>
+                    <?php $collection = $form->get('multiple_weight') ?>
+                    <?php foreach ($collection as $fieldset): ?>
+                        <div class="rower-row">
+                            <div class="row middle-md">
+                                <div class="col-md">
+                                    <div class="form-row" class="js-min-weight-row">
+                                        <?= $this->formLabel($fieldset->get('min_weight')) ?>
+                                        <?= $this->formNumber($fieldset->get('min_weight')) ?>
+                                        <?= $this->formElementErrors($fieldset->get('min_weight')) ?>
+                                    </div>
+                                </div>
+                                <div class="col-md">
+                                    <div class="form-row">
+                                        <?= $this->formLabel($fieldset->get('weight')) ?>
+                                        <?= $this->formText($fieldset->get('weight')) ?>
+                                        <?= $this->formElementErrors($fieldset->get('weight')) ?>
+                                    </div>
+                                </div>
+                                <div class="col-md">
+                                    <div class="form-row">
+                                        <?= $this->formLabel($fieldset->get('price')) ?>
+                                        <?= $this->formNumber($fieldset->get('price')) ?>
+                                        <?= $this->formElementErrors($fieldset->get('price')) ?>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-row">
+                                        <br>
+                                        <?= $this->formButton($fieldset->get('remove')) ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach ?>
+                    <script class="rower-template" type="text/html">
+                        <?php $template = $collection->getTemplateElement() ?>
+                        <div class="rower-row">
+                            <div class="row middle-md">
+                                <div class="col-md">
+                                    <div class="form-row" class="js-min-weight-row">
+                                        <?= $this->formLabel($template->get('min_weight')) ?>
+                                        <?= $this->formNumber($template->get('min_weight')) ?>
+                                        <?= $this->formElementErrors($template->get('min_weight')) ?>
+                                    </div>
+                                </div>
+                                <div class="col-md">
+                                    <div class="form-row">
+                                        <?= $this->formLabel($template->get('weight')) ?>
+                                        <?= $this->formText($template->get('weight')) ?>
+                                        <?= $this->formElementErrors($template->get('weight')) ?>
+                                    </div>
+                                </div>
+                                <div class="col-md">
+                                    <div class="form-row">
+                                        <?= $this->formLabel($template->get('price')) ?>
+                                        <?= $this->formNumber($template->get('price')) ?>
+                                        <?= $this->formElementErrors($template->get('price')) ?>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-row">
+                                        <br>
+                                        <?= $this->formButton($template->get('remove')) ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </script>
+                </section>
+                <!-- Values collection end -->
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-5">
+        <div class="panel">
+            <div class="panel-header">
+                <?= $this->translate('Period') ?>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md">
+                        <div class="form-row">
+                            <div style="margin-bottom:12px">
+                                <?= $this->formLabel($form->get('period_begin')) ?>
+                            </div>
+                            <?= $this->formHidden($form->get('period_begin')) ?>
+                            <?= $this->formElementErrors($form->get('period_begin')) ?>
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-row">
+                            <div style="margin-bottom:12px">
+                                <?= $this->formLabel($form->get('period_end')) ?>
+                            </div>
+                            <?= $this->formHidden($form->get('period_end')) ?>
+                            <?= $this->formElementErrors($form->get('period_end')) ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<?= $this->form()->closeTag() ?>
+
+<?php
+$this->headLink()->appendStylesheet('/css/datepicker.min.css');
+$this->inlineScript()->appendFile($this->basePath('/js/vendor/datepicker.min.js'));
+$this->inlineScript()->appendFile($this->basePath('/js/between.js'));
+$this->inlineScript()->appendFile($this->basePath('/js/rower.min.js'));
+$this->inlineScript()->captureStart();
+echo /** @lang JavaScript */
+<<<JS
+$(document).ready(function () {
+
+    var periodBegin = $('input[name=period_begin]'),
+        periodEnd   = $('input[name=period_end]'),
+        beginPts    = periodBegin.val().split('.'),
+        endPts      = periodEnd.val().split('.'),
+        dpBegin     = periodBegin.datepicker({
+            inline   : true,
+            startDate: (beginPts.length === 3) ?
+                new Date(parseInt(beginPts[2]), parseInt(beginPts[1]) - 1, 1) :
+                new Date(),
+            onSelect : function (fd, date) {
+                periodEnd.data('datepicker').update('minDate', date);
+                periodEnd.focus();
+            }
+        }).data('datepicker'),
+        dpEnd       = periodEnd.datepicker({
+            inline   : true,
+            startDate: (endPts.length === 3) ?
+                new Date(parseInt(endPts[2]), parseInt(endPts[1]) - 1, 1) :
+                new Date(),
+            onSelect : function (fd, date) {
+                periodBegin.data('datepicker').update('maxDate', date);
+            }
+        }).data('datepicker');
+    if (beginPts.length === 3) {
+        dpBegin.selectDate(new Date(beginPts[2], beginPts[1] - 1, beginPts[0]));
+    }
+    if (endPts.length === 3) {
+        dpEnd.selectDate(new Date(parseInt(endPts[2]), parseInt(endPts[1]) - 1, parseInt(endPts[0])));
+    }
+
+    var plantSelect   = $('select[name=plant_id]'),
+        companySelect = $('select[name=company_id]').attr('disabled', true),
+        companyFilter = function (plant, reset) {
+            if (plant) {
+                var options = companySelect.find('option').hide();
+                options.filter('[data-plant=' + plant + ']').show();
+                companySelect.removeAttr('disabled');
+            } else {
+                companySelect.attr('disabled', true)
+            }
+            if (reset) {
+                companySelect.prop('selectedIndex', 0);
+            }
+        };
+
+    plantSelect.on('change', function () {
+        companyFilter(this.value, true);
+    }).val() && companyFilter(plantSelect.val());
+
+    var typeSelect = $('select[name=rate_type]'),
+        changeRow  = function (html) {
+            var inpWeight    = $(html).find('input[name$="[weight]"]'),
+                inpMinWeight = $(html).find('input[name$="[min_weight]"]'),
+                minWeight    = typeSelect.find('option:selected').data('min-weight');
+
+            inpWeight.siblings('.between-wrapper').remove();
+
+            if ('mixed' === typeSelect.val()) {
+                inpWeight.val(minWeight).between({count: 1});
+                inpMinWeight.val(minWeight);
+                inpMinWeight.closest('.col-md').show();
+            } else {
+                inpWeight.val(minWeight).between({count: 2});
+                inpMinWeight.val('');
+                inpMinWeight.closest('.col-md').hide();
+            }
+        };
+
+    typeSelect.on('change', function () {
+        changeRow('.rower-section');
+    });
+
+    changeRow('.rower-section');
+
+    $('.rower-section').rower({
+        addButtonClass  : 'btn btn-primary',
+        rowSelector     : '.rower-row',
+        templateSelector: '.rower-template',
+        onInsert        : changeRow
+    });
+
+});
+JS;
+$this->inlineScript()->captureEnd() ?>

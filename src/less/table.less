@@ -1,0 +1,77 @@
+.table-data {
+  min-width: 100%;
+  table-layout: fixed;
+  border: 1px solid #dedede;
+  border-collapse: collapse;
+  color: #424242;
+}
+
+.table-data:not(:last-child) {
+  margin-bottom: 16px;
+}
+
+.table-data thead {
+  background-color: #f2f2f2;
+  border-bottom: 1px solid #dedede;
+}
+
+.table-data tfoot {
+  background-color: #f2f2f2;
+  border-top: 1px solid #dedede;
+}
+
+.table-data tbody tr:nth-child(even) {
+  background-color: #edf7fc;
+}
+
+.table-data tbody tr:not(:last-child) {
+  border-bottom: 1px solid #dedede;
+}
+
+.table-data th,
+.table-data td {
+  padding: 0.35rem 0.5rem;
+}
+
+.table-data th img,
+.table-data td img {
+  vertical-align: middle;
+}
+
+.table-data caption {
+  text-align: right;
+  font-weight: 400;
+  padding-top: 3px;
+  font-style: italic;
+  caption-side: bottom;
+}
+
+.table-data a,
+.table-data a:visited {
+  color: inherit;
+  text-decoration: none;
+}
+
+.table-hover tbody tr {
+  cursor: pointer;
+  transition: background-color 0.5s;
+}
+
+.table-hover tbody tr:hover {
+  background-color: #dedede;
+}
+
+.table-scroll {
+  max-width: 100%;
+  padding-bottom: 8px;
+  overflow: scroll;
+}
+
+.table-grid {
+  border-color: #dedede;
+}
+
+.table-grid th,
+.table-grid td {
+  border: 1px solid #dedede;
+}

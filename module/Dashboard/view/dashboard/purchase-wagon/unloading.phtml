@@ -1,0 +1,97 @@
+<?php
+/**
+ * @var \Contractor\Entity\ContractorCompany $company
+ */
+?>
+<div class="layout-toolbar">
+    <div class="row middle-md">
+        <div class="col-md">
+            <h1><i class="fa fa-dashboard fa-fw"></i>
+                <?= $title = sprintf('%s: %s - %s', $this->translate('Dashboard'), $company->getContractorName(), $this->translate('Wagon unloading')) ?>
+            </h1>
+            <div class="hint"><?= $company->getContractorType() ?></div>
+            <?php echo $this->headTitle($title) ?>
+        </div>
+        <div class="col-md end-md">
+            <?= $this->partial('partial/dashboard-menu', ['company' => $company]) ?>
+        </div>
+    </div>
+</div>
+
+
+<?php
+/**
+ * @var \Document\Domain\PurchaseContractEntity $contract
+ * @var \Zend\Form\Element\Collection $collection
+ * @var \Zend\Form\Form $form
+ * @var \Zend\Form\Fieldset $fieldset
+ */
+$form->setAttribute('action', $this->url('dashboard/purchaseWagon/unloading', [
+    'company'  => $company->getContractorId(),
+    'id'       => $form->get('wagon_id')->getValue(),
+    'contract' => $contract->getContractId()]));
+$form->prepare();
+echo $this->form()->openTag($form) ?>
+
+<?= $this->partial('partial/messenger', ['messenger' => $this->messenger]); ?>
+
+<?= $this->partial('document/purchase-contract/contract', ['contract' => $this->contract]); ?>
+
+<div class="row">
+    <div class="col-md">
+
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-title">
+                    <i class="fa fa-tag fa-fw"></i>
+                    <?= $this->translate('Common data') ?>
+                </div>
+            </div>
+            <div class="panel-body">
+                <?= $this->formHidden($form->get('csrf')) ?>
+                <?= $this->formHidden($form->get('wagon_id')) ?>
+                <?= $this->formHidden($form->get('contract_id')) ?>
+
+                <div class="form-row">
+                    <?= $this->formLabel($form->get('unloading_weight')) ?>
+                    <?= $this->formNumber($form->get('unloading_weight')) ?>
+                    <?= $this->formElementErrors($form->get('unloading_weight')) ?>
+                </div>
+
+                <div class="form-row">
+                    <?= $this->formLabel($form->get('unloading_date')) ?>
+                    <?= $this->formText($form->get('unloading_date')) ?>
+                    <?= $this->formElementErrors($form->get('unloading_date')) ?>
+                </div>
+
+                <?= $this->formSubmit($form->get('unload')) ?>
+                <a href="<?= $this->url('dashboard/purchaseContract/advanced', ['company' => $company->getContractorId(), 'id' => $contract->getContractId()]) ?>"
+                   class="btn btn-danger">
+                    <i class="fa fa-close fa-fw"></i>
+                    <?= $this->translate('Cancel') ?>
+                </a>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<?= $this->form()->closeTag() ?>
+
+<?php
+$this->headLink()->appendStylesheet('/css/datepicker.min.css');
+$this->inlineScript()->appendFile($this->basePath('/js/vendor/datepicker.min.js'));
+$this->inlineScript()->captureStart();
+echo <<<JS
+$(document).ready(function () {
+    
+    $('input[name=unloading_date]').datepicker({
+        minDate: new Date({$contract->getCreated()->format('U')} * 1000),
+        maxDate: new Date(),
+        onSelect: function(formattedDate, date, inst) { inst.hide(); }
+    });
+    
+});
+JS;
+$this->inlineScript()->captureEnd() ?>

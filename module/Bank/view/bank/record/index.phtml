@@ -1,0 +1,198 @@
+<?php
+/**
+ * @var \Contractor\Entity\ContractorCompany $company
+ */
+?>
+<div class="layout-toolbar">
+    <div class="row middle-md">
+        <div class="col-md">
+            <h1><i class="fa fa-bank fa-fw"></i>
+                <?= $title = sprintf('%s - %s', $this->translate('Banks'), $company->getContractorName()) ?></h1>
+            <?php echo $this->headTitle($title) ?>
+        </div>
+        <div class="col-md end-md">
+            <?= $this->partial('partial/dashboard-menu', ['company' => $company]) ?>
+        </div>
+    </div>
+</div>
+
+<?= $this->partial('partial/messenger', ['messenger' => $this->messenger]); ?>
+
+<div class="panel">
+    <div class="panel-header">
+        <div class="panel-title">
+            <i class="fa fa-check-square fa-fw"></i>
+            <?= $this->translate('Bank records data') ?>
+        </div>
+    </div>
+    <div class="panel-body">
+        <!--
+        <div class="table-scroll">
+        -->
+        <?php $lastKey = key(array_slice($this->data, -1, 1, true)); ?>
+        <table class="table-data">
+            <?php foreach ($this->data as $key => $rowData): ?>
+                <tr>
+                    <?php foreach ($rowData as $colKey => $colData): ?>
+                        <?= ($key > 0) ?
+                            '<td class="text-nowrap text-center" ' . ($colKey != 'date' ? null : 'style="text-align:left;background:#dce6eb"') . '>' :
+                            '<th class="text-nowrap" ' . ($colKey != 'date' ? 'style="text-align:center"' : 'style="text-align:left;width:128px;background:#dce6eb"') . '>' ?>
+
+
+                        <?php if (is_array($colData)): ?>
+                            <?php if (key_exists('record_id', $colData)): ?>
+                                <span class="<?= $colData['class'] ?>">
+                                        <a href="<?= $this->url('dashboard/bank/edit', [
+                                            'id'      => $colData['record_id'],
+                                            'company' => $company->getContractorId()], ['query' => [
+                                            'bank' => $colData['bank_id'],
+                                            'date' => $colData['date']->format('d.m.Y')]]) ?>">
+                                        <?= $this->currencyFormat($colData['amount']) ?></a></span>
+                            <?php else: ?>
+                                <span class="<?= $colData['class'] ?>">
+                                        <a href="<?= $this->url('dashboard/bank/edit', ['company' => $company->getContractorId()], ['query' => [
+                                            'bank' => $colData['bank_id'],
+                                            'date' => $colData['date']->format('d.m.Y')]]) ?>">
+                                            <?= $this->currencyFormat($colData['amount']) ?>
+                                        </a></span>
+                            <?php endif ?>
+                        <?php else: ?>
+                            <?= is_numeric($colData) ? $this->currencyFormat($colData) : $colData ?>
+                        <?php endif ?>
+
+                        <?= ($key != 'date') ? '</td>' : '</th>' ?>
+                    <?php endforeach; ?>
+                </tr>
+            <?php endforeach; ?>
+        </table>
+        <!--
+        </div>
+        -->
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-5">
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-title">
+                    <i class="fa fa-filter fa-fw"></i>
+                    <?= $this->translate('Record filter') ?>
+                </div>
+            </div>
+            <div class="panel-body">
+                <?php
+                /** @var \Zend\Form\Form $filterForm */
+                $filterForm->prepare();
+                $filterForm->setAttribute('action', $this->url('dashboard/bank', ['company' => $company->getContractorId()])) ?>
+                <?= $this->form()->openTag($filterForm) ?>
+                <div class="row">
+                    <div class="col-md">
+                        <div class="form-row">
+                            <div style="margin-bottom:12px">
+                                <?= $this->formLabel($filterForm->get('period_begin')) ?>
+                            </div>
+                            <?= $this->formHidden($filterForm->get('period_begin')) ?>
+                            <?= $this->formElementErrors($filterForm->get('period_begin')) ?>
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-row">
+                            <div style="margin-bottom:12px">
+                                <?= $this->formLabel($filterForm->get('period_end')) ?>
+                            </div>
+                            <?= $this->formHidden($filterForm->get('period_end')) ?>
+                            <?= $this->formElementErrors($filterForm->get('period_end')) ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="row">
+                        <div class="col-md">
+                            <?= $this->formSubmit($filterForm->get('filter')) ?>
+                        </div>
+                        <div class="col-md end-md">
+                            <a class="btn btn-danger"
+                               href="<?= $this->url('dashboard/bank', ['company' => $company->getContractorId()]) ?>"><?= $this->translate('Reset filter') ?></a>
+                        </div>
+                    </div>
+                </div>
+                <?= $this->form()->closeTag() ?>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-md-5">
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-title">
+                    <i class="fa fa-upload fa-fw"></i>
+                    <?= $this->translate('Import data') ?>
+                </div>
+            </div>
+            <div class="panel-body">
+                <?php
+                /** @var \Zend\Form\Form $importForm */
+                $importForm->prepare();
+                $importForm->setAttribute('action', $this->url('dashboard/bank/import', ['company' => $company->getContractorId()])) ?>
+                <?= $this->form()->openTag($importForm) ?>
+                <div class="form-row">
+                    <?= $this->formLabel($importForm->get('file')) ?>
+                    <?= $this->formFile($importForm->get('file')) ?>
+                </div>
+                <div class="form-row">
+                    <?= $this->formSubmit($importForm->get('import')) ?>
+                </div>
+                <?= $this->form()->closeTag() ?>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<?php
+$this->headLink()->appendStylesheet('/css/datepicker.min.css');
+$this->inlineScript()->appendFile($this->basePath('/js/vendor/datepicker.min.js'));
+
+$this->inlineScript()->captureStart();
+echo /** @lang JavaScript */
+<<<JS
+$(document).ready(function () {
+    var wrapper = $('.table-scroll');
+    var width;
+    wrapper.find('table').hide() && (width = wrapper.parent().width());
+    wrapper.find('table').show() && wrapper.css('width',  width + 'px');
+    
+    var periodBegin = $('input[name=period_begin]'),
+        periodEnd   = $('input[name=period_end]'),
+        beginPts    = periodBegin.val().split('.'),
+        endPts      = periodEnd.val().split('.'),
+        dpBegin     = periodBegin.datepicker({
+            inline   : true,
+            startDate: (beginPts.length === 3) ?
+                new Date(parseInt(beginPts[2]), parseInt(beginPts[1]) - 1, 1) :
+                new Date(),
+            onSelect : function (fd, date) {
+                periodEnd.data('datepicker').update('minDate', date);
+                periodEnd.focus();
+            }
+        }).data('datepicker'),
+        dpEnd       = periodEnd.datepicker({
+            inline   : true,
+            startDate: (endPts.length === 3) ?
+                new Date(parseInt(endPts[2]), parseInt(endPts[1]) - 1, 1) :
+                new Date(),
+            onSelect : function (fd, date) {
+                periodBegin.data('datepicker').update('maxDate', date);
+            }
+        }).data('datepicker');
+    if (beginPts.length === 3) {
+        dpBegin.selectDate(new Date(beginPts[2], beginPts[1] - 1, beginPts[0]));
+    }
+    if (endPts.length === 3) {
+        dpEnd.selectDate(new Date(parseInt(endPts[2]), parseInt(endPts[1]) - 1, parseInt(endPts[0])));
+    }
+
+});
+JS;
+$this->inlineScript()->captureEnd() ?>

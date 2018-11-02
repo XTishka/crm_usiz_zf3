@@ -1,0 +1,191 @@
+/* ---- Form begin ----  */
+
+.form-row {
+  margin-bottom: 12px;
+}
+
+.inline-form-row {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.inline-form-row:not(:last-child) {
+  margin-right: 32px;
+}
+
+.form-flex {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.form-flex > *:first-child {
+  min-width: 172px;
+}
+
+.form-flex > *:last-child {
+  max-width: 32px;
+}
+
+.form-flex > *:not(:first-child) {
+  margin-left: 8px;
+  flex: 1 1 auto;
+}
+
+.form-errors {
+  list-style: none;
+  margin: 2px 0 0;
+  padding: 0;
+  font-size: 12px;
+  color: #df4c42;
+}
+
+fieldset {
+  box-sizing: border-box;
+  border: 1px solid #d8d8d8;
+  border-radius: 3px;
+  padding: 16px;
+}
+
+fieldset legend {
+  display: block;
+  font-size: 13px;
+  color: #626262;
+  background-color: #d8d8d8;
+  padding: 2px 10px;
+  border-radius: 1px;
+}
+
+label[for] {
+  display: block;
+  font-size: 13px;
+  color: #929292;
+  margin-bottom: 2px;
+}
+
+label.label-inline {
+  display: inline-block;
+}
+
+input.input-inline,
+select.input-inline{
+  display: inline-block;
+  width: auto !important;
+}
+
+label[for]:after {
+  content: ':';
+}
+
+input[type=text],
+input[type=search],
+input[type=email],
+input[type=tel],
+input[type=number],
+input[type=color],
+input[type=password],
+input[type=date],
+input[type=datetime],
+select, textarea {
+  background-color: #ffffff;
+  box-sizing: border-box;
+  border: 1px solid #d8d8d8;
+  /*box-shadow: inset 0 0 0 1px #d8d8d8;*/
+  border-radius: 3px;
+  padding: 4px 8px 4px;
+  width: 100%;
+  height: 32px;
+  max-width: 100%;
+  font-family: "Istok Web", sans-serif;
+  font-size: 13px;
+  color: #525252;
+  line-height: 1.32;
+  outline: none;
+}
+
+.btn-group input[type=search] {
+  width: auto;
+  min-width: 60px;
+  border-radius: 0;
+  flex: 0 0 auto;
+}
+
+.btn-group input[type=search]:first-child {
+  border-radius: 3px 0 0 3px;
+  border-right: 0;
+}
+
+input[type=number] {
+  padding-right: 1px;
+}
+
+select[multiple] {
+  height: auto;
+}
+
+select:-moz-focusring {
+  color: transparent;
+  text-shadow: 0 0 0 #323232;
+}
+
+select[disabled] {
+  opacity: 0.5;
+}
+
+textarea {
+  height: auto;
+  line-height: 1.32;
+  padding: 0.5rem 0.65rem;
+}
+
+input[type=checkbox] + label,
+input[type=radio] + label {
+  display: inline-block;
+}
+
+input[type=checkbox] + label:after,
+input[type=radio] + label:after {
+  content: '';
+}
+
+input[type=text][disabled],
+input[type=email][disabled],
+input[type=tel][disabled],
+input[type=number][disabled],
+input[type=color][disabled],
+input[type=password][disabled],
+input[type=date][disabled],
+input[type=datetime][disabled],
+select[disabled], textarea[disabled] {
+}
+
+/* ---- Form end ----  */
+
+.fieldset {
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+.fieldset-toggle {
+  display: block;
+  margin-bottom: 2px;
+  font-size: 13px;
+  color: #929292;
+  cursor: pointer;
+}
+
+.fieldset-toggle:after {
+  font: normal normal normal 14px/1 FontAwesome;
+  margin-left: 3px;
+  vertical-align: middle;
+}
+
+.fieldset[aria-expanded=true] .fieldset-toggle:after {
+  content: '\f0d8';
+}
+
+.fieldset[aria-expanded=false] .fieldset-toggle:after {
+  content: '\f0d7';
+}

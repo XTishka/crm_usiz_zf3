@@ -1,0 +1,6 @@
+INSERT INTO xtishka_usizdev.furnaces (plant_id, furnace_name, description, updated, created) VALUES (1, 'Печь 1 (Губиниха)', '', '2017-10-16 15:12:39', '2017-10-16 15:12:39');
+INSERT INTO xtishka_usizdev.furnaces (plant_id, furnace_name, description, updated, created) VALUES (1, 'Печь 2 (Губиниха)', '', '2017-10-16 15:12:25', '2017-10-16 15:12:25');
+INSERT INTO xtishka_usizdev.furnaces (plant_id, furnace_name, description, updated, created) VALUES (1, 'Печь 3 (Губиниха)', '', '2017-10-12 13:56:14', '2017-10-12 13:56:14');
+INSERT INTO xtishka_usizdev.furnaces (plant_id, furnace_name, description, updated, created) VALUES (3, 'Печь 1 (Купянск)', '', '2017-10-16 15:13:00', '2017-10-16 15:13:00');
+INSERT INTO xtishka_usizdev.furnaces (plant_id, furnace_name, description, updated, created) VALUES (3, 'Печь 2 (Купянск)', '', '2017-10-16 15:13:20', '2017-10-16 15:13:20');
+INSERT INTO xtishka_usizdev.furnaces (plant_id, furnace_name, description, updated, created) VALUES (3, 'Печь 3 (Купянск)', '', '2017-10-16 15:13:58', '2017-10-16 15:13:58');

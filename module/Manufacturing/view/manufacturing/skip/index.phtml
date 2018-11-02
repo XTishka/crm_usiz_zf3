@@ -1,0 +1,109 @@
+<?php
+/**
+ * @var \Contractor\Entity\ContractorCompany $company
+ */
+?>
+<?php reset($furnaces) ?>
+<?php $header = array_shift($furnaces); ?>
+<table class="table-data">
+    <thead>
+    <tr>
+        <?php foreach ($header as $key => $column): ?>
+            <?php if (0 < $key): ?>
+                <th class="text-center"><?= $this->translate($column) ?></th>
+            <?php else: ?>
+                <th class="text-left"><?= $this->translate($column) ?></th>
+            <?php endif ?>
+        <?php endforeach ?>
+    </tr>
+    </thead>
+    <tbody>
+    <?php
+    $totalWeight = [];
+    $totalMaterialWeight = 0;
+    $totalCoalWeight = 0;
+    $totalDropoutWeight = 0;
+    $totalProductWeight = 0;
+    ?>
+    <?php foreach ($furnaces as $row): ?>
+        <tr>
+            <?php foreach ($row as $key => $column): ?>
+                <?php if ($column instanceof DateTime): ?>
+                    <?php $date = $column->format('d.m.Y') ?>
+                    <td class="text-left"><?= $this->dateFormat($column, IntlDateFormatter::LONG) ?></td>
+                <?php else: ?>
+                    <?php
+                    if (!key_exists($key, $totalWeight)) {
+                        $totalWeight[$key] = ['weight_material' => 0, 'weight_coal' => 0];
+                    }
+                    ?>
+                    <td class="text-center">
+                        <?php if (is_array($column)): ?>
+                            <?php if ('success' == $column['status']): ?>
+                                <a href="<?= $this->url('furnace/loading', ['id' => $column['skip_id']], ['query' => [
+                                    'company' => $company->getContractorId(),
+                                    'furnace' => $column['furnace_id'],
+                                    'date'    => $date ?? null]]) ?>">
+                                                    <span class="text-success"><?= sprintf('%s / %s',
+                                                            $this->numberFormat($column['weight_material']),
+                                                            $this->numberFormat($column['weight_coal'])) ?></span>
+                                </a>
+                                <?php
+                                $totalMaterialWeight += $column['weight_material'];
+                                $totalCoalWeight += $column['weight_coal'];
+                                $totalDropoutWeight += key_exists('dropout_weight', $column) ? $column['dropout_weight'] : 0;
+                                $totalProductWeight += key_exists('product_weight', $column) ? $column['product_weight'] : 0;
+
+                                $totalWeight[$key]['weight_material'] += $column['weight_material'];
+                                $totalWeight[$key]['weight_coal'] += $column['weight_coal'];
+                                ?>
+                            <?php else: ?>
+                                <a href="<?= $this->url('furnace/loading', [], ['query' => [
+                                    'company' => $company->getContractorId(),
+                                    'furnace' => $column['furnace_id'],
+                                    'date'    => $date ?? null]]) ?>">
+                                    <span class="text-error"><i class="fa fa-warning"></i></span>
+                                </a>
+                            <?php endif ?>
+                        <?php endif ?>
+                    </td>
+                <?php endif ?>
+            <?php endforeach ?>
+        </tr>
+    <?php endforeach ?>
+    <tfoot>
+    <tr>
+        <th><?= $this->translate('Total weight') ?>:</th>
+        <?php foreach ($totalWeight as $value): ?>
+            <th class="text-center">
+                <?= sprintf('%s / %s',
+                    $this->numberFormat($value['weight_material'], NumberFormatter::DECIMAL, NumberFormatter::TYPE_DEFAULT, null, 3),
+                    $this->numberFormat($value['weight_coal'], NumberFormatter::DECIMAL, NumberFormatter::TYPE_DEFAULT, null, 3, [
+                        NumberFormatter::POSITIVE_SUFFIX => sprintf(' %s.', $this->translate('tons'))])) ?>
+
+            </th>
+        <?php endforeach ?>
+    </tr>
+    </tfoot>
+    </tbody>
+</table>
+<table class="table-data">
+    <tbody>
+    <tr>
+        <th><?= $this->translate('Total calcareous stone') ?>:</th>
+        <td class="text-right"><?= $this->numberFormat($totalMaterialWeight, NumberFormatter::DECIMAL, NumberFormatter::TYPE_DEFAULT, null, 3, [NumberFormatter::POSITIVE_SUFFIX => sprintf(' %s.', $this->translate('tons'))]) ?></td>
+    </tr>
+    <tr>
+        <th><?= $this->translate('Total coal') ?>:</th>
+        <td class="text-right"><?= $this->numberFormat($totalCoalWeight, NumberFormatter::DECIMAL, NumberFormatter::TYPE_DEFAULT, null, 3, [NumberFormatter::POSITIVE_SUFFIX => sprintf(' %s.', $this->translate('tons'))]) ?></td>
+    </tr>
+    <tr>
+        <th><?= $this->translate('Total finished products') ?>:</th>
+        <td class="text-right"><?= $this->numberFormat($totalProductWeight, NumberFormatter::DECIMAL, NumberFormatter::TYPE_DEFAULT, null, 3, [NumberFormatter::POSITIVE_SUFFIX => sprintf(' %s.', $this->translate('tons'))]) ?></td>
+    </tr>
+    <tr>
+        <th><?= $this->translate('Total drop-out') ?>:</th>
+        <td class="text-right"><?= $this->numberFormat($totalDropoutWeight, NumberFormatter::DECIMAL, NumberFormatter::TYPE_DEFAULT, null, 3, [NumberFormatter::POSITIVE_SUFFIX => sprintf(' %s.', $this->translate('tons'))]) ?></td>
+    </tr>
+    </tbody>
+</table>

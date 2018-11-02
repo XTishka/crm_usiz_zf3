@@ -1,0 +1,25 @@
+<table class="table-data">
+    <thead>
+    <tr>
+        <th><?= $this->translate('Material') ?></th>
+        <th class="text-right"><?= $this->translate('Weight') ?></th>
+        <th class="text-right"><?= $this->translate('Price') ?></th>
+    </tr>
+    </thead>
+    <tr>
+        <td><?= sprintf('%s %s', $this->warehouseData->offsetGet('material_name'), $this->translate('in stock')) ?></td>
+        <td class="text-right">
+            <?= $this->numberFormat($this->warehouseData->offsetGet('weight'), NumberFormatter::DECIMAL, NumberFormatter::TYPE_DEFAULT, null, 3, [
+                NumberFormatter::POSITIVE_SUFFIX => sprintf(' %s.', $this->translate('tons'))]) ?>
+        </td>
+        <td class="text-right"><?= $this->currencyFormat($this->warehouseData->offsetGet('amount')) ?></td>
+    </tr>
+    <tr>
+        <td><?= sprintf('%s %s', $this->expectedData->offsetGet('material_name'), $this->translate('expected')) ?></td>
+        <td class="text-right">
+            <?= $this->numberFormat($this->expectedData->offsetGet('weight'), NumberFormatter::DECIMAL, NumberFormatter::TYPE_DEFAULT, null, 3, [
+                NumberFormatter::POSITIVE_SUFFIX => sprintf(' %s.', $this->translate('tons'))]) ?>
+        </td>
+        <td class="text-right"><?= $this->currencyFormat($this->expectedData->offsetGet('amount')) ?></td>
+    </tr>
+</table>

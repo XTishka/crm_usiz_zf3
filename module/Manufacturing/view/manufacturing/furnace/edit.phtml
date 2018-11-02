@@ -1,0 +1,76 @@
+<?php
+/**
+ * @var \Zend\Form\Element\Collection $collection
+ * @var \Zend\Form\Form $form
+ * @var \Zend\Form\Fieldset $fieldset
+ */
+$form->setAttribute('action', $this->url('furnace/edit'));
+$form->prepare();
+echo $this->form()->openTag($form) ?>
+
+<div class="layout-toolbar">
+    <div class="row middle-md">
+        <div class="col-md">
+            <h1>
+                <i class="fa fa-pencil fa-fw"></i>
+                <?= $title = $this->translate('Editing of furnace data') ?>
+            </h1>
+            <?php echo $this->headTitle($title) ?>
+        </div>
+        <div class="col-md end-md">
+            <?= $this->formSubmit($form->get('save_and_remain')) ?>
+            <?= $this->formSubmit($form->get('save_and_exit')) ?>
+            <a href="<?= $this->url('furnace') ?>" class="btn btn-danger">
+                <i class="fa fa-close fa-fw"></i>
+                <?= $this->translate('Cancel') ?>
+            </a>
+        </div>
+    </div>
+</div>
+
+<?= $this->partial('partial/messenger', ['messenger' => $this->messenger]); ?>
+
+<div class="panel">
+    <div class="panel-header">
+        <div class="panel-title">
+            <i class="fa fa-tag fa-fw"></i>
+            <?= $this->translate('Common data') ?>
+        </div>
+    </div>
+    <div class="panel-body">
+        <?= $this->formHidden($form->get('csrf')) ?>
+        <?= $this->formHidden($form->get('furnace_id')) ?>
+        <div class="form-row">
+            <?= $this->formLabel($form->get('furnace_name')) ?>
+            <?= $this->formText($form->get('furnace_name')) ?>
+            <?= $this->formElementErrors($form->get('furnace_name')) ?>
+        </div>
+
+        <div class="form-row">
+            <?= $this->formLabel($form->get('description')) ?>
+            <?= $this->formTextarea($form->get('description')) ?>
+            <?= $this->formElementErrors($form->get('description')) ?>
+        </div>
+
+        <div class="form-row">
+            <?= $this->formLabel($form->get('plant_id')) ?>
+            <?= $this->formSelect($form->get('plant_id')) ?>
+            <?= $this->formElementErrors($form->get('plant_id')) ?>
+        </div>
+
+    </div>
+</div>
+
+<?= $this->form()->closeTag() ?>
+
+<?php
+$this->inlineScript()->appendFile($this->basePath('/js/rower.min.js'));
+$this->inlineScript()->captureStart();
+echo <<<JS
+$('.rower-section').rower({
+    addButtonClass  : 'btn btn-primary',
+    rowSelector     : '.row',
+    templateSelector: '.rower-template'
+});
+JS;
+$this->inlineScript()->captureEnd() ?>

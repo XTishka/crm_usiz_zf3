@@ -1,0 +1,337 @@
+<?php
+/**
+ * @var \Document\Domain\PurchaseContractEntity $contract
+ * @var \Zend\Form\Element\Collection $collection
+ * @var \Zend\Form\Form $form
+ * @var \Zend\Form\Fieldset $fieldset
+ */
+$form->setAttribute('action', $this->url('purchaseWagon/loading', ['contract' => $contract->getContractId()]));
+$form->prepare();
+echo $this->form()->openTag($form) ?>
+
+<div class="layout-toolbar">
+    <div class="row middle-md">
+        <div class="col-md">
+            <h1>
+                <i class="fa fa-pencil fa-fw"></i>
+                <?= $title = $this->translate('Editing of purchase wagon data') ?>
+            </h1>
+            <?php echo $this->headTitle($title) ?>
+        </div>
+        <div class="col-md end-md">
+            <?= $this->formSubmit($form->get('save_and_exit')) ?>
+            <a href="<?= $this->url('purchaseContract') ?>" class="btn btn-danger">
+                <i class="fa fa-close fa-fw"></i>
+                <?= $this->translate('Cancel') ?>
+            </a>
+        </div>
+    </div>
+</div>
+
+<?= $this->partial('partial/messenger', ['messenger' => $this->messenger]); ?>
+
+<?= $this->partial('document/purchase-contract/contract', ['contract' => $this->contract]); ?>
+
+<div class="row">
+    <div class="col-md">
+
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-title">
+                    <i class="fa fa-tag fa-fw"></i>
+                    <?= $this->translate('Common data') ?>
+                </div>
+            </div>
+            <div class="panel-body">
+                <?= $this->formHidden($form->get('csrf')) ?>
+                <?= $this->formHidden($form->get('wagon_id')) ?>
+
+                <!-- Wagon collection begin -->
+                <section class="rower-section">
+                    <?php /** @var \Zend\Form\Element\Collection $collection */ ?>
+                    <?php $collection = $form->get('wagons') ?>
+                    <?php foreach ($collection as $fieldset): ?>
+                        <div class="rower-row">
+                            <div class="row middle-md">
+                                <?= $this->formHidden($fieldset->get('rate_id')) ?>
+                                <div class="col-md-2">
+                                    <div class="form-row">
+                                        <?= $this->formText($fieldset->get('wagon_number')) ?>
+                                        <?= $this->formElementErrors($fieldset->get('wagon_number')) ?>
+                                    </div>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="form-row">
+                                        <?= $this->formNumber($fieldset->get('loading_weight')) ?>
+                                        <?= $this->formElementErrors($fieldset->get('loading_weight')) ?>
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                    <div class="form-row">
+                                        <?= $this->formButton($fieldset->get('remove')) ?>
+                                    </div>
+                                </div>
+                            </div>
+                            <fieldset class="fieldset col-md-12">
+                                <legend class="fieldset-toggle"><?= $this->translate('Additional transportation costs') ?></legend>
+                                <div class="fieldset-body">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <div class="form-row">
+                                                <?= $this->formNumber($fieldset->get('transport_price')) ?>
+                                                <?= $this->formElementErrors($fieldset->get('transport_price')) ?>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-row">
+                                                <?= $this->formSelect($fieldset->get('contractor_id')) ?>
+                                                <?= $this->formElementErrors($fieldset->get('contractor_id')) ?>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <div class="form-row">
+                                                <?= $this->formText($fieldset->get('transport_comment')) ?>
+                                                <?= $this->formElementErrors($fieldset->get('transport_comment')) ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    <?php endforeach ?>
+                    <script class="rower-template" type="text/html">
+                        <?php $template = $collection->getTemplateElement() ?>
+                        <div class="rower-row">
+                            <div class="row middle-md">
+                                <?= $this->formHidden($template->get('rate_id')) ?>
+                                <div class="col-md-2">
+                                    <div class="form-row">
+                                        <?= $this->formText($template->get('wagon_number')) ?>
+                                        <?= $this->formElementErrors($template->get('wagon_number')) ?>
+                                    </div>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="form-row">
+                                        <?= $this->formNumber($template->get('loading_weight')) ?>
+                                        <?= $this->formElementErrors($template->get('loading_weight')) ?>
+                                    </div>
+                                </div>
+                                <div class="col-md-1">
+                                    <div class="form-row">
+                                        <?= $this->formButton($template->get('remove')) ?>
+                                    </div>
+                                </div>
+                            </div>
+                            <fieldset class="fieldset col-md-12">
+                                <legend class="fieldset-toggle"><?= $this->translate('Additional transportation costs') ?></legend>
+                                <div class="fieldset-body">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <div class="form-row">
+                                                <?= $this->formNumber($template->get('transport_price')) ?>
+                                                <?= $this->formElementErrors($template->get('transport_price')) ?>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-row">
+                                                <?= $this->formSelect($template->get('contractor_id')) ?>
+                                                <?= $this->formElementErrors($template->get('contractor_id')) ?>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <div class="form-row">
+                                                <?= $this->formText($template->get('transport_comment')) ?>
+                                                <?= $this->formElementErrors($template->get('transport_comment')) ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </script>
+                </section>
+                <!-- Wagon collection end -->
+
+            </div>
+        </div>
+
+    </div>
+    <div class="col-md-3">
+
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-title">
+                    <i class="fa fa-info-circle fa-fw"></i>
+                    <?= $this->translate('Advanced data') ?>
+                </div>
+            </div>
+            <div class="panel-body">
+
+                <div class="form-row">
+                    <?= $this->formLabel($form->get('loading_date')) ?>
+                    <?= $this->formText($form->get('loading_date')) ?>
+                    <?= $this->formElementErrors($form->get('loading_date')) ?>
+                </div>
+
+                <?php if ($contract->getConditions() != $contract::CONDITIONS_TYPE_CPT): ?>
+
+                    <div class="form-row">
+                        <?= $this->formLabel($form->get('carrier_id')) ?>
+                        <?= $this->formSelect($form->get('carrier_id')) ?>
+                        <?= $this->formElementErrors($form->get('carrier_id')) ?>
+                    </div>
+
+                    <div class="form-row">
+                        <?= $this->formLabel($form->get('rate_id')) ?>
+                        <?= $this->formSelect($form->get('rate_id')) ?>
+                        <?= $this->formElementErrors($form->get('rate_id')) ?>
+                    </div>
+
+                <?php endif ?>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<?= $this->form()->closeTag() ?>
+
+<?php
+$this->headLink()->appendStylesheet('/css/datepicker.min.css');
+$this->headLink()->appendStylesheet($this->basePath('/css/range-slider.css'));
+$this->inlineScript()->appendFile($this->basePath('/js/rower.min.js'));
+$this->inlineScript()->appendFile($this->basePath('/js/vendor/datepicker.min.js'));
+$this->inlineScript()->appendFile($this->basePath('/js/vendor/range-slider.min.js'));
+
+
+$this->inlineScript()->captureStart();
+echo <<<JS
+$(document).ready(function () {
+
+    $('input[name=loading_date]').datepicker({
+        minDate : new Date({$contract->getCreated()->format('U')} * 1000),
+        maxDate : new Date(),
+        onSelect: function (formattedDate, date, inst) {
+            inst.hide();
+        }
+    });
+
+    let aSel = $('select[name=carrier_id]'),
+        bSel = $('select[name=rate_id]');
+
+    $.ajax('/carrier/value-options', {
+        data      : {
+            carrier_type: '{$this->contract->getCarrierType()}',
+            //country     : '{$this->contract->getCountry()}'
+        },
+        type      : 'post',
+        success   : function (res) {
+            aSel.empty();
+            if (!res.length) return;
+            $.each(res, function (key, obj) {
+                $(document.createElement('option')).attr(obj.attributes).val(obj.value).text(obj.label).appendTo(aSel);
+            }) && aSel.prop({
+                disabled     : false,
+                selectedIndex: 0
+            }).val('{$form->getObject()->getCarrierId()}').change();
+        },
+        beforeSend: function () {
+            aSel.closest('.panel-body').addClass('loading');
+        },
+        complete  : function () {
+            setTimeout(function () {
+                aSel.closest('.panel-body').removeClass('loading');
+            }, 1000);
+        }
+    });
+
+    aSel.on('change', function () {
+        bSel.prop('disabled', true);
+        $.ajax('/rate/value-options', {
+            data      : {direction: 'inboundDirection', carrier: aSel.val(), period: 'true'},
+            type      : 'post',
+            success   : function (res) {
+                bSel.empty();
+                if (!res.length) return;
+                $.each(res, function (key, obj) {
+                    $(document.createElement('option')).attr(obj.attributes).val(obj.value).text(obj.label).appendTo(bSel);
+                }) && bSel.prop({
+                    disabled     : false,
+                    selectedIndex: 0
+                }).val('{$form->getObject()->getRateId()}');
+            },
+            beforeSend: function () {
+                aSel.closest('.panel-body').addClass('loading');
+            },
+            complete  : function () {
+                setTimeout(function () {
+                    aSel.closest('.panel-body').removeClass('loading');
+                }, 1000);
+            }
+        });
+    });
+
+    bSel.on('change', function () {
+        let wNum   = $('input[name$="[loading_weight]"]'),
+            rate   = $('input[name$="[rate_id]"]'),
+            weight = $(this).find('option:selected').data('weight');
+        if (0 <= weight.toString().indexOf('-')) weight = weight.split('-').map(parseFloat);
+        wNum.attr({min: $.isArray(weight) ? weight[0] : weight, max: $.isArray(weight) ? weight[1] : weight});
+        wNum.val($.isArray(weight) ? weight.reduce((a, b) => a + b, 0) / 2 : weight);
+        rate.val(this.value);
+    });
+
+
+    let fieldsetToggle = function () {
+        let fset = $('.fieldset').not('[aria-expanded]'),
+            body = fset.find('.fieldset-body'),
+            show = !!body.find('input').filter(function () {
+                return !!this.value && parseInt(this.value) !== 0;
+            }).length || !!body.find('.form-errors').length;
+
+        show && fset.attr('aria-expanded', 'true') || fset.attr('aria-expanded', 'false') && body.hide();
+
+        fset.on('click', '.fieldset-toggle', function () {
+            fset.attr('aria-expanded') === 'true' &&
+            body.slideUp() && fset.attr('aria-expanded', 'false') ||
+            body.slideDown() && fset.attr('aria-expanded', 'true');
+        });
+    };
+
+    $('.rower-section').rower({
+        addButtonClass  : 'btn btn-primary',
+        rowSelector     : '.rower-row',
+        templateSelector: '.rower-template',
+        onInsert        : function (html) {
+            fieldsetToggle();
+            let weight = bSel.find('option:selected').data('weight'),
+                curW   = html.find('input[name$="[loading_weight]"]'),
+                curR   = html.find('input[name$="[rate_id]"]');
+            if (weight === undefined) return;
+            if (0 <= weight.toString().indexOf('-')) weight = weight.split('-').map(parseFloat);
+            curW.attr({min: $.isArray(weight) ? weight[0] : weight, max: $.isArray(weight) ? weight[1] : weight});
+            curW.val($.isArray(weight) ? weight.reduce((a, b) => a + b, 0) / 2 : weight);
+            curR.val(bSel.val());
+        }
+    });
+
+    $('.fieldset').each(function () {
+        let fset = $(this),
+            body = fset.find('.fieldset-body'),
+            show = !!body.find('input').filter(function () {
+                return !!this.value && parseInt(this.value) !== 0;
+            }).length || !!body.find('.form-errors').length;
+
+        show && fset.attr('aria-expanded', 'true') || fset.attr('aria-expanded', 'false') && body.hide();
+
+        fset.on('click', '.fieldset-toggle', function () {
+            fset.attr('aria-expanded') === 'true' &&
+            body.slideUp() && fset.attr('aria-expanded', 'false') ||
+            body.slideDown() && fset.attr('aria-expanded', 'true');
+        });
+    });
+
+});
+JS;
+$this->inlineScript()->captureEnd() ?>

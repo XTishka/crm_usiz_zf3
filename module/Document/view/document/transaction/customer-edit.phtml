@@ -1,0 +1,133 @@
+<?php
+/**
+ * @var \Zend\Form\Element\Collection $collection
+ * @var \Zend\Form\Form $form
+ * @var \Zend\Form\Fieldset $fieldset
+ */
+$form->setAttribute('action', $this->url('transaction/customer/edit'));
+$form->prepare();
+echo $this->form()->openTag($form);
+echo $this->formHidden($form->get('transaction_id'));
+echo $this->formHidden($form->get('contractor_type'));
+echo $this->formHidden($form->get('is_manual')) ?>
+
+<div class="layout-toolbar">
+    <div class="row middle-md">
+        <div class="col-md">
+            <h1>
+                <i class="fa fa-money fa-fw"></i>
+                <?= $title = $this->translate('Transaction of the customer account') ?>
+            </h1>
+            <?php echo $this->headTitle($title) ?>
+        </div>
+        <div class="col-md end-md">
+            <?= $this->formSubmit($form->get('save')) ?>
+        </div>
+    </div>
+</div>
+
+<?= $this->partial('partial/messenger', ['messenger' => $this->messenger]); ?>
+
+<div class="panel">
+    <div class="panel-header">
+        <div class="panel-title">
+            <i class="fa fa-tag fa-fw"></i>
+            <?= $this->translate('Common data') ?>
+        </div>
+    </div>
+    <div class="panel-body">
+
+        <div class="form-row">
+            <?= $this->formLabel($form->get('created')) ?>
+            <?= $this->formText($form->get('created')) ?>
+            <?= $this->formElementErrors($form->get('created')) ?>
+        </div>
+
+        <div class="form-row">
+            <?= $this->formLabel($form->get('company_id')) ?>
+            <?= $this->formSelect($form->get('company_id')) ?>
+            <?= $this->formElementErrors($form->get('company_id')) ?>
+        </div>
+
+        <div class="form-row">
+            <?= $this->formLabel($form->get('contractor_id')) ?>
+            <?= $this->formSelect($form->get('contractor_id')) ?>
+            <?= $this->formElementErrors($form->get('contractor_id')) ?>
+        </div>
+
+        <div class="form-row">
+            <?= $this->formLabel($form->get('transaction_type')) ?>
+            <?= $this->formSelect($form->get('transaction_type')) ?>
+            <?= $this->formElementErrors($form->get('transaction_type')) ?>
+        </div>
+
+        <div class="row">
+            <div class="col-md">
+                <div class="form-row">
+                    <?= $this->formLabel($form->get('direction')) ?>
+                    <?= $this->formSelect($form->get('direction')) ?>
+                    <?= $this->formElementErrors($form->get('direction')) ?>
+                </div>
+            </div>
+            <div class="col-md">
+                <div class="form-row" id="amountCredit">
+                    <?= $this->formLabel($form->get('credit')) ?>
+                    <?= $this->formNumber($form->get('credit')) ?>
+                    <?= $this->formElementErrors($form->get('credit')) ?>
+                </div>
+
+                <div class="form-row" id="amountDebit">
+                    <?= $this->formLabel($form->get('debit')) ?>
+                    <?= $this->formNumber($form->get('debit')) ?>
+                    <?= $this->formElementErrors($form->get('debit')) ?>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <?= $this->formLabel($form->get('comment')) ?>
+            <?= $this->formTextarea($form->get('comment')) ?>
+            <?= $this->formElementErrors($form->get('comment')) ?>
+        </div>
+
+    </div>
+</div>
+
+<?= $this->form()->closeTag() ?>
+
+<?php
+$this->headLink()->appendStylesheet('/css/datepicker.min.css');
+$this->inlineScript()->appendFile($this->basePath('/js/vendor/datepicker.min.js'));
+$this->inlineScript()->captureStart();
+echo <<<JS
+$(document).ready(function () {
+    
+    $('input[name=created]').datepicker({
+        maxDate : new Date(),
+        timepicker: true,
+        timeFormat: 'hh:ii:00',
+    });
+    
+    var direction                  = $('select[name=direction]'),
+        amountCredit               = $('#amountCredit'),
+        amountCreditInput          = amountCredit.find(':input'),
+        amountDebit                = $('#amountDebit'),
+        amountDebitInput           = amountDebit.find(':input'),
+        changeTransactionDirection = function (dir) {
+            if (dir === 'credit') {
+                0 < amountDebitInput.val() && amountCreditInput.val(amountDebitInput.val());
+                amountCredit.show() && amountDebit.hide();
+                amountDebitInput.val('');
+            } else if (dir === 'debit') {
+                0 < amountCreditInput.val() && amountDebitInput.val(amountCreditInput.val());
+                amountCredit.hide() && amountDebit.show();
+                amountCreditInput.val('');
+            }
+        };
+
+    direction.on('change', function () {
+        changeTransactionDirection(this.value);
+    }) && changeTransactionDirection(direction.val());
+});
+JS;
+$this->inlineScript()->captureEnd() ?>

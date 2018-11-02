@@ -1,0 +1,16 @@
+INSERT INTO xtishka_usizdev.goods_warehouses_transactions (warehouse_id, price, weight, direction, date) VALUES (1, 0, 96.6, 'in', '2017-10-17');
+INSERT INTO xtishka_usizdev.goods_warehouses_transactions (warehouse_id, price, weight, direction, date) VALUES (1, 400, 50, 'out', '2017-10-16');
+INSERT INTO xtishka_usizdev.goods_warehouses_transactions (warehouse_id, price, weight, direction, date) VALUES (1, 400, 50, 'out', '2017-10-16');
+INSERT INTO xtishka_usizdev.goods_warehouses_transactions (warehouse_id, price, weight, direction, date) VALUES (1, 400, 50, 'out', '2017-10-16');
+INSERT INTO xtishka_usizdev.goods_warehouses_transactions (warehouse_id, price, weight, direction, date) VALUES (1, 400, 50, 'out', '2017-10-16');
+INSERT INTO xtishka_usizdev.goods_warehouses_transactions (warehouse_id, price, weight, direction, date) VALUES (3, 0, 55.2, 'in', '2017-10-17');
+INSERT INTO xtishka_usizdev.goods_warehouses_transactions (warehouse_id, price, weight, direction, date) VALUES (1, 400, 50, 'out', '2017-10-16');
+INSERT INTO xtishka_usizdev.goods_warehouses_transactions (warehouse_id, price, weight, direction, date) VALUES (1, 400, 50, 'out', '2017-10-16');
+INSERT INTO xtishka_usizdev.goods_warehouses_transactions (warehouse_id, price, weight, direction, date) VALUES (1, 0, 84, 'in', '2017-10-16');
+INSERT INTO xtishka_usizdev.goods_warehouses_transactions (warehouse_id, price, weight, direction, date) VALUES (1, 0, 46, 'in', '2017-10-16');
+INSERT INTO xtishka_usizdev.goods_warehouses_transactions (warehouse_id, price, weight, direction, date) VALUES (1, 0, 92, 'in', '2017-10-16');
+INSERT INTO xtishka_usizdev.goods_warehouses_transactions (warehouse_id, price, weight, direction, date) VALUES (1, 0, 92, 'in', '2017-10-17');
+INSERT INTO xtishka_usizdev.goods_warehouses_transactions (warehouse_id, price, weight, direction, date) VALUES (1, 0, 46, 'in', '2017-10-17');
+INSERT INTO xtishka_usizdev.goods_warehouses_transactions (warehouse_id, price, weight, direction, date) VALUES (1, 400, 50, 'out', '2017-10-16');
+INSERT INTO xtishka_usizdev.goods_warehouses_transactions (warehouse_id, price, weight, direction, date) VALUES (2, 2300, 67, 'out', '2017-10-17');
+INSERT INTO xtishka_usizdev.goods_warehouses_transactions (warehouse_id, price, weight, direction, date) VALUES (3, 0, 80.04, 'in', '2017-10-17');

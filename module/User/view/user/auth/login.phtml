@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="<?= $this->basePath('/css/login.css') ?>">
+</head>
+<body>
+
+<div class="container bounceIn">
+    <?php
+    /** @var \User\Form\Login $form */
+    $form = $this->form;
+    $form->setAttribute('action', $this->url('login'));
+    $form->prepare(); ?>
+
+    <div class="row center-xs">
+        <div class="col-md-4">
+            <div class="panel">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <i class="fa fa-sign-in fa-fw"></i>
+                        <?= $this->translate('Login to your account') ?>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <?= $this->partial('partial/messenger', ['messenger' => $this->messenger]) ?>
+
+                    <?= $this->form()->openTag($form) ?>
+                    <?= $this->formHidden($form->get('csrf')) ?>
+                    <?= $this->formHidden($form->get('redirect_url')) ?>
+                    <div class="form-row">
+                        <?= $this->formLabel($form->get('email')) ?>
+                        <?= $this->formEmail($form->get('email')) ?>
+                        <?= $this->formElementErrors($form->get('email')) ?>
+                    </div>
+                    <div class="form-row">
+                        <?= $this->formLabel($form->get('password')) ?>
+                        <?= $this->formPassword($form->get('password')) ?>
+                        <?= $this->formElementErrors($form->get('password')) ?>
+                    </div>
+                    <div class="form-row">
+                        <?= $this->formCheckbox($form->get('remember_me')) ?>
+                        <?= $this->formLabel($form->get('remember_me')) ?>
+                        <?= $this->formElementErrors($form->get('remember_me')) ?>
+                    </div>
+                    <div class="form-row text-center">
+                        <?= $this->formSubmit($form->get('login')) ?>
+                    </div>
+                    <?= $this->form()->closeTag() ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

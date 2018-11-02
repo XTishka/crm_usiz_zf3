@@ -1,0 +1,24 @@
+<?php if ($this->paginator->count()): ?>
+<table class="table-data">
+    <thead>
+    <tr>
+        <th class="text-left"><?= $this->translate('Company') ?></th>
+        <th class="text-right" style="width:10rem"><?= $this->translate('Amount') ?></th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php /** @var ArrayObject $row */ ?>
+    <?php foreach ($this->paginator as $row): ?>
+        <tr>
+            <td class="text-left hint"><?= $this->escapeHtml($row->offsetGet('contractor_name')) ?></td>
+            <td class="text-right"><?= $this->currencyFormat($row->offsetGet('amount')) ?></td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+<?php else: ?>
+    <div class="text-center">
+        <img src="<?= $this->basePath('img/empty.svg') ?>" alt="Empty folder" style="max-width:200px">
+        <h3><?= $this->translate('Nothing found') ?></h3>
+    </div>
+<?php endif ?>

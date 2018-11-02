@@ -1,0 +1,10 @@
+{
+  "require": {
+    "php": ">=7.1.0",
+    "ext-bcmath": "*",
+    "ext-mbstring": "*",
+    "ext-intl": "*",
+    "zendframework/zendframework": "^3.0",
+    "phpoffice/phpspreadsheet": "^1.2"
+  }
+}

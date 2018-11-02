@@ -1,0 +1,72 @@
+<?php
+/**
+ * @var \Contractor\Entity\ContractorPlant $plant
+ */
+?>
+<div class="layout-toolbar">
+    <div class="row middle-md">
+        <div class="col-md">
+            <h1><i class="fa fa-bank fa-fw"></i>
+                <?= $title = sprintf('%s - %s', $this->translate('Banks'), $plant->getContractorName()) ?></h1>
+            <?php echo $this->headTitle($title) ?>
+        </div>
+        <div class="col-md end-md">
+            <?= $this->partial('partial/dashboard-menu', ['company' => $plant]) ?>
+        </div>
+    </div>
+</div>
+
+<?= $this->partial('partial/messenger', ['messenger' => $this->messenger]); ?>
+<div class="table-scroll">
+    <?php $lastKey = key(array_slice($this->data, -1, 1, true)); ?>
+    <table class="table-data">
+        <?php foreach ($this->data as $key => $rowData): ?>
+            <tr>
+                <?php foreach ($rowData as $colKey => $colData): ?>
+                    <?= ($key > 0 && $lastKey != $key) ? '<td class="text-nowrap text-center" ' . ($colKey > 0 ? null : 'style="text-align:left;background:#dce6eb"') . '>' : '<th class="text-nowrap" ' . ($colKey > 0 ? null : 'style="text-align:left;width:128px;background:#dce6eb"') . '>' ?>
+                    <?php if (is_array($colData)): ?>
+                        <?php if ($key > 0): ?>
+                            <?php if (key_exists('record', $colData)): ?>
+                                <a href="<?= $this->url('plantDashboard/bank/edit', [
+                                    'id'      => $colData['record']->getRecordId(),
+                                    'plant' => $plant->getContractorId()], ['query' => [
+                                    'bank' => $colData['bankId'],
+                                    'date' => $colData['dateString']]]) ?>">
+                                    <div class="text-right"><?= $this->currencyFormat($colData['record']->getAmount()) ?></div>
+                                </a>
+                            <?php elseif (key_exists('total', $colData)): ?>
+                                <div class="text-right"><?= $this->currencyFormat($colData['total']) ?></div>
+                            <?php else: ?>
+                                <a class="text-info" href="<?= $this->url('plantDashboard/bank/edit', ['plant' => $plant->getContractorId()], ['query' => [
+                                    'bank' => $colData['bankId'],
+                                    'date' => $colData['dateString']]]) ?>">
+                                    <i class="fa fa-plus-square"></i>
+                                </a>
+                            <?php endif ?>
+                        <?php else: ?>
+                            <?= $colData['label'] ?>
+                        <?php endif ?>
+                    <?php else: ?>
+                        <?= $colData ?>
+                    <?php endif ?>
+                    <?= ($key > 0 && $lastKey != $key) ? '</td>' : '</th>' ?>
+                <?php endforeach; ?>
+            </tr>
+        <?php endforeach; ?>
+    </table>
+</div>
+
+<?php $this->inlineScript()->captureStart();
+echo /** @lang JavaScript */
+<<<JS
+$(document).ready(function () {
+    var wrapper = $('.table-scroll');
+    var width;
+    wrapper.find('table').hide() && (width = wrapper.parent().width());
+    wrapper.find('table').show() && wrapper.css('width',  width + 'px');
+    
+    console.log(width)
+
+});
+JS;
+$this->inlineScript()->captureEnd() ?>
