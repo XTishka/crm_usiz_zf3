@@ -52,6 +52,17 @@ class Carrier extends Form {
         ]);
 
         $this->add([
+            'type'       => 'text',
+            'name'       => 'register_code',
+            'attributes' => [
+                'placeholder' => 'Enter register code of contractor',
+            ],
+            'options'    => [
+                'label' => 'Register code of contractor',
+            ],
+        ]);
+
+        $this->add([
             'type'    => Element\CarrierTypeSelect::class,
             'name'    => 'carrier_type',
             'options' => [

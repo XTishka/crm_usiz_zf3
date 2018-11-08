@@ -18,96 +18,146 @@
 
 <?= $this->partial('partial/messenger', ['messenger' => $this->messenger]); ?>
 
-<?php /** @var \Zend\Paginator\Paginator $paginator */ ?>
-<?php if ($paginator->count()): ?>
+<div class="row">
+    <div class="col-md">
 
-    <div class="panel">
-        <div class="panel-header">
-            <div class="row middle-md">
-                <div class="col-md">
-                    <div class="panel-title">
-                        <i class="fa fa-navicon fa-fw"></i>
-                        <?= $this->translate('Carrier list') ?>
+        <?php /** @var \Zend\Paginator\Paginator $paginator */ ?>
+        <?php if ($paginator->count()): ?>
+
+            <div class="panel">
+                <div class="panel-header">
+                    <div class="row middle-md">
+                        <div class="col-md">
+                            <div class="panel-title">
+                                <i class="fa fa-navicon fa-fw"></i>
+                                <?= $this->translate('Carrier list') ?>
+                            </div>
+                        </div>
+                        <div class="col-md end-md">
+                            <?= $this->paginationControl($this->paginator, 'Sliding', 'partial/paginator', ['route' => 'carrier']) ?>
+                        </div>
                     </div>
                 </div>
-                <div class="col-md end-md">
-                    <?= $this->paginationControl($this->paginator, 'Sliding', 'partial/paginator', ['route' => 'carrier']) ?>
+                <div class="panel-body">
+                    <table class="table-data">
+                        <thead>
+                        <tr>
+                            <th class="text-center" style="width:32px"><?= $this->translate('Flag') ?></th>
+                            <th class="text-left"><?= $this->translate('Carrier name') ?></th>
+                            <th class="text-right" style="width:100px;"><?= $this->translate('Register code of contractor') ?></th>
+                            <th class="text-center" style="width:2rem"><?= $this->translate('Type') ?></th>
+                            <th class="text-right" style="width:130px"><?= $this->translate('Updated') ?></th>
+                            <th class="text-right" style="width:130px"><?= $this->translate('Created') ?></th>
+                            <th class="text-right" style="width:48px"><?= $this->translate('Tools') ?></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php /** @var \Transport\Domain\CarrierEntity $carrier */ ?>
+                        <?php foreach ($this->paginator as $carrier): ?>
+                            <tr>
+                                <td class="text-center">
+                                    <img class="flag-icon" src="<?= $this->basePath(sprintf('/img/flags/%s.png', $carrier->getCountry())) ?>"
+                                         alt="<?= $carrier->getCountry() ?>"></td>
+                                <td class="text-left">
+                                    <a href="<?= $this->url('carrier/edit', ['id' => $carrier->getCarrierId()]) ?>"><?= $carrier->getCarrierName() ?></a>
+                                    <div class="hint"><?= $carrier->getPerson()->toString() ?></div>
+                                </td>
+                                <td class="text-right">
+                                    <?= $carrier->getRegisterCode() ?>
+                                </td>
+                                <td class="text-center">
+                                    <?php if ('train' == $carrier->getCarrierType()): ?>
+                                        <i class="fa fa-train" title="<?= $this->translate('Railway transport') ?>"></i>
+                                    <?php elseif ('truck' == $carrier->getCarrierType()): ?>
+                                        <i class="fa fa-truck" title="<?= $this->translate('Motor transport') ?>"></i>
+                                    <?php endif ?>
+                                </td>
+                                <td class="text-right"><?= $this->dateFormat($carrier->getUpdated(), IntlDateFormatter::LONG) ?>
+                                    <div class="hint"><?= $this->dateFormat($carrier->getUpdated(), IntlDateFormatter::NONE, IntlDateFormatter::MEDIUM) ?></div>
+                                </td>
+                                <td class="text-right"><?= $this->dateFormat($carrier->getCreated(), IntlDateFormatter::LONG) ?>
+                                    <div class="hint"><?= $this->dateFormat($carrier->getCreated(), IntlDateFormatter::NONE, IntlDateFormatter::MEDIUM) ?></div>
+                                </td>
+                                <td class="text-right">
+                                    <div class="dropdown">
+                                        <button class="dropdown-toggle btn btn-default"><i class="fa fa-navicon"></i></button>
+                                        <ul class="dropdown-list">
+                                            <li>
+                                                <a href="<?= $this->url('carrier/edit', ['id' => $carrier->getCarrierId()]) ?>">
+                                                    <i class="fa fa-pencil fa-fw"></i>
+                                                    <?= $this->translate('Edit carrier') ?>
+                                                </a>
+                                            </li>
+                                            <li class="dropdown-list-separator"></li>
+                                            <li>
+                                                <a href="<?= $this->url('carrier/delete', ['id' => $carrier->getCarrierId()]) ?>"
+                                                   data-modal="confirm"><i class="fa fa-trash fa-fw"></i>
+                                                    <?= $this->translate('Delete carrier') ?>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                        <?php endforeach ?>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-        </div>
-        <div class="panel-body">
-            <table class="table-data">
-                <thead>
-                <tr>
-                    <th class="text-center" style="width:32px"><?= $this->translate('Flag') ?></th>
-                    <th class="text-left"><?= $this->translate('Carrier name') ?></th>
-                    <th class="text-center" style="width:2rem"><?= $this->translate('Type') ?></th>
-                    <th class="text-right" style="width:130px"><?= $this->translate('Updated') ?></th>
-                    <th class="text-right" style="width:130px"><?= $this->translate('Created') ?></th>
-                    <th class="text-right" style="width:48px"><?= $this->translate('Tools') ?></th>
-                </tr>
-                </thead>
-                <tbody>
-                <?php /** @var \Transport\Domain\CarrierEntity $carrier */ ?>
-                <?php foreach ($this->paginator as $carrier): ?>
-                    <tr>
-                        <td class="text-center">
-                            <img class="flag-icon" src="<?= $this->basePath(sprintf('/img/flags/%s.png', $carrier->getCountry())) ?>"
-                                 alt="<?= $carrier->getCountry() ?>"></td>
-                        <td class="text-left">
-                            <a href="<?= $this->url('carrier/edit', ['id' => $carrier->getCarrierId()]) ?>"><?= $carrier->getCarrierName() ?></a>
-                            <div class="hint"><?= $carrier->getPerson()->toString() ?></div>
-                        </td>
-                        <td class="text-center">
-                            <?php if ('train' == $carrier->getCarrierType()): ?>
-                                <i class="fa fa-train" title="<?= $this->translate('Railway transport') ?>"></i>
-                            <?php elseif ('truck' == $carrier->getCarrierType()): ?>
-                                <i class="fa fa-truck" title="<?= $this->translate('Motor transport') ?>"></i>
-                            <?php endif ?>
-                        </td>
-                        <td class="text-right"><?= $this->dateFormat($carrier->getUpdated(), IntlDateFormatter::LONG) ?>
-                            <div class="hint"><?= $this->dateFormat($carrier->getUpdated(), IntlDateFormatter::NONE, IntlDateFormatter::MEDIUM) ?></div>
-                        </td>
-                        <td class="text-right"><?= $this->dateFormat($carrier->getCreated(), IntlDateFormatter::LONG) ?>
-                            <div class="hint"><?= $this->dateFormat($carrier->getCreated(), IntlDateFormatter::NONE, IntlDateFormatter::MEDIUM) ?></div>
-                        </td>
-                        <td class="text-right">
-                            <div class="dropdown">
-                                <button class="dropdown-toggle btn btn-default"><i class="fa fa-navicon"></i></button>
-                                <ul class="dropdown-list">
-                                    <li>
-                                        <a href="<?= $this->url('carrier/edit', ['id' => $carrier->getCarrierId()]) ?>">
-                                            <i class="fa fa-pencil fa-fw"></i>
-                                            <?= $this->translate('Edit carrier') ?>
-                                        </a>
-                                    </li>
-                                    <li class="dropdown-list-separator"></li>
-                                    <li>
-                                        <a href="<?= $this->url('carrier/delete', ['id' => $carrier->getCarrierId()]) ?>"
-                                           data-modal="confirm"><i class="fa fa-trash fa-fw"></i>
-                                            <?= $this->translate('Delete carrier') ?>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </td>
-                    </tr>
-                <?php endforeach ?>
-                </tbody>
-            </table>
-        </div>
+
+        <?php else: ?>
+            <div class="layout-not-found">
+                <h3><?= $this->translate('No countries') ?></h3>
+                <p><?= $this->translate('Do you want to add a new carrier?') ?></p>
+                <a href="<?= $this->url('carrier/edit') ?>" class="btn btn-lg btn-success">
+                    <i class="fa fa-plus-circle fa-fw"></i>
+                    <?= $this->translate('Add new carrier') ?>
+                </a>
+            </div>
+        <?php endif ?>
+
     </div>
 
-<?php else: ?>
-    <div class="layout-not-found">
-        <h3><?= $this->translate('No countries') ?></h3>
-        <p><?= $this->translate('Do you want to add a new carrier?') ?></p>
-        <a href="<?= $this->url('carrier/edit') ?>" class="btn btn-lg btn-success">
-            <i class="fa fa-plus-circle fa-fw"></i>
-            <?= $this->translate('Add new carrier') ?>
-        </a>
+    <div class="col-md-3">
+
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-title">
+                    <i class="fa fa-filter fa-fw"></i>
+                    <?= $this->translate('Rate filter') ?>
+                </div>
+            </div>
+            <div class="panel-body">
+                <?php
+                /** @var \Zend\Form\Form $filterForm */
+                $filterForm->prepare();
+                $filterForm->setAttribute('action', $this->url('carrier')) ?>
+                <?= $this->form()->openTag($filterForm) ?>
+                <div class="form-row">
+                    <?= $this->formLabel($filterForm->get('carrier_name')) ?>
+                    <?= $this->formText($filterForm->get('carrier_name')) ?>
+                </div>
+                <div class="form-row">
+                    <?= $this->formLabel($filterForm->get('register_code')) ?>
+                    <?= $this->formText($filterForm->get('register_code')) ?>
+                </div>
+                <div class="form-row">
+                    <div class="row">
+                        <div class="col-md">
+                            <?= $this->formSubmit($filterForm->get('filter')) ?>
+                        </div>
+                        <div class="col-md end-md">
+                            <a class="btn btn-danger" href="<?= $this->url('carrier') ?>"><?= $this->translate('Reset filter') ?></a>
+                        </div>
+                    </div>
+                </div>
+                <?= $this->form()->closeTag() ?>
+            </div>
+        </div>
+
     </div>
-<?php endif ?>
+
+</div>
 
 <?php
 $this->headLink()->appendStylesheet($this->basePath('css/dropdown.css'));

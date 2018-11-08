@@ -86,16 +86,23 @@ class DropoutManager {
      * @return DropoutEntity
      * @throws NotFoundException
      */
-    public function fetchOneByProviderId($providerId) {
+    public function fetchOneByProviderId($providerId, $materialId, $date = null) {
+        if (is_string($date) && trim($date)) {
+            $date = \DateTime::createFromFormat('d.m.Y', $date);
+        } elseif (!$date instanceof \DateTime) {
+            $date = new \DateTime();
+        }
+
         $providerId = intval($providerId);
         $sql = new Sql($this->adapter);
         $select = $sql->select(['a' => self::TABLE_DROPOUTS]);
         $select->join(['b' => DatabaseContractorProvider::TABLE_CONTRACTORS], 'a.provider_id = b.contractor_id', ['provider_name' => 'contractor_name']);
         $select->join(['c' => MaterialDb::TABLE_MATERIALS], 'a.material_id = c.material_id', ['material_name' => 'material_name']);
-        $select->where->equalTo('a.provider_id', $providerId);
+        $select->where->equalTo('a.provider_id', intval($providerId));
+        $select->where->equalTo('a.material_id', intval($materialId));
         $select->where->nest()
-            ->lessThanOrEqualTo('a.period_begin', (new \DateTime())->format('Y-m-d'))
-            ->greaterThanOrEqualTo('a.period_end', (new \DateTime())->format('Y-m-d'));
+            ->lessThanOrEqualTo('a.period_begin', $date->format('Y-m-d'))
+            ->greaterThanOrEqualTo('a.period_end', $date->format('Y-m-d'));
         $dataSource = $sql->prepareStatementForSqlObject($select)->execute();
         if (!$dataSource->isQueryResult() || !$dataSource->count())
             throw new NotFoundException('No dropouts found');

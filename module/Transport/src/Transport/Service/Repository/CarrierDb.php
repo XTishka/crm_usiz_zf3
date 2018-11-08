@@ -22,12 +22,22 @@ class CarrierDb extends AbstractDb {
         return $columnNames;
     }
 
-    public function fetchCarriersPaginator($carrierType = null, $sortColumn = 'carrier_name', $sortDirection = 'ASC') {
+    public function fetchCarriersPaginator($carrierType = null, $sortColumn = 'carrier_name', $sortDirection = 'ASC', $query = null) {
         $sql = new Sql($this->dbAdapter);
         $select = $sql->select(self::TABLE_CARRIERS);
         $select->order(sprintf('%s %s', $sortColumn, $sortDirection));
         if ($carrierType = trim($carrierType))
             $select->where->equalTo('carrier_type', $carrierType);
+
+        if (is_array($query)) {
+            if (isset($query['carrier_name']) && trim($query['carrier_name'])) {
+                $select->where->like('carrier_name', sprintf('%%%s%%', $query['carrier_name']));
+            }
+            if (isset($query['register_code']) && trim($query['register_code'])) {
+                $select->where->like('register_code', sprintf('%%%s%%', $query['register_code']));
+            }
+        }
+        //echo $select->getSqlString($this->dbAdapter->platform);
         $resultSet = new HydratingResultSet($this->hydrator, $this->prototype);
         $paginator = new Paginator\Paginator(new Paginator\Adapter\DbSelect($select, $sql, $resultSet));
         return $paginator;

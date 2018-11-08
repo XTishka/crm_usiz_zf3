@@ -57,7 +57,7 @@ class SaleWagonsContainer implements \IteratorAggregate {
     public function getTotalProductPrice() {
         $total = 0;
         foreach ($this->getIterator() as $wagon) {
-            $total = bcadd($total, $wagon->getProductPrice(), 2);
+            $total = bcadd($total, $wagon->getProductPrice(), 4);
         }
         return $total;
     }
@@ -69,7 +69,7 @@ class SaleWagonsContainer implements \IteratorAggregate {
     public function getTotalDeliveryPrice() {
         $total = 0;
         foreach ($this->getIterator() as $wagon) {
-            $total = bcadd($total, $wagon->getDeliveryPrice(), 2);
+            $total = bcadd($total, $wagon->getDeliveryPrice(), 4);
         }
         return $total;
     }
@@ -81,7 +81,7 @@ class SaleWagonsContainer implements \IteratorAggregate {
     public function getTotalLoadingWeight() {
         $total = 0;
         foreach ($this->getIterator() as $wagon) {
-            $total = bcadd($total, $wagon->getLoadingWeight(), 2);
+            $total = bcadd($total, $wagon->getLoadingWeight(), 4);
         }
         return $total;
     }

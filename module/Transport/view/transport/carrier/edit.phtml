@@ -64,6 +64,12 @@ echo $this->form()->openTag($form) ?>
             <?= $this->formElementErrors($form->get('description')) ?>
         </div>
 
+        <div class="form-row">
+            <?= $this->formLabel($form->get('register_code')) ?>
+            <?= $this->formText($form->get('register_code')) ?>
+            <?= $this->formElementErrors($form->get('register_code')) ?>
+        </div>
+
         <!-- Person fieldset begin -->
         <?= $this->formLabel($form->get('person')) ?>
         <div class="row">

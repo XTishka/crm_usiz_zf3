@@ -76,6 +76,7 @@ class SkipController extends AbstractActionController {
     }
 
     public function editAction() {
+
         $form = $this->skipCommonForm;
         $messenger = $this->plugin('FlashMessenger');
         $error = false;

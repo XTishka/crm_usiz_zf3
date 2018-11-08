@@ -27,23 +27,36 @@ class CarrierController extends AbstractActionController {
     protected $carrierForm;
 
     /**
+     * @var Form\CarrierFilter
+     */
+    protected $carrierFilterForm;
+
+    /**
      * CarrierController constructor.
      * @param CarrierManager $carrierManager
      * @param Form\Carrier $carrierForm
+     * @param Form\CarrierFilter $carrierFilterForm
      */
-    public function __construct(CarrierManager $carrierManager, Form\Carrier $carrierForm) {
+    public function __construct(CarrierManager $carrierManager, Form\Carrier $carrierForm, Form\CarrierFilter $carrierFilterForm) {
         $this->carrierManager = $carrierManager;
         $this->carrierForm = $carrierForm;
+        $this->carrierFilterForm = $carrierFilterForm;
     }
 
     public function indexAction() {
+        $queryParams = $this->params()->fromQuery();
+        $filterForm = $this->carrierFilterForm;
+        if (count($queryParams)) {
+            $filterForm->populateValues($queryParams);
+        }
         $messenger = $this->plugin('FlashMessenger');
         $pageNumber = $this->params()->fromQuery('page');
-        $paginator = $this->carrierManager->getCarriersPaginator();
+        $paginator = $this->carrierManager->getCarriersPaginator(null, null, null, $queryParams);
         $paginator->setCurrentPageNumber($pageNumber);
         $viewModel = new ViewModel();
         $viewModel->setVariable('messenger', $messenger);
         $viewModel->setVariable('paginator', $paginator);
+        $viewModel->setVariable('filterForm', $filterForm);
         return $viewModel;
     }
 

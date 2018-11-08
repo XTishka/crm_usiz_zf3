@@ -1,4 +1,4 @@
-/.idea
-/.config/autoload/
+.idea
+/config/autoload/
 /vendor
-/nbproject/private/
+/nbproject/private/пше

@@ -32,6 +32,12 @@ class CarrierEntity {
     protected $description = '';
 
     /**
+     * Код клиента в ЕГДРПОУ
+     * @var string
+     */
+    protected $registerCode = '';
+
+    /**
      * @var string
      */
     protected $country = '';
@@ -120,10 +126,26 @@ class CarrierEntity {
     }
 
     /**
+     * Возвращает код клиента в ЕГДРПОУ
+     * @return string
+     */
+    public function getRegisterCode(): string {
+        return trim($this->registerCode);
+    }
+
+    /**
+     * Устанавливает код клиента в ЕГДРПОУ
+     * @param string $registerCode
+     */
+    public function setRegisterCode($registerCode) {
+        $this->registerCode = $registerCode;
+    }
+
+    /**
      * @return string
      */
     public function getCountry(): string {
-        return $this->country;
+        return trim($this->country);
     }
 
     /**

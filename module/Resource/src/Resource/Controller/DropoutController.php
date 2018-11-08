@@ -43,9 +43,11 @@ class DropoutController extends AbstractActionController {
      */
     public function ajaxValueAction() {
         $providerId = $this->params()->fromRoute('provider');
+        $date = $this->params()->fromQuery('date');
+        $materialId = $this->params()->fromQuery('material');
         $json = new JsonModel();
         try {
-            $dropoutEntity = $this->dropoutManager->fetchOneByProviderId($providerId);
+            $dropoutEntity = $this->dropoutManager->fetchOneByProviderId($providerId, $materialId, $date);
             $json->setVariable('provider', $dropoutEntity->getProviderId());
             $json->setVariable('value', $dropoutEntity->getValue());
             $json->setVariable('status', 'success');

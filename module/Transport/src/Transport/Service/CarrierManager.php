@@ -26,14 +26,14 @@ class CarrierManager {
      * @param null $sortDirection
      * @return \Zend\Paginator\Paginator
      */
-    public function getCarriersPaginator($carrierType = null, $sortColumn = null, $sortDirection = null) {
+    public function getCarriersPaginator($carrierType = null, $sortColumn = null, $sortDirection = null, $query = null) {
         $columnsNames = $this->carrierDbRepository->fetchTableColumns();
         if (!in_array($sortColumn, $columnsNames))
             $sortColumn = 'carrier_name';
         $sortDirection = strtoupper($sortDirection);
         if ($sortDirection !== 'ASC' && $sortDirection !== 'DESC')
             $sortDirection = 'ASC';
-        $paginator = $this->carrierDbRepository->fetchCarriersPaginator($carrierType, $sortColumn, $sortDirection);
+        $paginator = $this->carrierDbRepository->fetchCarriersPaginator($carrierType, $sortColumn, $sortDirection, $query);
         return $paginator;
     }
 

@@ -12,8 +12,8 @@ class CarrierControllerFactory implements FactoryInterface {
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null) {
         $carrierManager = $container->get(CarrierManager::class);
         $carrierForm = $container->get('FormElementManager')->get(Form\Carrier::class);
-        return new CarrierController($carrierManager, $carrierForm);
+        $carrierFilterForm = $container->get('FormElementManager')->get(Form\CarrierFilter::class);
+        return new CarrierController($carrierManager, $carrierForm, $carrierFilterForm);
     }
-
 
 }

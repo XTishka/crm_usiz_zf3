@@ -28,6 +28,7 @@ return [
             Form\Fieldset\RateValue::class          => InvokableFactory::class,
             Form\RateFilter::class                  => Form\RateFilterFactory::class,
             Form\Carrier::class                     => Form\CarrierFactory::class,
+            Form\CarrierFilter::class               => Form\CarrierFilterFactory::class,
             Form\AddRate::class                     => Form\AddRateFactory::class,
             Form\Rate::class                        => Form\RateFactory::class,
             Form\Station::class                     => Form\StationFactory::class,

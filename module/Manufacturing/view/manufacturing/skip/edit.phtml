@@ -224,9 +224,11 @@ $(document).on('change', 'select[name$="[provider_id]"]', function () {
 let changeVisibilityDropout = function (element) {
     var readonly = !$(element).find('option:checked').data('dropout'),
         provider = $(element).find('option:checked').data('provider'),
-        dropout  = $(element).closest('.row').find('input[name$="[dropout]"]').prop('readonly', readonly).val(0);
+        material = $(element).find('option:checked').attr('value'),
+        dropout  = $(element).closest('.row').find('input[name$="[dropout]"]').prop('readonly', readonly).val(0),
+        date = $('input[name=date]').val();
     if (provider != undefined && 0 < provider) {
-        $.get('/dropout/ajax-value/' + provider, function(data) {
+        $.get('/dropout/ajax-value/' + provider, {date: date, material: material}, function(data) {
             if (data.status === "success" && provider === data.provider && data.value > 0) {
                 dropout.val(data.value);
                 return true;
