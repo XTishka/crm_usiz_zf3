@@ -18,8 +18,8 @@ echo $this->form()->openTag($form) ?>
             <?php echo $this->headTitle($title) ?>
         </div>
         <div class="col-md end-md">
-            <?= $this->formSubmit($form->get('save_and_remain')) ?>
             <?= $this->formSubmit($form->get('save_and_exit')) ?>
+            <?= $this->formSubmit($form->get('save_and_recount')) ?>
             <a href="<?= $this->url('rate') ?>" class="btn btn-danger">
                 <i class="fa fa-close fa-fw"></i>
                 <?= $this->translate('Cancel') ?>

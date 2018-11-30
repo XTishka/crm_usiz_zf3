@@ -10,6 +10,7 @@ use Manufacturing\Exception\ErrorException;
 use Zend\Db\Adapter\Driver\ResultInterface;
 use Zend\Db\ResultSet\HydratingResultSet;
 use Zend\Db\ResultSet\ResultSet;
+use Zend\Db\Sql\Combine;
 use Zend\Db\Sql\Expression;
 use Zend\Db\Sql\Sql;
 
@@ -22,21 +23,49 @@ class DatabaseSkip extends AbstractDb {
         $date = ($date instanceof DateTime) ? $date : new DateTime();
         $sql = new Sql($this->dbAdapter);
 
+        /*
         $select = $sql->select(['a' => self::TABLE_SKIP_COMMON]);
         $select->columns(['skip_id', 'date']);
         $select->join(['b' => self::TABLE_SKIP_MATERIALS], 'a.skip_id = b.skip_id', ['weight_material' => new Expression('SUM(b.weight)'), 'product_weight', 'dropout_weight']);
         $select->join(['c' => self::TABLE_SKIP_MATERIALS], 'a.skip_id = c.skip_id', ['weight_coal' => new Expression('SUM(c.weight)')]);
+        //$select->join(['c' => self::TABLE_SKIP_MATERIALS], 'a.skip_id = c.skip_id', ['weight_coal' => new Expression('c.weight')]);
         $select->where->equalTo('a.furnace_id', $furnaceId);
         $select->where->greaterThanOrEqualTo('date', $date->format('Y-m-d'));
         $select->where->notEqualTo('b.dropout', 0);
         $select->where->equalTo('c.dropout', 0);
         $select->group(['date']);
+        $select->group(['skip_id']);
         $select->order('date DESC');
+        */
+
+        $selectA = $sql->select(['a' => self::TABLE_SKIP_COMMON]);
+        $selectA->columns(['skip_id', 'date']);
+        $selectA->join(['b' => self::TABLE_SKIP_MATERIALS], 'a.skip_id = b.skip_id', ['weight_material' => new Expression('SUM(b.weight)'), 'product_weight', 'dropout_weight']);
+        $selectA->where->equalTo('a.furnace_id', $furnaceId);
+        $selectA->where->greaterThanOrEqualTo('date', $date->format('Y-m-d'));
+        $selectA->where->notEqualTo('b.dropout', 0);
+        $selectA->group('a.skip_id');
+
+        $selectB = $sql->select(['a' => self::TABLE_SKIP_COMMON]);
+        $selectB->columns(['skip_id', 'date']);
+        $selectB->join(['b' => self::TABLE_SKIP_MATERIALS], 'a.skip_id = b.skip_id', [
+            'weight_coal' => new Expression('SUM(b.weight)')
+        ]);
+        $selectB->where->equalTo('a.furnace_id', $furnaceId);
+        $selectB->where->greaterThanOrEqualTo('date', $date->format('Y-m-d'));
+        $selectB->where->equalTo('b.dropout', 0);
+        $selectB->group('a.skip_id');
+
+        $select = $sql->select(['q1' => $selectA]);
+        $select->join(['q2' => $selectB], 'q1.skip_id = q2.skip_id', ['weight_coal']);
 
         $dataSource = $sql->prepareStatementForSqlObject($select)->execute();
         $resultSet = new ResultSet(ResultSet::TYPE_ARRAY);
         $resultSet->initialize($dataSource);
         $data = $resultSet->toArray();
+
+        //echo '<pre>';print_r($data);echo '</pre>';
+
         return $data;
     }
 

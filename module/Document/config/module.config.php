@@ -73,6 +73,9 @@ return [
             Service\PurchaseWagonManager::class            => Service\PurchaseWagonManagerFactory::class,
             Service\SaleContractManager::class             => Service\SaleContractManagerFactory::class,
             Service\SaleWagonManager::class                => Service\SaleWagonManagerFactory::class,
+
+            Service\PurchaseRecountShippingCost::class     => Service\PurchaseRecountShippingCostFactory::class,
+            Service\SaleRecountShippingCost::class         => Service\SaleRecountShippingCostFactory::class,
         ],
     ],
     'validators'      => [

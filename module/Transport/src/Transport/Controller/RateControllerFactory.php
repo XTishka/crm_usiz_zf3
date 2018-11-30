@@ -2,6 +2,8 @@
 
 namespace Transport\Controller;
 
+use Document\Service\PurchaseRecountShippingCost;
+use Document\Service\SaleRecountShippingCost;
 use Transport\Form;
 use Transport\Service\RateManager;
 use Interop\Container\ContainerInterface;
@@ -14,7 +16,9 @@ class RateControllerFactory implements FactoryInterface {
         $addRateForm = $container->get('FormElementManager')->get(Form\AddRate::class);
         $rateForm = $container->get('FormElementManager')->get(Form\Rate::class);
         $rateFilterForm = $container->get('FormElementManager')->get(Form\RateFilter::class);
-        return new RateController($rateManager, $addRateForm, $rateForm, $rateFilterForm);
+        $purchaseRecountShippingCostService = $container->get(PurchaseRecountShippingCost::class);
+        $saleRecountShippingCostService = $container->get(SaleRecountShippingCost::class);
+        return new RateController($rateManager, $addRateForm, $rateForm, $rateFilterForm, $purchaseRecountShippingCostService, $saleRecountShippingCostService);
     }
 
 

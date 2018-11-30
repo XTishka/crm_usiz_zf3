@@ -101,16 +101,18 @@ class RateDb extends AbstractDb {
                 $select->where->equalTo('a.company_id', $params['company']);
             if (key_exists('station', $params))
                 $select->where->equalTo('a.station_id', $params['station']);
-            if (key_exists('period', $params) && $params['period']) {
+            if (key_exists('period', $params) && 'false' != $params['period']) {
                 $select->where->lessThanOrEqualTo('period_begin', new Expression('CURDATE()'));
                 $select->where->greaterThanOrEqualTo('period_end', new Expression('CURDATE()'));
             }
-
         }
         $select->group('a.rate_id');
         $dataSource = $sql->prepareStatementForSqlObject($select)->execute();
         $resultSet = new ResultSet('array');
+
+
         $resultSet->initialize($dataSource);
+        //print_r($resultSet->toArray());
         return $resultSet->toArray();
     }
 

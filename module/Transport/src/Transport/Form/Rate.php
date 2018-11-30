@@ -134,10 +134,10 @@ class Rate extends Form {
 
         $this->add([
             'type'       => 'submit',
-            'name'       => 'save_and_remain',
+            'name'       => 'save_and_recount',
             'attributes' => [
-                'class' => 'btn btn-success',
-                'value' => 'Save and remain',
+                'class' => 'btn btn-warning',
+                'value' => 'Save and recount',
             ],
         ]);
 

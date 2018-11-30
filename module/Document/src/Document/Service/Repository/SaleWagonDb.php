@@ -108,6 +108,25 @@ class SaleWagonDb extends Repository\AbstractDb {
         return $object;
     }
 
+    /**
+     * @param int $rateId
+     * @return HydratingResultSet
+     */
+    public function fetchWagonsByRateId(int $rateId) {
+        $sql = new Sql($this->dbAdapter);
+        $select = $sql->select(['a' => self::TABLE_SALE_WAGONS]);
+        $select->where->equalTo('rate_id', $rateId);
+        $dataSource = $sql->prepareStatementForSqlObject($select)->execute();
+        $resultSet = new HydratingResultSet($this->hydrator, $this->prototype);
+        $resultSet->initialize($dataSource);
+        return $resultSet;
+    }
+
+    /**
+     * @param WagonEntity $object
+     * @return WagonEntity
+     * @throws Exception\ErrorException
+     */
     public function saveWagon(WagonEntity $object) {
         $data = $this->getHydrator()->extract($object);
 

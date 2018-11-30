@@ -2,6 +2,8 @@
 
 namespace Transport\Controller;
 
+use Document\Service\PurchaseRecountShippingCost;
+use Document\Service\SaleRecountShippingCost;
 use Transport\Domain\RateEntity;
 use Transport\Form;
 use Transport\Service\RateManager;
@@ -34,19 +36,49 @@ class RateController extends AbstractActionController {
 
     protected $addRateForm;
 
+    /** @var PurchaseRecountShippingCost */
+    protected $purchaseRecountShippingCostService;
+
+    /** @var SaleRecountShippingCost */
+    protected $saleRecountShippingCostService;
+
     /**
      * RateController constructor.
-     * @param RateManager     $rateManager
-     * @param Form\AddRate    $addRateForm
-     * @param Form\Rate       $rateForm
+     * @param RateManager $rateManager
+     * @param Form\AddRate $addRateForm
+     * @param Form\Rate $rateForm
      * @param Form\RateFilter $rateFilterForm
+     * @param PurchaseRecountShippingCost $purchaseRecountShippingCostService
+     * @param SaleRecountShippingCost $saleRecountShippingCostService
      */
-    public function __construct(RateManager $rateManager, Form\AddRate $addRateForm, Form\Rate $rateForm, Form\RateFilter $rateFilterForm) {
+    public function __construct(
+        RateManager $rateManager,
+        Form\AddRate $addRateForm,
+        Form\Rate $rateForm,
+        Form\RateFilter $rateFilterForm,
+        PurchaseRecountShippingCost $purchaseRecountShippingCostService,
+        SaleRecountShippingCost $saleRecountShippingCostService) {
         $this->rateManager = $rateManager;
-        $this->addRateForm = $addRateForm;
         $this->rateForm = $rateForm;
         $this->rateFilterForm = $rateFilterForm;
+        $this->addRateForm = $addRateForm;
+        $this->purchaseRecountShippingCostService = $purchaseRecountShippingCostService;
+        $this->saleRecountShippingCostService = $saleRecountShippingCostService;
     }
+
+    /**
+     * RateController constructor.
+     * @param RateManager $rateManager
+     * @param Form\AddRate $addRateForm
+     * @param Form\Rate $rateForm
+     * @param Form\RateFilter $rateFilterForm
+     * public function construct(RateManager $rateManager, Form\AddRate $addRateForm, Form\Rate $rateForm, Form\RateFilter $rateFilterForm) {
+     * $this->rateManager = $rateManager;
+     * $this->addRateForm = $addRateForm;
+     * $this->rateForm = $rateForm;
+     * $this->rateFilterForm = $rateFilterForm;
+     * }
+     */
 
     public function indexAction() {
         $queryParams = $this->params()->fromQuery();
@@ -80,7 +112,7 @@ class RateController extends AbstractActionController {
             $form->setData($this->params()->fromPost());
             if ($form->isValid()) {
                 /**
-                 * @var RateEntity   $object
+                 * @var RateEntity $object
                  * @var \ArrayObject $one
                  */
                 $object = $form->getObject();
@@ -109,14 +141,32 @@ class RateController extends AbstractActionController {
         if ($this->request->isPost()) {
             $form->setData($this->params()->fromPost());
             if ($form->isValid()) {
+                /** @var RateEntity $object */
                 $object = $form->getObject();
                 $result = $this->rateManager->saveRate($object);
                 $messenger->addMessage($result->getMessage(), $result->getStatus());
                 if ($this->params()->fromPost('save_and_remain'))
                     return $this->plugin('Redirect')->toRoute('rate/edit', ['id' => $result->getSource()->getRateId()]);
+
+                if ($this->params()->fromPost('save_and_recount', false)) {
+                    $rateId = $result->getSource()->getRateId();
+                    // Пересчет стоимости перевозки для поставок сырья
+                    $purchaseRecountResult = $this->purchaseRecountShippingCostService->recount($rateId);
+                    $messenger->addMessage(
+                        $purchaseRecountResult->getMessage(),
+                        $purchaseRecountResult->getStatus()
+                    );
+                    // Пересчет стоимости перевозки для отгрузок товара
+                    $saleRecountResult = $this->saleRecountShippingCostService->recount($rateId);
+                    $messenger->addMessage(
+                        $saleRecountResult->getMessage(),
+                        $saleRecountResult->getStatus()
+                    );
+                }
+
                 return $this->plugin('Redirect')->toRoute('rate');
             }
-        } else if ($rateId = $this->params()->fromRoute('id')) {
+        } elseif ($rateId = $this->params()->fromRoute('id')) {
             $object = $this->rateManager->getRateById($rateId);
             $form->bind($object);
         }

@@ -158,6 +158,14 @@ class PurchaseWagonManager {
     }
 
     /**
+     * @param $rateId
+     * @return \Zend\Db\ResultSet\HydratingResultSet
+     */
+    public function getWagonsByRateId($rateId) {
+        return $this->purchaseWagonDbRepository->fetchWagonsByRateId($rateId);
+    }
+
+    /**
      * @param $wagonId
      * @return PurchaseWagonEntity
      */
@@ -429,7 +437,6 @@ class PurchaseWagonManager {
 
             $object = $this->purchaseWagonDbRepository->saveWagon($object);
 
-
             if (isset($debtToCarrier) && isset($transportRate)) {
 
                 //if (CarrierEntity::TYPE_TRAIN == $contract->getCarrierType()) {
@@ -497,6 +504,7 @@ class PurchaseWagonManager {
             switch ($contract->getConditions()) {
                 // Записываеться задолженность перед поставщиком за сырье и перед перевозчиком
                 case $contract::CONDITIONS_TYPE_FCA:
+
                     $this->financeManager->saveTransaction($providerTransaction);
                     if (isset($carrierTransaction)) {
                         $this->financeManager->saveTransaction($carrierTransaction);

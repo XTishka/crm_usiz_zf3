@@ -135,6 +135,14 @@ class SaleWagonManager {
     }
 
     /**
+     * @param $rateId
+     * @return \Zend\Db\ResultSet\HydratingResultSet
+     */
+    public function getWagonsByRateId($rateId) {
+        return $this->saleWagonDbRepository->fetchWagonsByRateId($rateId);
+    }
+
+    /**
      * @param SaleWagonEntity $object
      * @return Service\Result
      * @throws \Contractor\Exception\ErrorException
@@ -256,16 +264,22 @@ class SaleWagonManager {
                         // Клиент должен компании за продукцию
                         $this->financeManager->saveTransaction($customerSaleTransaction);
                         if (CarrierEntity::TYPE_TRAIN == $contract->getCarrierType()) {
-                            // Компания должна заводу - минус компании
-                            $this->financeManager->saveTransaction($companyToPlantDebtTransaction);
-                            // Заводу должна компания - плюс заводу
-                            $this->financeManager->saveTransaction($companyToPlantCreditTransaction);
-                            // Завод должен перевозчику - минус заводу
-                            $this->financeManager->saveTransaction($carrierTransaction);
-                        } else {
+                            if (isset($companyToPlantDebtTransaction)) {
+                                // Компания должна заводу - минус компании
+                                $this->financeManager->saveTransaction($companyToPlantDebtTransaction);
+                            }
+                            if (isset($companyToPlantCreditTransaction)) {
+                                // Заводу должна компания - плюс заводу
+                                $this->financeManager->saveTransaction($companyToPlantCreditTransaction);
+                            }
+                            if (isset($carrierTransaction)) {
+                                // Завод должен перевозчику - минус заводу
+                                $this->financeManager->saveTransaction($carrierTransaction);
+                            }
+                        } elseif (isset($carrierTransaction)) {
                             // Компания должна перевозчику - минус компании
                             $carrierTransaction->setCompanyId($companyContractor->getContractorId());
-                            $carrierTransaction->setComment(sprintf('Перевозка продукции по договору %s за авто %s', $contract->getContractNumber(), $currentWagon->getWagonNumber()));
+                            $carrierTransaction->setComment(sprintf('Авто. Перевозка продукции по договору %s за авто %s', $contract->getContractNumber(), $currentWagon->getWagonNumber()));
                             $this->financeManager->saveTransaction($carrierTransaction);
                         }
                         break;
@@ -274,19 +288,27 @@ class SaleWagonManager {
                         // Если случай CPT с возвратом средств, тогда возвратные средства выставляются компании, а компания заводу
                         // Клиент должен компании за продукцию
                         $this->financeManager->saveTransaction($customerSaleTransaction);
-                        // Клиент должен компании за перевозку
-                        $this->financeManager->saveTransaction($customerTransportTransaction);
+                        if (isset($customerTransportTransaction)) {
+                            // Клиент должен компании за перевозку
+                            $this->financeManager->saveTransaction($customerTransportTransaction);
+                        }
                         if (CarrierEntity::TYPE_TRAIN == $contract->getCarrierType()) {
-                            // Компания должна заводу - минус компании
-                            $this->financeManager->saveTransaction($companyToPlantDebtTransaction);
-                            // Заводу должна компания - плюс заводу
-                            $this->financeManager->saveTransaction($companyToPlantCreditTransaction);
-                            // Завод должен перевозчику - минус заводу
-                            $this->financeManager->saveTransaction($carrierTransaction);
-                        } else {
+                            if (isset($companyToPlantDebtTransaction)) {
+                                // Компания должна заводу - минус компании
+                                $this->financeManager->saveTransaction($companyToPlantDebtTransaction);
+                            }
+                            if (isset($companyToPlantCreditTransaction)) {
+                                // Заводу должна компания - плюс заводу
+                                $this->financeManager->saveTransaction($companyToPlantCreditTransaction);
+                            }
+                            if (isset($carrierTransaction)) {
+                                // Завод должен перевозчику - минус заводу
+                                $this->financeManager->saveTransaction($carrierTransaction);
+                            }
+                        } elseif (isset($carrierTransaction)) {
                             // Компания должна перевозчику - минус компании
                             $carrierTransaction->setCompanyId($companyContractor->getContractorId());
-                            $carrierTransaction->setComment(sprintf('Перевозка продукции по договору %s за авто %s', $contract->getContractNumber(), $currentWagon->getWagonNumber()));
+                            $carrierTransaction->setComment(sprintf('Авто. Перевозка продукции по договору %s за авто %s', $contract->getContractNumber(), $currentWagon->getWagonNumber()));
                             $this->financeManager->saveTransaction($carrierTransaction);
                         }
 
@@ -439,12 +461,34 @@ class SaleWagonManager {
                 case $contract::CONDITIONS_TYPE_CPT:
                     // Клиент должен компании за продукцию
                     $this->financeManager->saveTransaction($customerSaleTransaction);
+                    /*
                     // Компания должна заводу - минус компании
                     $this->financeManager->saveTransaction($companyToPlantDebtTransaction);
                     // Заводу должна компания - плюс заводу
                     $this->financeManager->saveTransaction($companyToPlantCreditTransaction);
                     // Завод должен перевозчику - минус заводу
                     $this->financeManager->saveTransaction($carrierTransaction);
+                    */
+
+                    if (isset($carrierTransaction)) {
+                        if (CarrierEntity::TYPE_TRAIN == $contract->getCarrierType()) {
+                            if (isset($companyToPlantDebtTransaction)) {
+                                // Компания должна заводу - минус компании
+                                $this->financeManager->saveTransaction($companyToPlantDebtTransaction);
+                            }
+                            if (isset($companyToPlantCreditTransaction)) {
+                                // Заводу должна компания - плюс заводу
+                                $this->financeManager->saveTransaction($companyToPlantCreditTransaction);
+                            }
+                            // Завод должен перевозчику - минус заводу
+                            $this->financeManager->saveTransaction($carrierTransaction);
+                        } else {
+                            // Компания должна перевозчику - минус компании
+                            $carrierTransaction->setCompanyId($companyContractor->getContractorId());
+                            $carrierTransaction->setComment(sprintf('Авто. Перевозка продукции по договору %s за авто %s', $contract->getContractNumber(), $object->getWagonNumber()));
+                            $this->financeManager->saveTransaction($carrierTransaction);
+                        }
+                    }
                     break;
                 // Записываеться задолженность перед покупателем за сырье и за перевозку
                 case $contract::CONDITIONS_TYPE_CPT_RETURN:
@@ -453,12 +497,33 @@ class SaleWagonManager {
                     $this->financeManager->saveTransaction($customerSaleTransaction);
                     // Клиент должен компании за перевозку
                     $this->financeManager->saveTransaction($customerTransportTransaction);
+                    /*
                     // Компания должна заводу - минус компании
                     $this->financeManager->saveTransaction($companyToPlantDebtTransaction);
                     // Заводу должна компания - плюс заводу
                     $this->financeManager->saveTransaction($companyToPlantCreditTransaction);
                     // Завод должен перевозчику - минус заводу
                     $this->financeManager->saveTransaction($carrierTransaction);
+                    */
+                    if (isset($carrierTransaction)) {
+                        if (CarrierEntity::TYPE_TRAIN == $contract->getCarrierType()) {
+                            if (isset($companyToPlantDebtTransaction)) {
+                                // Компания должна заводу - минус компании
+                                $this->financeManager->saveTransaction($companyToPlantDebtTransaction);
+                            }
+                            if (isset($companyToPlantCreditTransaction)) {
+                                // Заводу должна компания - плюс заводу
+                                $this->financeManager->saveTransaction($companyToPlantCreditTransaction);
+                            }
+                            // Завод должен перевозчику - минус заводу
+                            $this->financeManager->saveTransaction($carrierTransaction);
+                        } else {
+                            // Компания должна перевозчику - минус компании
+                            $carrierTransaction->setCompanyId($companyContractor->getContractorId());
+                            $carrierTransaction->setComment(sprintf('Авто. Перевозка продукции по договору %s за авто %s', $contract->getContractNumber(), $object->getWagonNumber()));
+                            $this->financeManager->saveTransaction($carrierTransaction);
+                        }
+                    }
                     break;
                 default:
                     throw new Exception\InvalidArgumentException('Invalid delivery condition type');

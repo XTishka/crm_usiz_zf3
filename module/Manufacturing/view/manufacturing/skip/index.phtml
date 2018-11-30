@@ -44,9 +44,12 @@
                                     'company' => $company->getContractorId(),
                                     'furnace' => $column['furnace_id'],
                                     'date'    => $date ?? null]]) ?>">
-                                                    <span class="text-success"><?= sprintf('%s / %s',
+                                                    <span class="text-success hint"><?= sprintf('%s / %s',
                                                             $this->numberFormat($column['weight_material']),
                                                             $this->numberFormat($column['weight_coal'])) ?></span>
+                                                    <span class="text-warning hint">
+                                                        (<?=$this->numberFormat($column['product_weight'])?>)
+                                                    </span>
                                 </a>
                                 <?php
                                 $totalMaterialWeight += $column['weight_material'];

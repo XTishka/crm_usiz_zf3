@@ -1,12 +1,10 @@
 <?php
 
 return [
-    '' => '',
-    '' => '',
-    '' => '',
-    '' => '',
-    '' => '',
-    '' => '',
+    ''                                                                   => '',
+    'Purchase shipping cost recalculation completed successfully'        => 'Перерасчет стоимости перевозки сырья успешно завершен',
+    'Sale shipping cost recalculation completed successfully'            => 'Перерасчет стоимости отгрузки продукции успешно завершен',
+    'Save and recount'                                                   => 'Сохранить и пересчитать',
     'Transaction was fully completed.'                                   => 'Транзакция успешно проведена.',
     'Import transactions'                                                => 'Импортировать транзакции',
     'All finance transactions data was successfully imported.'           => 'Все финансовые операции успешно импортированы',
