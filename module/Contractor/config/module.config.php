@@ -12,6 +12,7 @@ return [
         ],
         'factories'          => [
             Controller\ContractorAdditionalController::class => Controller\ContractorControllerFactory::class,
+            Controller\ContractorCommonController::class     => Controller\ContractorCommonControllerFactory::class,
             Controller\ContractorCarrierController::class    => Controller\ContractorControllerFactory::class,
             Controller\ContractorCompanyController::class    => Controller\ContractorControllerFactory::class,
             Controller\ContractorCorporateController::class  => Controller\ContractorControllerFactory::class,
@@ -28,6 +29,8 @@ return [
         ],
         'factories'          => [
             Form\Element\ContractorAdditionalSelect::class => Form\Element\ContractorSelectFactory::class,
+            Form\Element\ContractorCommonSelect::class     => Form\Element\ContractorSelectFactory::class,
+            Form\ContractorCommonFilter::class             => Form\ContractorCommonFilterFactory::class,
             Form\Element\ContractorCarrierSelect::class    => Form\Element\ContractorSelectFactory::class,
             Form\Element\ContractorCompanySelect::class    => Form\Element\ContractorSelectFactory::class,
             Form\Element\ContractorCorporateSelect::class  => Form\Element\ContractorSelectFactory::class,
@@ -36,6 +39,7 @@ return [
             Form\Element\ContractorPlantSelect::class      => Form\Element\ContractorSelectFactory::class,
             Form\Element\ContractorProviderSelect::class   => Form\Element\ContractorSelectFactory::class,
             Form\ContractorAdditional::class               => Form\ContractorAbstractFactory::class,
+            Form\ContractorCommon::class                   => Form\ContractorAbstractFactory::class,
             Form\ContractorCarrier::class                  => Form\ContractorAbstractFactory::class,
             Form\ContractorCompany::class                  => Form\ContractorAbstractFactory::class,
             Form\ContractorConsignee::class                => Form\ContractorAbstractFactory::class,
@@ -56,6 +60,7 @@ return [
         ],
         'factories'          => [
             Service\ContractorAdditionalManager::class => Service\ContractorAbstractManagerFactory::class,
+            Service\ContractorCommonManager::class     => Service\ContractorAbstractManagerFactory::class,
             Service\ContractorCarrierManager::class    => Service\ContractorAbstractManagerFactory::class,
             Service\ContractorCompanyManager::class    => Service\ContractorAbstractManagerFactory::class,
             Service\ContractorCorporateManager::class  => Service\ContractorAbstractManagerFactory::class,
@@ -78,6 +83,7 @@ return [
     'view_helpers'    => [
         'aliases'   => [
             'contractorAdditionalMenu' => View\Helper\ContractorAdditionalMenu::class,
+            'contractorCommonMenu'     => View\Helper\ContractorCommonMenu::class,
             'contractorCarrierMenu'    => View\Helper\ContractorCarrierMenu::class,
             'contractorCompanyMenu'    => View\Helper\ContractorCompanyMenu::class,
             'contractorCorporateMenu'  => View\Helper\ContractorCorporateMenu::class,
@@ -87,6 +93,7 @@ return [
         ],
         'factories' => [
             View\Helper\ContractorAdditionalMenu::class => View\Helper\ContractorAbstractMenuFactory::class,
+            View\Helper\ContractorCommonMenu::class     => View\Helper\ContractorAbstractMenuFactory::class,
             View\Helper\ContractorCarrierMenu::class    => View\Helper\ContractorAbstractMenuFactory::class,
             View\Helper\ContractorCompanyMenu::class    => View\Helper\ContractorAbstractMenuFactory::class,
             View\Helper\ContractorCorporateMenu::class  => View\Helper\ContractorAbstractMenuFactory::class,

@@ -92,7 +92,7 @@ class RateController extends AbstractActionController {
         $pageNumber = $this->params()->fromQuery('page');
         $paginator = $this->rateManager->getRatesPaginator(null, $queryParams);
         $paginator->setCurrentPageNumber($pageNumber);
-        $paginator->setItemCountPerPage(20);
+        $paginator->setItemCountPerPage(50);
         $viewModel = new ViewModel();
         $viewModel->setVariable('messenger', $messenger);
         $viewModel->setVariable('paginator', $paginator);

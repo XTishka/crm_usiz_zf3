@@ -29,6 +29,22 @@ abstract class ContractorAbstractManager {
     }
 
     /**
+     * @return \Zend\Paginator\Paginator
+     */
+    public function getAllContractorsWithPaginator($sortColumn = null, $sortDirection = null, $query = null) {
+        $columnsNames = $this->databaseContractorAbstractRepository->fetchTableColumns();
+        if (!in_array($sortColumn, $columnsNames))
+            $sortColumn = 'contractor_name';
+        if (!in_array($sortColumn, $columnsNames))
+            $sortColumn = 'contractor_type';
+        $sortDirection = strtoupper($sortDirection);
+        if ($sortDirection !== 'ASC' && $sortDirection !== 'DESC')
+            $sortDirection = 'ASC';
+        $paginator = $this->databaseContractorAbstractRepository->fetchAllContractorsWithPaginator($sortColumn, $sortDirection, $query);
+        return $paginator;
+    }
+
+    /**
      * @return array
      */
     public function getContractorsValueOptions() {

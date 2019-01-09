@@ -52,6 +52,7 @@ class CarrierController extends AbstractActionController {
         $messenger = $this->plugin('FlashMessenger');
         $pageNumber = $this->params()->fromQuery('page');
         $paginator = $this->carrierManager->getCarriersPaginator(null, null, null, $queryParams);
+        $paginator->setItemCountPerPage(50);
         $paginator->setCurrentPageNumber($pageNumber);
         $viewModel = new ViewModel();
         $viewModel->setVariable('messenger', $messenger);

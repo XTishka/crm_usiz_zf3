@@ -40,14 +40,7 @@ class AccountsPayableService {
 
         $selectA = $sql->select(['a' => FinanceTransactionDb::TABLE_FINANCE_TRANSACTIONS]);
         $selectA->join(['b' => DatabaseContractorAbstract::TABLE_CONTRACTORS], 'a.contractor_id = b.contractor_id AND a.contractor_type = b.contractor_type', ['contractor_name']);
-        $selectA->columns([
-            'credit',
-            'debit',
-            'company_id',
-            'contractor_id',
-            'contractor_type',
-            'transaction_type',
-        ]);
+        $selectA->columns(['credit', 'debit', 'company_id', 'contractor_id', 'contractor_type', 'transaction_type']);
         $selectA->where->equalTo('a.company_id', $companyId);
         //$selectA->where->equalTo('a.transaction_type', TransactionEntity::TRANSACTION_DEBT);
         $selectA->where->notIn('a.contractor_type', [ContractorCustomer::TYPE_CUSTOMER]);

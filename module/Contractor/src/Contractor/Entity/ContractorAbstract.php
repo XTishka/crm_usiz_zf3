@@ -8,6 +8,11 @@ use DateTime;
 abstract class ContractorAbstract {
 
     /**
+     * Не явный
+     */
+    const TYPE_COMMON = 'common';
+
+    /**
      * Прочие контрагенты
      */
     const TYPE_ADDITIONAL = 'additional';
@@ -58,7 +63,7 @@ abstract class ContractorAbstract {
      * Тип контрагента
      * @var null
      */
-    protected $contractorType = null;
+    protected $contractorType;
 
     /**
      * Название контрагента
@@ -147,6 +152,15 @@ abstract class ContractorAbstract {
      * @return string
      */
     public function getContractorType(): string {
+        if ($this->contractorType == self::TYPE_COMMON) $this->contractorType = 'test';
+        return $this->contractorType;
+    }
+
+    /**
+     * Возвращает тип контрагента
+     * @return string
+     */
+    public function setContractorType(): string {
         return $this->contractorType;
     }
 

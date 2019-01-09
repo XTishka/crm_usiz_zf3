@@ -302,6 +302,17 @@ return [
                 ],
             ],
         ],
+        'contractorCommon' => [
+            'route'           => 'contractorCommon',
+            'child_resources' => [
+                'edit'   => [
+                    'route' => 'edit',
+                ],
+                'delete' => [
+                    'route' => 'delete',
+                ],
+            ],
+        ],
         'contractorCarrier'    => [
             'route'           => 'contractorCarrier',
             'child_resources' => [

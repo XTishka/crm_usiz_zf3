@@ -4,6 +4,43 @@ namespace Contractor;
 
 return [
     'routes' => [
+        'contractorCommon' => [
+            'type'          => 'segment',
+            'options'       => [
+                'route'    => '/contractor-common',
+                'defaults' => [
+                    'action'     => 'index',
+                    'controller' => Controller\ContractorCommonController::class,
+                ],
+            ],
+            'may_terminate' => true,
+            'child_routes'  => [
+                'edit'   => [
+                    'type'    => 'segment',
+                    'options' => [
+                        'route'       => '/edit[/:id]',
+                        'constraints' => [
+                            'id' => '\d+',
+                        ],
+                        'defaults'    => [
+                            'action' => 'edit',
+                        ],
+                    ],
+                ],
+                'delete' => [
+                    'type'    => 'segment',
+                    'options' => [
+                        'route'       => '/delete[/:id]',
+                        'constraints' => [
+                            'id' => '\d+',
+                        ],
+                        'defaults'    => [
+                            'action' => 'delete',
+                        ],
+                    ],
+                ],
+            ],
+        ],
         'contractorAdditional' => [
             'type'          => 'segment',
             'options'       => [
