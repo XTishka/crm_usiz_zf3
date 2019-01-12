@@ -33,11 +33,6 @@ class ApiController extends AbstractActionController {
     protected $companyManager;
 
     /**
-     * @var AccountsPayableService
-     */
-    protected $accountsPayableService;
-
-    /**
      * @var AccountsReceivableService
      */
     protected $accountsReceivableService;
@@ -61,7 +56,6 @@ class ApiController extends AbstractActionController {
     protected $providersReceivableService;
 
     public function __construct(
-        AccountsPayableService $accountsPayableService,
         AccountsReceivableService $accountsReceivableService,
         CarriersReceivableService $carriersReceivableService,
         CheckingAccountService $checkingAccountService,
@@ -69,7 +63,6 @@ class ApiController extends AbstractActionController {
         ProvidersReceivableService $providersReceivableService,
         ApiDb $apiDbRepository, ContractorCompanyManager $companyManager) {
 
-        $this->accountsPayableService = $accountsPayableService;
         $this->accountsReceivableService = $accountsReceivableService;
         $this->carriersReceivableService = $carriersReceivableService;
         $this->checkingAccountService = $checkingAccountService;

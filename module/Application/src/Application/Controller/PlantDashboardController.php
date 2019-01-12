@@ -2,6 +2,7 @@
 
 namespace Application\Controller;
 
+use Application\Model\Finance\Plant\AccountPayableService;
 use Bank\Service\RecordManager;
 use Contractor\Entity\ContractorPlant;
 use Contractor\Service\ContractorPlantManager;
@@ -50,18 +51,25 @@ class PlantDashboardController extends AbstractActionController {
      */
     protected $recordManager;
 
+    /**
+     * @var AccountPayableService
+     */
+    protected $accountPayableService;
+
     public function __construct(ContractorPlantManager $plantManager,
                                 FinanceManager $financeManager,
                                 WarehouseLogManager $warehouseLogManager,
                                 SkipManager $furnaceSkipManager,
                                 PurchaseWagonManager $purchaseWagonManager,
-                                RecordManager $recordManager) {
+                                RecordManager $recordManager,
+                                AccountPayableService $accountPayableService) {
         $this->plantManager = $plantManager;
         $this->financeManager = $financeManager;
         $this->warehouseLogManager = $warehouseLogManager;
         $this->furnaceSkipManager = $furnaceSkipManager;
         $this->purchaseWagonManager = $purchaseWagonManager;
         $this->recordManager = $recordManager;
+        $this->accountPayableService = $accountPayableService;
     }
 
     public function welcomeAction() {
@@ -128,7 +136,7 @@ class PlantDashboardController extends AbstractActionController {
         $viewModel->setVariable('warehouseBalance', $this->warehouseLogManager->getTotalMaterialBalances($plant->getContractorId()));
         $viewModel->setVariable('expectedMaterials', $this->purchaseWagonManager->getExpectedMaterialWeight($plantId));
         $viewModel->setVariable('plantBalance', $this->financeManager->getCompanyBalance($plantId));
-        $viewModel->setVariable('plantPayableSum', $this->financeManager->getCompanyPayableSum($plantId));
+        $viewModel->setVariable('accountPayableContainer', $this->accountPayableService->getRecords($plantId));
         $viewModel->setVariable('plantReceivableSum', $this->financeManager->getCompanyReceivableSum($plantId));
 
         $viewModel->setVariable('plantPrepaymentSum', $this->financeManager->getPlantPrepaymentSum($plantId));

@@ -28,6 +28,10 @@ return [
                 ],
             ],
         ],
+        'test'                 => [
+            'allow' => 'customer',
+            'route' => 'test',
+        ],
         'api'                  => [
             'allow'           => 'customer',
             'route'           => 'api',
@@ -89,8 +93,65 @@ return [
                 'companyTransactions'         => [
                     'route' => 'companyTransactions',
                 ],
-                'carriersReceivable'         => [
+                'carriersReceivable'          => [
                     'route' => 'carriersReceivable',
+                ],
+                'assets'                      => [
+                    'route'           => 'assets',
+                    'child_resources' => [
+                        'customer-receivable' => [
+                            'route' => 'customer-receivable',
+                        ],
+                        'prepay-to-provider'  => [
+                            'route' => 'prepay-to-provider',
+                        ],
+                        'prepay-to-carrier'   => [
+                            'route' => 'prepay-to-carrier',
+                        ],
+                        'prepay-to-plant'     => [
+                            'route' => 'prepay-to-plant',
+                        ],
+                        'prepay-to-other'     => [
+                            'route' => 'prepay-to-other',
+                        ],
+                        'total-receivable'    => [
+                            'route' => 'total-receivable',
+                        ],
+                    ],
+                ],
+                'liabilities'                 => [
+                    'route'           => 'liabilities',
+                    'child_resources' => [
+                        'charter-capital'      => [
+                            'route' => 'charter-capital',
+                        ],
+                        'prepay-from-customer' => [
+                            'route' => 'prepay-from-customer',
+                        ],
+                        'debt-to-carrier'      => [
+                            'route' => 'debt-to-carrier',
+                        ],
+                        'debt-to-provider'     => [
+                            'route' => 'debt-to-provider',
+                        ],
+                        'debt-to-plant'        => [
+                            'route' => 'debt-to-plant',
+                        ],
+                        'debt-to-other'        => [
+                            'route' => 'debt-to-other',
+                        ],
+                        'accounts-payable'     => [
+                            'route' => 'accounts-payable',
+                        ],
+                        'plant' => [
+                            'route' => 'plant',
+                            'child_resources' => [
+                                'accounts-payable'     => [
+                                    'route' => 'accounts-payable',
+                                ],
+                            ]
+                        ]
+                    ],
                 ],
             ],
         ],
@@ -293,17 +354,6 @@ return [
         ],
         'contractorAdditional' => [
             'route'           => 'contractorAdditional',
-            'child_resources' => [
-                'edit'   => [
-                    'route' => 'edit',
-                ],
-                'delete' => [
-                    'route' => 'delete',
-                ],
-            ],
-        ],
-        'contractorCommon' => [
-            'route'           => 'contractorCommon',
             'child_resources' => [
                 'edit'   => [
                     'route' => 'edit',

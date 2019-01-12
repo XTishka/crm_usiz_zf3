@@ -1,41 +1,23 @@
 <?php
 
-namespace Application\Model;
+namespace Application\Model\Finance;
 
 use Contractor\Entity\ContractorCustomer;
 use Contractor\Service\Repository\DatabaseContractorAbstract;
 use Document\Domain\TransactionEntity;
 use Document\Service\Repository\FinanceTransactionDb;
 use Transport\Service\Repository\CarrierDb;
-use Zend\Db\Adapter\Adapter;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\Sql\Sql;
 
-class AccountsPayableService {
-
-    /** @var Adapter */
-    protected $db;
-
-    /**
-     * AccountsPayableService constructor.
-     * @param Adapter $db
-     */
-    public function __construct(Adapter $db) {
-        $this->db = $db;
-    }
+class AccountsPayableService extends AbstractService {
 
     /**
      * @param $companyId
-     * @param null $date
-     * @return AccountsPayableContainer
+     * @return ContainerInterface
+     * @throws \Exception
      */
-    public function getRecords($companyId, $dateTime = null) {
-
-        if (!$dateTime instanceof \DateTime) {
-            $dateTime = trim($dateTime) ? \DateTime::createFromFormat('d.m.Y', $dateTime) : new \DateTime();
-            $dateTime->setTime(23, 59, 59);
-        }
-
+    function getRecords($companyId): ContainerInterface {
         $sql = new Sql($this->db);
 
         $selectA = $sql->select(['a' => FinanceTransactionDb::TABLE_FINANCE_TRANSACTIONS]);
@@ -44,7 +26,7 @@ class AccountsPayableService {
         $selectA->where->equalTo('a.company_id', $companyId);
         //$selectA->where->equalTo('a.transaction_type', TransactionEntity::TRANSACTION_DEBT);
         $selectA->where->notIn('a.contractor_type', [ContractorCustomer::TYPE_CUSTOMER]);
-        $selectA->where->lessThanOrEqualTo('a.created', $dateTime->format('Y-m-d H:i:s'));
+        $selectA->where->lessThanOrEqualTo('a.created', $this->getDate()->format('Y-m-d H:i:s'));
         $selectA->having->nest()->greaterThan('credit', 0)->or->greaterThan('debit', 0);
 
         $dataSourceA = $sql->prepareStatementForSqlObject($selectA)->execute();
@@ -64,13 +46,6 @@ class AccountsPayableService {
                 $dataA[$index]->amount = 0;
             }
 
-            /*
-            if ($item->transaction_type == TransactionEntity::TRANSACTION_DEBT) {
-                $dataA[$index]->amount = bcadd($dataA[$index]->amount, $item->amount, 2);
-            } else {
-                $dataA[$index]->amount = bcsub($dataA[$index]->amount, $item->amount, 2);
-            }
-            */
             if ($item->transaction_type == TransactionEntity::TRANSACTION_DEBT && 0 < $item->debit) {
                 $dataA[$index]->amount = bcsub($dataA[$index]->amount, $item->debit, 2);
             } elseif ($item->transaction_type == TransactionEntity::TRANSACTION_PAYMENT && 0 < $item->debit) {
@@ -95,7 +70,7 @@ class AccountsPayableService {
         ]);
         $selectB->where->equalTo('a.contractor_type', TransactionEntity::CONTRACTOR_CARRIER);
         $selectB->where->equalTo('a.company_id', $companyId);
-        $selectB->where->lessThanOrEqualTo('a.created', $dateTime->format('Y-m-d H:i:s'));
+        $selectB->where->lessThanOrEqualTo('a.created', $this->getDate()->format('Y-m-d H:i:s'));
         $selectA->having->nest()->greaterThan('credit', 0)->or->greaterThan('debit', 0);
 
         $dataSourceB = $sql->prepareStatementForSqlObject($selectB)->execute();
@@ -138,5 +113,6 @@ class AccountsPayableService {
 
         return new AccountsPayableContainer($data);
     }
+
 
 }

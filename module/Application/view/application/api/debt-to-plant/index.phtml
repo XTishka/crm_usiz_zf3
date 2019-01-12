@@ -1,0 +1,21 @@
+<?php if ($this->container->count()): ?>
+    <table class="table-data">
+        <?php foreach ($this->container as $current): ?>
+            <tr>
+                <td><?= $current->contractor_name ?></td>
+                <td class="text-right"><?= $this->currencyFormat($current->amount) ?></td>
+            </tr>
+        <?php endforeach ?>
+        <tfoot>
+        <tr>
+            <td>Total:</td>
+            <th class="text-right"><?= $this->currencyFormat($this->container->total()) ?></th>
+        </tr>
+        </tfoot>
+    </table>
+<?php else: ?>
+    <div class="text-center">
+        <img src="<?= $this->basePath('img/empty.svg') ?>" alt="Empty folder" style="max-width:200px">
+        <h3><?= $this->translate('Nothing found') ?></h3>
+    </div>
+<?php endif ?>

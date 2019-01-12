@@ -2,69 +2,57 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="39a7e7bb-839e-4cc8-9bc0-47f1f661ff9c" name="Default Changelist" comment="- Добавляет фильтрацию для Перевозчиков по коду ОКПО и Названию&#10;- Исправляет отображение суммы веса в договорах &#10;  (была ошибка, не считало тысячные)&#10;- Исправлена ошибка процента отсева при добавлении скипов">
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/AccountsPayableContainerInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/AccountsPayableServiceInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/CharterCapitalContainerInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/CharterCapitalServiceInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/DebtToCarriersContainerInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/DebtToCarriersServiceInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/DebtToOthersContainerInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/DebtToOthersServiceInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/DebtToPlantsContainerInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/DebtToPlantsServiceInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/DebtToProvidersContainerInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/DebtToProvidersServiceInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/PrepayFromCustomersContainerInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/PrepayFromCustomersServiceInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/PrepayToCarriersContainerInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/PrepayToCarriersServiceInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/PrepayToOthersContainerInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/PrepayToPlantsContainerInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/PrepayToPlantsServiceInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/PrepayToProvidersContainerInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/PrepayToProvidersServiceInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/TotalReceivablesContainerInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/TotalReceivablesServiceInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Contractor/src/Contractor/Controller/ContractorCommonController.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Contractor/src/Contractor/Controller/ContractorCommonControllerFactory.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Contractor/src/Contractor/Entity/ContractorCommon.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Contractor/src/Contractor/Form/ContractorCommon.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Contractor/src/Contractor/Form/ContractorCommonFilter.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Contractor/src/Contractor/Form/ContractorCommonFilterFactory.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Contractor/src/Contractor/Form/Element/ContractorCommonSelect.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Contractor/src/Contractor/Service/ContractorCommonManager.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Contractor/src/Contractor/Service/Repository/DatabaseContractorCommon.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Contractor/src/Contractor/View/Helper/ContractorCommonMenu.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Contractor/view/contractor/contractor-common/edit.phtml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Contractor/view/contractor/contractor-common/index.phtml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Document/src/Document/Service/PurchaseRecountShippingCost.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Document/src/Document/Service/PurchaseRecountShippingCostFactory.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Document/src/Document/Service/SaleRecountShippingCost.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Document/src/Document/Service/SaleRecountShippingCostFactory.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/nbproject/private/config.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/nbproject/private/private.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/nbproject/private/private.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/deployment.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deployment.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/usiz.site.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/usiz.site.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/AbstractContainer.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/AbstractService.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/AbstractServiceFactory.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/AccountsPayableContainer.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/AccountsPayableService.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/CharterCapitalContainer.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/CharterCapitalService.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/ContainerInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/CustomerReceivablesContainerInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/CustomerReceivablesServiceInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/Interface/AccountsPayableContainerInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/Interface/AccountsPayableServiceInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/Interface/CharterCapitalContainerInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/Interface/CharterCapitalServiceInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/Interface/CustomerReceivablesContainerInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/Interface/CustomerReceivablesServiceInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/Interface/DebtToCarriersContainerInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/Interface/DebtToCarriersServiceInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/Interface/DebtToOthersContainerInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/Interface/DebtToOthersServiceInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/Interface/DebtToPlantsContainerInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/Interface/DebtToPlantsServiceInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/Interface/DebtToProvidersContainerInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/Interface/DebtToProvidersServiceInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/Interface/PrepayFromCustomersContainerInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/Interface/PrepayFromCustomersServiceInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/Interface/PrepayToCarriersContainerInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/Interface/PrepayToCarriersServiceInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/Interface/PrepayToOthersContainerInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/Interface/PrepayToOthersServiceInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/Interface/PrepayToPlantsContainerInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/Interface/PrepayToPlantsServiceInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/Interface/PrepayToProvidersContainerInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/Interface/PrepayToProvidersServiceInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/Interface/TotalReceivablesContainerInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/Interface/TotalReceivablesServiceInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/PrepayToOthersServiceInterface.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/ServiceInterface.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/development.config.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/development.config.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/module/Application/config/navigation.config.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Application/config/navigation.config.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Application/config/module.config.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Application/config/module.config.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Application/config/router.config.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Application/config/router.config.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/module/Application/language/ru_RU.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Application/language/ru_RU.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Application/src/Application/Controller/ApiController.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Application/src/Application/Controller/ApiController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Application/src/Application/Controller/DashboardController.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Application/src/Application/Controller/DashboardController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Application/src/Application/Controller/PlantDashboardController.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Application/src/Application/Controller/PlantDashboardController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Application/src/Application/Model/AccountsPayableContainer.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/AccountsPayableContainer.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/module/Application/src/Application/Model/AccountsPayableService.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/AccountsPayableService.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/module/Contractor/config/module.config.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Contractor/config/module.config.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/module/Contractor/config/router.config.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Contractor/config/router.config.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/module/Contractor/src/Contractor/Entity/ContractorAbstract.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Contractor/src/Contractor/Entity/ContractorAbstract.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/module/Contractor/src/Contractor/Service/ContractorAbstractManager.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Contractor/src/Contractor/Service/ContractorAbstractManager.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/module/Contractor/src/Contractor/Service/Repository/DatabaseContractorAbstract.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Contractor/src/Contractor/Service/Repository/DatabaseContractorAbstract.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/module/Contractor/view/contractor/contractor-plant/edit.phtml" beforeDir="false" afterPath="$PROJECT_DIR$/module/Contractor/view/contractor/contractor-plant/edit.phtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/module/Transport/src/Transport/Controller/CarrierController.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Transport/src/Transport/Controller/CarrierController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/module/Transport/src/Transport/Controller/RateController.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Transport/src/Transport/Controller/RateController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/module/Transport/src/Transport/Controller/StationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Transport/src/Transport/Controller/StationController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Application/src/Application/Service/Repository/ApiDb.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Application/src/Application/Service/Repository/ApiDb.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Application/view/application/dashboard/finance.phtml" beforeDir="false" afterPath="$PROJECT_DIR$/module/Application/view/application/dashboard/finance.phtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Application/view/application/plant-dashboard/finance.phtml" beforeDir="false" afterPath="$PROJECT_DIR$/module/Application/view/application/plant-dashboard/finance.phtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/module/User/config/acl.config.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/User/config/acl.config.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/www/js/rower.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/www/js/rower.min.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -420,7 +408,9 @@
       <workItem from="1546082593965" duration="9532000" />
       <workItem from="1546952352154" duration="54000" />
       <workItem from="1547023091519" duration="4000" />
-      <workItem from="1547025823997" duration="1001000" />
+      <workItem from="1547025823997" duration="2360000" />
+      <workItem from="1547308779207" duration="29000" />
+      <workItem from="1547308853983" duration="249000" />
     </task>
     <task id="LOCAL-00001" summary="- Добавляет фильтрацию для Перевозчиков по коду ОКПО и Названию&#10;- Исправляет отображение суммы веса в договорах &#10;  (была ошибка, не считало тысячные)&#10;- Исправлена ошибка процента отсева при добавлении скипов">
       <created>1541689056611</created>
@@ -436,16 +426,23 @@
       <option name="project" value="LOCAL" />
       <updated>1543577060971</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="- Внедрение нового класса финансов.">
+      <created>1547027307365</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1547027307365</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="102706000" />
+    <option name="totallyTimeSpent" value="104343000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1176" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49953052" visible="true" weight="0.23489584" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49953052" visible="true" weight="0.14375" />
       <window_info id="Structure" order="1" sideWeight="0.5004695" side_tool="true" weight="0.20052083" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -459,7 +456,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.4741784" />
       <window_info anchor="bottom" id="File Transfer" order="9" weight="0.3027179" />
       <window_info anchor="bottom" id="Database Changes" order="10" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="11" visible="true" weight="0.32239926" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="11" visible="true" weight="0.31958762" />
       <window_info anchor="bottom" id="Event Log" order="12" side_tool="true" />
       <window_info anchor="bottom" id="Messages" order="13" weight="0.3298872" />
       <window_info anchor="bottom" id="Database Console" order="14" weight="0.4718045" />
@@ -515,7 +512,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="- Добавляет фильтрацию для Перевозчиков по коду ОКПО и Названию&#10;- Исправляет отображение суммы веса в договорах &#10;  (была ошибка, не считало тысячные)&#10;- Исправлена ошибка процента отсева при добавлении скипов" />
     <MESSAGE value="- Добавляет пересчет вагонов при изменении тарифов&#10;- Исправляет суммарные данные скипов" />
-    <option name="LAST_COMMIT_MESSAGE" value="- Добавляет пересчет вагонов при изменении тарифов&#10;- Исправляет суммарные данные скипов" />
+    <MESSAGE value="- Внедрение нового класса финансов." />
+    <option name="LAST_COMMIT_MESSAGE" value="- Внедрение нового класса финансов." />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/module/Contractor/src/Contractor/Form/Element/ContractorSelectFactory.php">

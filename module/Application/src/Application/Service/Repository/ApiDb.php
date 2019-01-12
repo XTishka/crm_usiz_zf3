@@ -155,7 +155,7 @@ class ApiDb extends AbstractDb {
             'company_id',
             'contractor_id',
             'contractor_type',
-            'transaction_type'
+            'transaction_type',
         ]);
         $select->where->equalTo('a.contractor_type', TransactionEntity::CONTRACTOR_CUSTOMER);
         $select->where->equalTo('a.company_id', $companyId);
@@ -177,7 +177,7 @@ class ApiDb extends AbstractDb {
             $index = \join([
                 $item['company_id'],
                 $item['contractor_id'],
-                $item['contractor_type']
+                $item['contractor_type'],
             ]);
             if (array_key_exists($index, $data)) {
                 if ($item->transaction_type == TransactionEntity::TRANSACTION_DEBT) {
@@ -396,7 +396,7 @@ class ApiDb extends AbstractDb {
             'debit',
             'company_id',
             'contractor_id',
-            'transaction_type'
+            'transaction_type',
         ]);
         $select->where->equalTo('a.contractor_type', TransactionEntity::CONTRACTOR_CUSTOMER);
         $select->where->equalTo('a.company_id', $companyId);
@@ -529,7 +529,7 @@ class ApiDb extends AbstractDb {
             'company_id',
             'contractor_id',
             'contractor_type',
-            'transaction_type'
+            'transaction_type',
         ]);
         $selectA->having->greaterThan('amount', 0);
         $selectA->where->equalTo('a.company_id', $companyId);
@@ -551,7 +551,7 @@ class ApiDb extends AbstractDb {
             $index = \join([
                 $item['company_id'],
                 $item['contractor_id'],
-                $item['contractor_type']
+                $item['contractor_type'],
             ]);
             if (array_key_exists($index, $dataA)) {
                 if ($item->transaction_type == TransactionEntity::TRANSACTION_DEBT) {
@@ -572,7 +572,7 @@ class ApiDb extends AbstractDb {
             'company_id',
             'contractor_id',
             'contractor_type',
-            'transaction_type'
+            'transaction_type',
         ]);
         $selectB->having->greaterThan('amount', 0);
         $selectB->where->equalTo('a.contractor_type', TransactionEntity::CONTRACTOR_CARRIER);
@@ -593,7 +593,7 @@ class ApiDb extends AbstractDb {
             $index = \join([
                 $item['company_id'],
                 $item['contractor_id'],
-                $item['contractor_type']
+                $item['contractor_type'],
             ]);
             if (array_key_exists($index, $dataB)) {
                 if ($item->transaction_type == TransactionEntity::TRANSACTION_DEBT) {
@@ -737,14 +737,17 @@ class ApiDb extends AbstractDb {
     public function getCompanyTransactionsPaginator($plantId, $companyId = null) {
         $sql = new Sql($this->dbAdapter);
         $select = $sql->select(['a' => FinanceTransactionDb::TABLE_FINANCE_TRANSACTIONS]);
-        $select->join(['b' => DatabaseContractorAbstract::TABLE_CONTRACTORS],
-            'a.contractor_id = b.contractor_id AND a.contractor_type = b.contractor_type',
-            ['contractor_name']);
-        $select->where->equalTo('a.contractor_type', TransactionEntity::CONTRACTOR_COMPANY);
-        $select->where->equalTo('a.company_id', $plantId);
-        if ($companyId)
-            $select->where->equalTo('a.contractor_id', $companyId);
+        $select->columns(['transaction_id', 'transaction_type', 'debit' => 'credit', 'credit' => 'debit', 'comment', 'is_manual', 'created']);
+        $select->join(['b' => DatabaseContractorAbstract::TABLE_CONTRACTORS], 'a.company_id = b.contractor_id', ['contractor_name']);
+        $select->where->equalTo('a.contractor_type', TransactionEntity::CONTRACTOR_PLANT);
+        $select->where->equalTo('a.contractor_id', $plantId);
+        if (is_int($companyId)) {
+            $select->where->equalTo('a.company_id', $companyId);
+        }
         $select->order('a.created DESC');
+
+        //echo $select->getSqlString($this->dbAdapter->platform);
+
         $paginator = new Paginator(new DbSelect($select, $sql, new ResultSet()));
         return $paginator;
     }

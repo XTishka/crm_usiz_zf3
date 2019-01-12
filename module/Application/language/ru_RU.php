@@ -1,8 +1,6 @@
 <?php
 
 return [
-    ''                                                                   => '',
-    ''                                                                   => '',
     'Сustomer contractors'                                               => 'Покупатели',
     'Сorporate contractors'                                              => 'Корпоративные',
     'Consignee contractors'                                              => 'Грузополучатели',
@@ -563,4 +561,16 @@ return [
     'Checking account'                                                   => 'Расчетный счет',
     'Checkout passed'                                                    => 'Проверка успешно пройдена',
     'Checkout failed'                                                    => 'Не удалось выполнить проверку',
+    'Customers receivable'                                               => 'Задолженность покупателей',
+    'Prepay to providers'                                                => 'Предоплата поставщиков',
+    'Prepay to carriers'                                                 => 'Предоплата перевозчиков',
+    'Prepay to plants'                                                   => 'Предоплата заводов',
+    'Prepay to other contractors'                                        => 'Предоплата прочих контрагентов',
+    'Total accounts receivable'                                          => 'Общая дебиторская задолженность',
+    'Customer prepayments'                                               => 'Предоплата покупателей',
+    'Debt to carriers'                                                   => 'Задолженность перед перевозчиками',
+    'Debt to providers'                                                  => 'Задолженность перед поставщиками',
+    'Debt to plants'                                                     => 'Задолженность перед заводами',
+    'Debt to other contractors'                                          => 'Задолженность перед прочими контрагентами',
+    'Total accounts payable'                                             => 'Общая кредиторская задолженность',
 ];

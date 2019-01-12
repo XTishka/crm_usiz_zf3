@@ -125,36 +125,62 @@
                                 <?php endif ?>
                             </td>
                         </tr>
+
                         <tr>
-                            <td><a data-extended="true"
-                                   href="<?= $this->url('api/customerDebts', ['company' => $company->getContractorId()], ['query' => ['date' => $this->date]]) ?>">
-                                    <?= $this->translate('Company receivable sum') ?>:</a></td>
-                            <td class="text-right"><?= $this->currencyFormat($this->accountsReceivable->getTotal()) ?></td>
+                            <td>
+                                <a data-extended="true"
+                                   href="<?= $this->url('api/assets/customer-receivable', ['company' => $company->getContractorId()], ['query' => ['date' => $this->date]]) ?>">
+                                    <?= $this->translate('Customers receivable') ?>:
+                                </a>
+                            </td>
+                            <td class="text-right"><?= $this->currencyFormat($this->customerReceivableContainer->total()) ?></td>
                         </tr>
                         <tr>
                             <td>
                                 <a data-extended="true"
-                                   href="<?= $this->url('api/companyPrepayments', ['company' => $company->getContractorId()], ['query' => ['date' => $this->date]]) ?>">
-                                    <?= $this->translate('Company prepayment sum') ?>:</a>
+                                   href="<?= $this->url('api/assets/prepay-to-provider', ['company' => $company->getContractorId()], ['query' => ['date' => $this->date]]) ?>">
+                                    <?= $this->translate('Prepay to providers') ?>:
+                                </a>
                             </td>
-                            <td class="text-right"><?= $this->currencyFormat($this->providersReceivable->getTotal()) ?></td>
+                            <td class="text-right"><?= $this->currencyFormat($this->prepayToProviderContainer->total()) ?></td>
                         </tr>
                         <tr>
                             <td>
                                 <a data-extended="true"
-                                   href="<?= $this->url('api/companyToPlantPrepayments', ['company' => $company->getContractorId()], ['query' => ['date' => $this->date]]) ?>">
-                                    <?= $this->translate('Prepayment to plant sum') ?>:</a>
+                                   href="<?= $this->url('api/assets/prepay-to-carrier', ['company' => $company->getContractorId()], ['query' => ['date' => $this->date]]) ?>">
+                                    <?= $this->translate('Prepay to carriers') ?>:
+                                </a>
                             </td>
-                            <td class="text-right"><?= $this->currencyFormat($this->companyToPlantPrepaymentSum->offsetGet('amount')) ?></td>
+                            <td class="text-right"><?= $this->currencyFormat($this->prepayToCarrierContainer->total()) ?></td>
                         </tr>
                         <tr>
                             <td>
                                 <a data-extended="true"
-                                   href="<?= $this->url('api/carriersReceivable', ['company' => $company->getContractorId()], ['query' => ['date' => $this->date]]) ?>">
-                                    <?= $this->translate('Carrier prepayment sum') ?>:</a>
+                                   href="<?= $this->url('api/assets/prepay-to-plant', ['company' => $company->getContractorId()], ['query' => ['date' => $this->date]]) ?>">
+                                    <?= $this->translate('Prepay to plants') ?>:
+                                </a>
                             </td>
-                            <td class="text-right"><?= $this->currencyFormat($this->carriersReceivable->getTotal()) ?></td>
+                            <td class="text-right"><?= $this->currencyFormat($this->prepayToPlantContainer->total()) ?></td>
                         </tr>
+                        <tr>
+                            <td>
+                                <a data-extended="true"
+                                   href="<?= $this->url('api/assets/prepay-to-other', ['company' => $company->getContractorId()], ['query' => ['date' => $this->date]]) ?>">
+                                    <?= $this->translate('Prepay to other contractors') ?>:
+                                </a>
+                            </td>
+                            <td class="text-right"><?= $this->currencyFormat($this->prepayToOtherContainer->total()) ?></td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <a data-extended="true"
+                                   href="<?= $this->url('api/assets/total-receivable', ['company' => $company->getContractorId()], ['query' => ['date' => $this->date]]) ?>">
+                                    <?= $this->translate('Total accounts receivable') ?>:
+                                </a>
+                            </th>
+                            <th class="text-right"><?= $this->currencyFormat($this->totalReceivableContainer->total()) ?></th>
+                        </tr>
+
                     </table>
 
                 </div>
@@ -170,31 +196,68 @@
                 <div class="panel-body">
 
                     <table class="table-data text-error">
-
                         <tr>
                             <td>
-                                <a data-extended="true" href="<?= $this->url('api/companyCorporates',
-                                    ['company' => $company->getContractorId()],
-                                    ['query' => ['date' => $this->date]]) ?>"><?= $this->translate('Charter capital') ?>:</a>
+                                <a data-extended="true"
+                                   href="<?= $this->url('api/liabilities/charter-capital', ['company' => $company->getContractorId()], ['query' => ['date' => $this->date]]) ?>">
+                                    <?= $this->translate('Charter capital') ?>:
+                                </a>
                             </td>
-                            <td class="text-right"><?= $this->currencyFormat($this->internalPayableSum->offsetGet('amount')) ?></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <a data-extended="true" href="<?= $this->url('api/customerPrepayments',
-                                    ['company' => $company->getContractorId()],
-                                    ['query' => ['date' => $this->date]]) ?>"><?= $this->translate('Customer prepayment sum') ?>:</a>
-                            </td>
-                            <td class="text-right"><?= $this->currencyFormat($this->customerPayable->getTotal()) ?></td>
+                            <td class="text-right"><?= $this->currencyFormat($this->charterCapitalContainer->total()) ?></td>
                         </tr>
                         <tr>
                             <td>
                                 <a data-extended="true"
-                                   href="<?= $this->url('api/companyPayables',
-                                       ['company' => $company->getContractorId()],
-                                       ['query' => ['date' => $this->date]]) ?>"><?= $this->translate('Company payable sum') ?>:</a>
+                                   href="<?= $this->url('api/liabilities/prepay-from-customer', ['company' => $company->getContractorId()], ['query' => ['date' => $this->date]]) ?>">
+                                    <?= $this->translate('Customer prepayments') ?>:
+                                </a>
                             </td>
-                            <td class="text-right"><?= $this->currencyFormat($this->accountsPayable->getTotal()) ?></td>
+                            <td class="text-right"><?= $this->currencyFormat($this->prepayFromCustomerContainer->total()) ?></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a data-extended="true"
+                                   href="<?= $this->url('api/liabilities/debt-to-carrier', ['company' => $company->getContractorId()], ['query' => ['date' => $this->date]]) ?>">
+                                    <?= $this->translate('Debt to carriers') ?>:
+                                </a>
+                            </td>
+                            <td class="text-right"><?= $this->currencyFormat($this->debtToCarrierContainer->total()) ?></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a data-extended="true"
+                                   href="<?= $this->url('api/liabilities/debt-to-provider', ['company' => $company->getContractorId()], ['query' => ['date' => $this->date]]) ?>">
+                                    <?= $this->translate('Debt to providers') ?>:
+                                </a>
+                            </td>
+                            <td class="text-right"><?= $this->currencyFormat($this->debtToProviderContainer->total()) ?></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a data-extended="true"
+                                   href="<?= $this->url('api/liabilities/debt-to-plant', ['company' => $company->getContractorId()], ['query' => ['date' => $this->date]]) ?>">
+                                    <?= $this->translate('Debt to plants') ?>:
+                                </a>
+                            </td>
+                            <td class="text-right"><?= $this->currencyFormat($this->debtToPlantContainer->total()) ?></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <a data-extended="true"
+                                   href="<?= $this->url('api/liabilities/debt-to-other', ['company' => $company->getContractorId()], ['query' => ['date' => $this->date]]) ?>">
+                                    <?= $this->translate('Debt to other contractors') ?>:
+                                </a>
+                            </td>
+                            <td class="text-right"><?= $this->currencyFormat($this->debtToOtherContainer->total()) ?></td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <a data-extended="true"
+                                   href="<?= $this->url('api/liabilities/accounts-payable', ['company' => $company->getContractorId()], ['query' => ['date' => $this->date]]) ?>">
+                                    <?= $this->translate('Total accounts payable') ?>:
+                                </a>
+                            </th>
+                            <th class="text-right"><?= $this->currencyFormat($this->accountPayableContainer->total()) ?></th>
                         </tr>
                     </table>
 

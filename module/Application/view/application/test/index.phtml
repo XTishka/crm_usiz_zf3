@@ -1,0 +1,289 @@
+<div class="panel">
+    <div class="panel-header"><?= $this->translate('Total accounts payable and receivable') ?></div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-6 text-error">
+                <h3><?= $this->translate('Total accounts payable') ?></h3>
+                <table class="table-data">
+                    <caption>AccountPayableContainer - Сервис получает записи общей кредиторской задолженности</caption>
+                    <?php foreach ($this->accountPayableContainer as $accountPayable): ?>
+                        <tr>
+                            <td><?= $accountPayable->contractor_name ?></td>
+                            <td class="text-right"><?= $this->currencyFormat($accountPayable->amount) ?></td>
+                        </tr>
+                    <?php endforeach ?>
+                    <tfoot>
+                    <tr>
+                        <td>Total:</td>
+                        <th class="text-right"><?= $this->currencyFormat($this->accountPayableContainer->total()) ?></th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <div class="col-md-6 text-success">
+                <h3><?= $this->translate('Total accounts receivable') ?></h3>
+                <table class="table-data">
+                    <caption>TotalReceivableContainer - Сервис получает записи общей дебиторской задолженности</caption>
+                    <?php foreach ($this->totalReceivableContainer as $totalReceivable): ?>
+                        <tr>
+                            <td><?= $totalReceivable->contractor_name ?></td>
+                            <td class="text-right"><?= $this->currencyFormat($totalReceivable->amount) ?></td>
+                        </tr>
+                    <?php endforeach ?>
+                    <tfoot>
+                    <tr>
+                        <td>Total:</td>
+                        <th class="text-right"><?= $this->currencyFormat($this->totalReceivableContainer->total()) ?></th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="panel">
+    <div class="panel-header"><?= $this->translate('Provider payables and receivables') ?></div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-6 text-error">
+                <h3><?= $this->translate('Debt to providers') ?></h3>
+                <table class="table-data">
+                    <caption>DebtToProviderService - Сервис получает записи задолженностей перед поставщиками</caption>
+                    <?php foreach ($this->debtToProviderContainer as $debtToProvider): ?>
+                        <tr>
+                            <td><?= $debtToProvider->contractor_name ?></td>
+                            <td class="text-right"><?= $this->currencyFormat($debtToProvider->amount) ?></td>
+                        </tr>
+                    <?php endforeach ?>
+                    <tfoot>
+                    <tr>
+                        <td>Total:</td>
+                        <th class="text-right"><?= $this->currencyFormat($this->debtToProviderContainer->total()) ?></th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <div class="col-md-6 text-success">
+                <h3><?= $this->translate('Prepay to providers') ?></h3>
+                <table class="table-data">
+                    <caption>PrepayToProviderService - Сервис получает записи предоплат поставщикам</caption>
+                    <?php foreach ($this->prepayToProviderContainer as $prepayToProvider): ?>
+                        <tr>
+                            <td><?= $prepayToProvider->contractor_name ?></td>
+                            <td class="text-right"><?= $this->currencyFormat($prepayToProvider->amount) ?></td>
+                        </tr>
+                    <?php endforeach ?>
+                    <tfoot>
+                    <tr>
+                        <td>Total:</td>
+                        <th class="text-right"><?= $this->currencyFormat($this->prepayToProviderContainer->total()) ?></th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="panel">
+    <div class="panel-header"><?= $this->translate('Carrier payables and receivables') ?></div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-6 text-error">
+                <h3><?= $this->translate('Debt to carriers') ?></h3>
+                <table class="table-data">
+                    <caption>DebtToCarrierService - Сервис получает записи задолженностей перед перевозчиками</caption>
+                    <?php foreach ($this->debtToCarrierContainer as $debtToCarrier): ?>
+                        <tr>
+                            <td><?= $debtToCarrier->contractor_name ?></td>
+                            <td class="text-right"><?= $this->currencyFormat($debtToCarrier->amount) ?></td>
+                        </tr>
+                    <?php endforeach ?>
+                    <tfoot>
+                    <tr>
+                        <td>Total:</td>
+                        <th class="text-right"><?= $this->currencyFormat($this->debtToCarrierContainer->total()) ?></th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <div class="col-md-6 text-success">
+                <h3><?= $this->translate('Prepay to carriers') ?></h3>
+                <table class="table-data">
+                    <caption>PrepayToCarrierService - Сервис получает записи предоплат перевозчикам</caption>
+                    <?php foreach ($this->prepayToCarrierContainer as $prepayToCarrier): ?>
+                        <tr>
+                            <td><?= $prepayToCarrier->contractor_name ?></td>
+                            <td class="text-right"><?= $this->currencyFormat($prepayToCarrier->amount) ?></td>
+                        </tr>
+                    <?php endforeach ?>
+                    <tfoot>
+                    <tr>
+                        <td>Total:</td>
+                        <th class="text-right"><?= $this->currencyFormat($this->prepayToCarrierContainer->total()) ?></th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="panel">
+    <div class="panel-header"><?= $this->translate('Customer payables and receivables') ?></div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-6 text-error">
+                <h3><?= $this->translate('Customer prepayments') ?></h3>
+                <table class="table-data">
+                    <caption>PrepayFromCustomerService - Сервис получает записи предоплат от покупателей</caption>
+                    <?php foreach ($this->prepayFromCustomerContainer as $prepayFromCustomer): ?>
+                        <tr>
+                            <td><?= $prepayFromCustomer->contractor_name ?></td>
+                            <td class="text-right"><?= $this->currencyFormat($prepayFromCustomer->amount) ?></td>
+                        </tr>
+                    <?php endforeach ?>
+                    <tfoot>
+                    <tr>
+                        <td>Total:</td>
+                        <th class="text-right"><?= $this->currencyFormat($this->prepayFromCustomerContainer->total()) ?></th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <div class="col-md-6 text-success">
+                <h3><?= $this->translate('Debts from customers') ?></h3>
+                <table class="table-data">
+                    <caption>CustomerReceivableService - Сервис получает записи задолженности покупателей</caption>
+                    <?php foreach ($this->customerReceivableContainer as $customerReceivable): ?>
+                        <tr>
+                            <td><?= $customerReceivable->contractor_name ?></td>
+                            <td class="text-right"><?= $this->currencyFormat($customerReceivable->amount) ?></td>
+                        </tr>
+                    <?php endforeach ?>
+                    <tfoot>
+                    <tr>
+                        <td>Total:</td>
+                        <th class="text-right"><?= $this->currencyFormat($this->customerReceivableContainer->total()) ?></th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="panel">
+    <div class="panel-header"><?= $this->translate('Plant payables and receivables') ?></div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-6 text-error">
+                <h3><?= $this->translate('Debt to plants') ?></h3>
+                <table class="table-data">
+                    <caption>DebtToPlantService - Сервис получает записи задолженностей перед заводами</caption>
+                    <?php foreach ($this->debtToPlantContainer as $debtToPlant): ?>
+                        <tr>
+                            <td><?= $debtToPlant->contractor_name ?></td>
+                            <td class="text-right"><?= $this->currencyFormat($debtToPlant->amount) ?></td>
+                        </tr>
+                    <?php endforeach ?>
+                    <tfoot>
+                    <tr>
+                        <td>Total:</td>
+                        <th class="text-right"><?= $this->currencyFormat($this->debtToPlantContainer->total()) ?></th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <div class="col-md-6 text-success">
+                <h3><?= $this->translate('Prepay to plants') ?></h3>
+                <table class="table-data">
+                    <caption>PrepayToPlantService - Сервис получает записи предоплат заводов</caption>
+                    <?php foreach ($this->prepayToPlantContainer as $prepayToPlant): ?>
+                        <tr>
+                            <td><?= $prepayToPlant->contractor_name ?></td>
+                            <td class="text-right"><?= $this->currencyFormat($prepayToPlant->amount) ?></td>
+                        </tr>
+                    <?php endforeach ?>
+                    <tfoot>
+                    <tr>
+                        <td>Total:</td>
+                        <th class="text-right"><?= $this->currencyFormat($this->prepayToPlantContainer->total()) ?></th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="panel">
+    <div class="panel-header"><?= $this->translate('Other contractor payables and receivables') ?></div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-6 text-error">
+                <h3><?= $this->translate('Debt to other contractors') ?></h3>
+                <table class="table-data">
+                    <caption>DebtToOtherService - Сервис получает записи задолженностей перед прочими контрагентами</caption>
+                    <?php foreach ($this->debtToOtherContainer as $debtToOther): ?>
+                        <tr>
+                            <td><?= $debtToOther->contractor_name ?></td>
+                            <td class="text-right"><?= $this->currencyFormat($debtToOther->amount) ?></td>
+                        </tr>
+                    <?php endforeach ?>
+                    <tfoot>
+                    <tr>
+                        <td>Total:</td>
+                        <th class="text-right"><?= $this->currencyFormat($this->debtToOtherContainer->total()) ?></th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <div class="col-md-6 text-success">
+                <h3><?= $this->translate('Prepay to other contractors') ?></h3>
+                <table class="table-data">
+                    <caption>PrepayToOtherService - Сервис получает записи предоплат прочим контрагентам</caption>
+                    <?php foreach ($this->prepayToOtherContainer as $prepayToOther): ?>
+                        <tr>
+                            <td><?= $prepayToOther->contractor_name ?></td>
+                            <td class="text-right"><?= $this->currencyFormat($prepayToOther->amount) ?></td>
+                        </tr>
+                    <?php endforeach ?>
+                    <tfoot>
+                    <tr>
+                        <td>Total:</td>
+                        <th class="text-right"><?= $this->currencyFormat($this->prepayToOtherContainer->total()) ?></th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="panel">
+    <div class="panel-header"><?= $this->translate('Charter capital') ?></div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-6 text-error">
+                <h3><?= $this->translate('Charter capital') ?></h3>
+                <table class="table-data">
+                    <caption>CharterCapitalContainer - Сервис получает записи уставного фонда</caption>
+                    <?php foreach ($this->charterCapitalContainer as $charterCapital): ?>
+                        <tr>
+                            <td><?= $charterCapital->contractor_name ?></td>
+                            <td class="text-right"><?= $this->currencyFormat($charterCapital->amount) ?></td>
+                        </tr>
+                    <?php endforeach ?>
+                    <tfoot>
+                    <tr>
+                        <td>Total:</td>
+                        <th class="text-right"><?= $this->currencyFormat($this->charterCapitalContainer->total()) ?></th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

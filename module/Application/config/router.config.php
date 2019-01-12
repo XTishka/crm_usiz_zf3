@@ -2,15 +2,27 @@
 
 namespace Application;
 
+use Application\Controller\Api\PrepayFromCustomerController;
+
 return [
     'routes' => [
+        'test'           => [
+            'type'    => 'literal',
+            'options' => [
+                'route'    => '/test',
+                'defaults' => [
+                    'action'     => 'index',
+                    'controller' => Controller\TestController::class,
+                ],
+            ],
+        ],
         'api'            => [
             'type'         => 'segment',
             'options'      => [
                 'route' => '/api',
             ],
             'child_routes' => [
-                'bankBalances'                => [
+                'bankBalances'   => [
                     'type'    => 'segment',
                     'options' => [
                         'route'       => '/bank-balances/:company',
@@ -24,7 +36,7 @@ return [
                         ],
                     ],
                 ],
-                'materialAssets'              => [
+                'materialAssets' => [
                     'type'    => 'segment',
                     'options' => [
                         'route'       => '/material-assets/:company/:material',
@@ -38,7 +50,7 @@ return [
                         ],
                     ],
                 ],
-                'companyDebits'               => [
+                'companyDebits'  => [
                     'type'    => 'segment',
                     'options' => [
                         'route'       => '/company-debits/:company',
@@ -51,20 +63,8 @@ return [
                         ],
                     ],
                 ],
-                'customerDebts'               => [
-                    'type'    => 'segment',
-                    'options' => [
-                        'route'       => '/customer-debts/:company',
-                        'constraints' => [
-                            'company' => '\d+',
-                        ],
-                        'defaults'    => [
-                            'action'     => 'customer-debts',
-                            'controller' => Controller\ApiController::class,
-                        ],
-                    ],
-                ],
-                'plantDebts'                  => [
+
+                'plantDebts' => [
                     'type'    => 'segment',
                     'options' => [
                         'route'       => '/plant-debts/:company',
@@ -77,20 +77,8 @@ return [
                         ],
                     ],
                 ],
-                'companyPrepayments'          => [
-                    'type'    => 'segment',
-                    'options' => [
-                        'route'       => '/company-prepayments/:company',
-                        'constraints' => [
-                            'company' => '\d+',
-                        ],
-                        'defaults'    => [
-                            'action'     => 'company-prepayments',
-                            'controller' => Controller\ApiController::class,
-                        ],
-                    ],
-                ],
-                'plantPrepayments'            => [
+
+                'plantPrepayments' => [
                     'type'    => 'segment',
                     'options' => [
                         'route'       => '/plant-prepayments/:plant',
@@ -103,19 +91,8 @@ return [
                         ],
                     ],
                 ],
-                'companyToPlantPrepayments'   => [
-                    'type'    => 'segment',
-                    'options' => [
-                        'route'       => '/company-to-plant-prepayments/:company',
-                        'constraints' => [
-                            'company' => '\d+',
-                        ],
-                        'defaults'    => [
-                            'action'     => 'company-to-plant-prepayments',
-                            'controller' => Controller\ApiController::class,
-                        ],
-                    ],
-                ],
+
+
                 'plantFromCompanyPrepayments' => [
                     'type'    => 'segment',
                     'options' => [
@@ -129,59 +106,8 @@ return [
                         ],
                     ],
                 ],
-                'carriersReceivable' => [
-                    'type'    => 'segment',
-                    'options' => [
-                        'route'       => '/carriers-receivable/:company',
-                        'constraints' => [
-                            'company' => '\d+',
-                        ],
-                        'defaults'    => [
-                            'action'     => 'carriers-receivable',
-                            'controller' => Controller\ApiController::class,
-                        ],
-                    ],
-                ],
-                'companyCorporates'           => [
-                    'type'    => 'segment',
-                    'options' => [
-                        'route'       => '/company-corporates/:company',
-                        'constraints' => [
-                            'company' => '\d+',
-                        ],
-                        'defaults'    => [
-                            'action'     => 'company-corporates',
-                            'controller' => Controller\ApiController::class,
-                        ],
-                    ],
-                ],
-                'customerPrepayments'         => [
-                    'type'    => 'segment',
-                    'options' => [
-                        'route'       => '/customer-prepayments/:company',
-                        'constraints' => [
-                            'customer' => '\d+',
-                        ],
-                        'defaults'    => [
-                            'action'     => 'customer-prepayments',
-                            'controller' => Controller\ApiController::class,
-                        ],
-                    ],
-                ],
-                'companyPayables'             => [
-                    'type'    => 'segment',
-                    'options' => [
-                        'route'       => '/company-payables/:company',
-                        'constraints' => [
-                            'customer' => '\d+',
-                        ],
-                        'defaults'    => [
-                            'action'     => 'company-payables',
-                            'controller' => Controller\ApiController::class,
-                        ],
-                    ],
-                ],
-                'providerTransactions'        => [
+
+                'providerTransactions'   => [
                     'type'    => 'segment',
                     'options' => [
                         'route'       => '/provider-transactions/:company[/provider/:contractor]',
@@ -195,7 +121,7 @@ return [
                         ],
                     ],
                 ],
-                'plantTransactions'           => [
+                'plantTransactions'      => [
                     'type'    => 'segment',
                     'options' => [
                         'route'       => '/plant-transactions/:company[/plant/:contractor]',
@@ -209,7 +135,7 @@ return [
                         ],
                     ],
                 ],
-                'companyTransactions'         => [
+                'companyTransactions'    => [
                     'type'    => 'segment',
                     'options' => [
                         'route'       => '/company-transactions/:plant[/company/:contractor]',
@@ -223,7 +149,7 @@ return [
                         ],
                     ],
                 ],
-                'customerTransactions'        => [
+                'customerTransactions'   => [
                     'type'    => 'segment',
                     'options' => [
                         'route'       => '/customer-transactions/:company[/customer/:contractor]',
@@ -237,7 +163,7 @@ return [
                         ],
                     ],
                 ],
-                'carrierTransactions'         => [
+                'carrierTransactions'    => [
                     'type'    => 'segment',
                     'options' => [
                         'route'       => '/carrier-transactions/:company[/carrier/:contractor]',
@@ -251,7 +177,7 @@ return [
                         ],
                     ],
                 ],
-                'additionalTransactions'      => [
+                'additionalTransactions' => [
                     'type'    => 'segment',
                     'options' => [
                         'route'       => '/additional-transactions/:company[/additional/:contractor]',
@@ -265,7 +191,7 @@ return [
                         ],
                     ],
                 ],
-                'corporateTransactions'       => [
+                'corporateTransactions'  => [
                     'type'    => 'segment',
                     'options' => [
                         'route'       => '/corporate-transactions/:company[/corporate/:contractor]',
@@ -277,6 +203,177 @@ return [
                             'action'     => 'corporate-transactions',
                             'controller' => Controller\ApiController::class,
                         ],
+                    ],
+                ],
+
+                'assets'      => [
+                    'type'         => 'segment',
+                    'options'      => [
+                        'route'   => '/assets',
+                        'default' => [
+                            'action' => 'index',
+                        ],
+                    ],
+                    'child_routes' => [
+                        'customer-receivable' => [
+                            'type'    => 'segment',
+                            'options' => [
+                                'route'    => '/customer-receivable/:company',
+                                'defaults' => [
+                                    'action'     => 'index',
+                                    'controller' => Controller\Api\CustomerReceivableController::class,
+                                ],
+                            ],
+                        ],
+                        'prepay-to-provider'  => [
+                            'type'    => 'segment',
+                            'options' => [
+                                'route'    => '/prepay-to-provider/:company',
+                                'defaults' => [
+                                    'action'     => 'index',
+                                    'controller' => Controller\Api\PrepayToProviderController::class,
+                                ],
+                            ],
+                        ],
+                        'prepay-to-carrier'   => [
+                            'type'    => 'segment',
+                            'options' => [
+                                'route'    => '/prepay-to-carrier/:company',
+                                'defaults' => [
+                                    'action'     => 'index',
+                                    'controller' => Controller\Api\PrepayToCarrierController::class,
+                                ],
+                            ],
+                        ],
+                        'prepay-to-plant'     => [
+                            'type'    => 'segment',
+                            'options' => [
+                                'route'    => '/prepay-to-plant/:company',
+                                'defaults' => [
+                                    'action'     => 'index',
+                                    'controller' => Controller\Api\PrepayToPlantController::class,
+                                ],
+                            ],
+                        ],
+                        'prepay-to-other'     => [
+                            'type'    => 'segment',
+                            'options' => [
+                                'route'    => '/prepay-to-other/:company',
+                                'defaults' => [
+                                    'action'     => 'index',
+                                    'controller' => Controller\Api\PrepayToOtherController::class,
+                                ],
+                            ],
+                        ],
+                        'total-receivable'    => [
+                            'type'    => 'segment',
+                            'options' => [
+                                'route'    => '/total-receivable/:company',
+                                'defaults' => [
+                                    'action'     => 'index',
+                                    'controller' => Controller\Api\TotalReceivableController::class,
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'liabilities' => [
+                    'type'         => 'segment',
+                    'options'      => [
+                        'route'   => '/liabilities',
+                        'default' => [
+                            'action' => 'index',
+                        ],
+                    ],
+                    'child_routes' => [
+                        'charter-capital'      => [
+                            'type'    => 'segment',
+                            'options' => [
+                                'route'    => '/charter-capital/:company',
+                                'defaults' => [
+                                    'action'     => 'index',
+                                    'controller' => Controller\Api\CharterCapitalController::class,
+                                ],
+                            ],
+                        ],
+                        'prepay-from-customer' => [
+                            'type'    => 'segment',
+                            'options' => [
+                                'route'    => '/prepay-from-customer/:company',
+                                'defaults' => [
+                                    'action'     => 'index',
+                                    'controller' => Controller\Api\PrepayFromCustomerController::class,
+                                ],
+                            ],
+                        ],
+                        'debt-to-carrier'      => [
+                            'type'    => 'segment',
+                            'options' => [
+                                'route'    => '/debt-to-carrier/:company',
+                                'defaults' => [
+                                    'action'     => 'index',
+                                    'controller' => Controller\Api\DebtToCarrierController::class,
+                                ],
+                            ],
+                        ],
+                        'debt-to-provider'     => [
+                            'type'    => 'segment',
+                            'options' => [
+                                'route'    => '/debt-to-provider/:company',
+                                'defaults' => [
+                                    'action'     => 'index',
+                                    'controller' => Controller\Api\DebtToProviderController::class,
+                                ],
+                            ],
+                        ],
+                        'debt-to-plant'        => [
+                            'type'    => 'segment',
+                            'options' => [
+                                'route'    => '/debt-to-plant/:company',
+                                'defaults' => [
+                                    'action'     => 'index',
+                                    'controller' => Controller\Api\DebtToPlantController::class,
+                                ],
+                            ],
+                        ],
+                        'debt-to-other'        => [
+                            'type'    => 'segment',
+                            'options' => [
+                                'route'    => '/debt-to-other/:company',
+                                'defaults' => [
+                                    'action'     => 'index',
+                                    'controller' => Controller\Api\DebtToOtherController::class,
+                                ],
+                            ],
+                        ],
+                        'accounts-payable'     => [
+                            'type'    => 'segment',
+                            'options' => [
+                                'route'    => '/accounts-payable/:company',
+                                'defaults' => [
+                                    'action'     => 'index',
+                                    'controller' => Controller\Api\AccountPayableController::class,
+                                ],
+                            ],
+                        ],
+                        'plant' => [
+                            'type' => 'segment',
+                            'options' => [
+                                'route' => '/plant'
+                            ],
+                            'child_routes' => [
+                                'accounts-payable'     => [
+                                    'type'    => 'segment',
+                                    'options' => [
+                                        'route'    => '/accounts-payable/:company',
+                                        'defaults' => [
+                                            'action'     => 'index',
+                                            'controller' => Controller\Api\Plant\AccountPayableController::class,
+                                        ],
+                                    ],
+                                ],
+                            ]
+                        ]
                     ],
                 ],
             ],

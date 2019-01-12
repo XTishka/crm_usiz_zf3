@@ -7,6 +7,19 @@ use Application\Model\AccountsReceivableService;
 use Application\Model\CarriersReceivableService;
 use Application\Model\CheckingAccountService;
 use Application\Model\CustomerPayableService;
+use Application\Model\Finance\AccountPayableService;
+use Application\Model\Finance\CharterCapitalService;
+use Application\Model\Finance\CustomerReceivableService;
+use Application\Model\Finance\DebtToCarrierService;
+use Application\Model\Finance\DebtToOtherService;
+use Application\Model\Finance\DebtToPlantService;
+use Application\Model\Finance\DebtToProviderService;
+use Application\Model\Finance\PrepayFromCustomerService;
+use Application\Model\Finance\PrepayToCarrierService;
+use Application\Model\Finance\PrepayToOtherService;
+use Application\Model\Finance\PrepayToPlantService;
+use Application\Model\Finance\PrepayToProviderService;
+use Application\Model\Finance\TotalReceivableService;
 use Application\Model\ProvidersReceivableService;
 use Bank\Service\RecordManager;
 use Contractor\Entity\ContractorCompany;
@@ -57,15 +70,6 @@ class DashboardController extends AbstractActionController {
      */
     protected $recordManager;
 
-    /** @var AccountsPayableService */
-    protected $accountsPayableService;
-
-    /** @var AccountsReceivableService */
-    protected $accountsReceivableService;
-
-    /** @var CarriersReceivableService */
-    protected $carriersReceivableService;
-
     /**
      * @var CheckingAccountService
      */
@@ -79,33 +83,120 @@ class DashboardController extends AbstractActionController {
     /** @var ProvidersReceivableService */
     protected $providersReceivableService;
 
+
+    /**
+     * @var CustomerReceivableService
+     */
+    protected $customerReceivableService;
+
+    /**
+     * @var PrepayToProviderService
+     */
+    protected $prepayToProviderService;
+
+    /**
+     * @var PrepayToCarrierService
+     */
+    protected $prepayToCarrierService;
+
+    /**
+     * @var PrepayToPlantService
+     */
+    protected $prepayToPlantService;
+
+    /**
+     * @var PrepayToOtherService
+     */
+    protected $prepayToOtherService;
+
+    /**
+     * @var TotalReceivableService
+     */
+    protected $totalReceivableService;
+
+    /**
+     * @var CharterCapitalService
+     */
+    protected $charterCapitalService;
+
+    /**
+     * @var PrepayFromCustomerService
+     */
+    protected $prepayFromCustomerService;
+
+    /**
+     * @var DebtToCarrierService
+     */
+    protected $debtToCarrierService;
+
+    /**
+     * @var DebtToProviderService
+     */
+    protected $debtToProviderService;
+
+    /**
+     * @var DebtToPlantService
+     */
+    protected $debtToPlantService;
+
+    /**
+     * @var DebtToOtherService
+     */
+    protected $debtToOtherService;
+
+    /**
+     * @var AccountsPayableService
+     */
+    protected $accountPayableService;
+
     public function __construct(
-        AccountsPayableService $accountsPayableService,
-        AccountsReceivableService $accountsReceivableService,
-        CarriersReceivableService $carriersReceivableService,
         CheckingAccountService $checkingAccountService,
-        CustomerPayableService $customerPayableService,
-        ProvidersReceivableService $providersReceivableService,
         ContractorCompanyManager $companyManager,
-        FinanceManager $financeManager,
         WarehouseLogManager $warehouseLogManager,
         SkipManager $furnaceSkipManager,
         PurchaseWagonManager $purchaseWagonManager,
-        RecordManager $recordManager) {
+        RecordManager $recordManager,
 
-        $this->accountsPayableService = $accountsPayableService;
-        $this->accountsReceivableService = $accountsReceivableService;
-        $this->carriersReceivableService = $carriersReceivableService;
+        CustomerReceivableService $customerReceivableService,
+        PrepayToProviderService $prepayToProviderService,
+        PrepayToCarrierService $prepayToCarrierService,
+        PrepayToPlantService $prepayToPlantService,
+        PrepayToOtherService $prepayToOtherService,
+        TotalReceivableService $totalReceivableService,
+
+        CharterCapitalService $charterCapitalService,
+        PrepayFromCustomerService $prepayFromCustomerService,
+        DebtToCarrierService $debtToCarrierService,
+        DebtToProviderService $debtToProviderService,
+        DebtToPlantService $debtToPlantService,
+        DebtToOtherService $debtToOtherService,
+        AccountPayableService $accountPayableService
+    ) {
+
+
         $this->checkingAccountService = $checkingAccountService;
-        $this->customerPayableService = $customerPayableService;
-        $this->providersReceivableService = $providersReceivableService;
 
         $this->companyManager = $companyManager;
-        $this->financeManager = $financeManager;
+        //$this->financeManager = $financeManager;
         $this->warehouseLogManager = $warehouseLogManager;
         $this->furnaceSkipManager = $furnaceSkipManager;
         $this->purchaseWagonManager = $purchaseWagonManager;
         $this->recordManager = $recordManager;
+
+        $this->customerReceivableService = $customerReceivableService;
+        $this->prepayToProviderService = $prepayToProviderService;
+        $this->prepayToCarrierService = $prepayToCarrierService;
+        $this->prepayToPlantService = $prepayToPlantService;
+        $this->prepayToOtherService = $prepayToOtherService;
+        $this->totalReceivableService = $totalReceivableService;
+
+        $this->charterCapitalService = $charterCapitalService;
+        $this->prepayFromCustomerService = $prepayFromCustomerService;
+        $this->debtToCarrierService = $debtToCarrierService;
+        $this->debtToProviderService = $debtToProviderService;
+        $this->debtToPlantService = $debtToPlantService;
+        $this->debtToOtherService = $debtToOtherService;
+        $this->accountPayableService = $accountPayableService;
     }
 
     public
@@ -168,10 +259,7 @@ class DashboardController extends AbstractActionController {
 
     /**
      * @return ViewModel
-     * @throws \Bank\Exception\NotFoundException
-     * @throws \Contractor\Exception\ErrorException
-     * @throws \Document\Exception\ErrorException
-     * @throws \Manufacturing\Exception\ErrorException
+     * @throws \Exception
      */
     public
     function financeAction() {
@@ -181,6 +269,21 @@ class DashboardController extends AbstractActionController {
 
         if ($date = $this->params()->fromQuery('date')) {
             $date = \DateTime::createFromFormat('d.m.Y', $date);
+
+            $this->customerReceivableService->setDate($date);
+            $this->prepayToProviderService->setDate($date);
+            $this->prepayToCarrierService->setDate($date);
+            $this->prepayToPlantService->setDate($date);
+            $this->prepayToOtherService->setDate($date);
+            $this->totalReceivableService->setDate($date);
+
+            $this->charterCapitalService->setDate($date);
+            $this->prepayFromCustomerService->setDate($date);
+            $this->debtToCarrierService->setDate($date);
+            $this->debtToProviderService->setDate($date);
+            $this->debtToPlantService->setDate($date);
+            $this->debtToOtherService->setDate($date);
+            $this->accountPayableService->setDate($date);
         } else {
             $date = null;
         }
@@ -190,22 +293,24 @@ class DashboardController extends AbstractActionController {
         $viewModel->setVariable('messenger', $messenger);
         $viewModel->setVariable('warehouseBalance', $this->warehouseLogManager->getTotalMaterialBalances($company->getPlantId(), $date));
         $viewModel->setVariable('expectedMaterials', $this->purchaseWagonManager->getExpectedMaterialWeight($companyId, $date));
-        //$viewModel->setVariable('companyBalance', $this->financeManager->getCompanyBalance($companyId, $date));
-        //$viewModel->setVariable('companyPrepaymentSum', $this->financeManager->getCompanyPrepaymentSum($companyId, $date));
-        $viewModel->setVariable('customerPrepaymentSum', $this->financeManager->getCustomerPrepaymentSum($companyId, $date));
-        $viewModel->setVariable('internalPayableSum', $this->financeManager->getInternalPayableSum($companyId, $date));
-        $viewModel->setVariable('bankTotalSum', $this->recordManager->getCurrentTotalAmount($companyId));
-
-        /* -------------------------- */
-        $viewModel->setVariable('accountsPayable', $this->accountsPayableService->getRecords($companyId, $date));
-        $viewModel->setVariable('accountsReceivable', $this->accountsReceivableService->getRecords($companyId, $date));
-        $viewModel->setVariable('carriersReceivable', $this->carriersReceivableService->getRecords($companyId, $date));
         $viewModel->setVariable('checkingAccount', $this->checkingAccountService->getRecords($companyId, $date));
-        $viewModel->setVariable('customerPayable', $this->customerPayableService->getRecords($companyId, $date));
-        $viewModel->setVariable('providersReceivable', $this->providersReceivableService->getRecords($companyId, $date));
+
         /* -------------------------- */
 
-        $viewModel->setVariable('companyToPlantPrepaymentSum', $this->financeManager->getCompanyToPlantPrepaymentSum($companyId, $date));
+        $viewModel->setVariable('customerReceivableContainer', $this->customerReceivableService->getRecords($companyId));
+        $viewModel->setVariable('prepayToProviderContainer', $this->prepayToProviderService->getRecords($companyId));
+        $viewModel->setVariable('prepayToCarrierContainer', $this->prepayToCarrierService->getRecords($companyId));
+        $viewModel->setVariable('prepayToPlantContainer', $this->prepayToPlantService->getRecords($companyId));
+        $viewModel->setVariable('prepayToOtherContainer', $this->prepayToOtherService->getRecords($companyId));
+        $viewModel->setVariable('totalReceivableContainer', $this->totalReceivableService->getRecords($companyId));
+
+        $viewModel->setVariable('charterCapitalContainer', $this->charterCapitalService->getRecords($companyId));
+        $viewModel->setVariable('prepayFromCustomerContainer', $this->prepayFromCustomerService->getRecords($companyId));
+        $viewModel->setVariable('debtToCarrierContainer', $this->debtToCarrierService->getRecords($companyId));
+        $viewModel->setVariable('debtToProviderContainer', $this->debtToProviderService->getRecords($companyId));
+        $viewModel->setVariable('debtToPlantContainer', $this->debtToPlantService->getRecords($companyId));
+        $viewModel->setVariable('debtToOtherContainer', $this->debtToOtherService->getRecords($companyId));
+        $viewModel->setVariable('accountPayableContainer', $this->accountPayableService->getRecords($companyId));
 
 
         $viewModel->setVariable('date', $date ? $date->format('d.m.Y') : null);

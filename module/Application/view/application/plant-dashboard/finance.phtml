@@ -128,7 +128,7 @@
 
                         <tr>
                             <td>
-                                <a data-extended="true" href="<?= $this->url('api/companyCorporates', ['company' => $plant->getContractorId()]) ?>"><?= $this->translate('Charter capital') ?>:</a>
+                                <a data-extended="true" href="<?php ///$this->url('api/companyCorporates', ['company' => $plant->getContractorId()]) ?>"><?= $this->translate('Charter capital') ?>:</a>
                             </td>
                             <td class="text-right"><?= $this->currencyFormat($this->internalPayableSum->offsetGet('amount')) ?></td>
                         </tr>
@@ -140,9 +140,9 @@
                         </tr>
                         <tr>
                             <td>
-                                <a data-extended="true" href="<?= $this->url('api/companyPayables', ['company' => $plant->getContractorId()]) ?>"><?= $this->translate('Plant payable sum') ?>:</a>
+                                <a data-extended="true" href="<?php echo $this->url('api/liabilities/plant/accounts-payable', ['company' => $plant->getContractorId()]) ?>"><?= $this->translate('Plant payable sum') ?>:</a>
                             </td>
-                            <td class="text-right"><?= $this->currencyFormat($this->plantPayableSum->offsetGet('amount')) ?></td>
+                            <td class="text-right"><?= $this->currencyFormat($this->accountPayableContainer->total()) ?></td>
                         </tr>
                     </table>
 
