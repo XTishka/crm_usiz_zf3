@@ -29,12 +29,13 @@ class TotalReceivableService extends AbstractService {
 
     /**
      * @param $companyId
+     * @param bool $excludeProviders
      * @return ContainerInterface
      * @throws \Exception
      */
-    public function getRecords($companyId): ContainerInterface {
+    public function getRecords($companyId, $excludeProviders = false): ContainerInterface {
         $data = array_merge(
-            $this->getContractorRecords($companyId),
+            $this->getContractorRecords($companyId, $excludeProviders),
             $this->getCarrierRecords($companyId)
         );
 
@@ -51,10 +52,11 @@ class TotalReceivableService extends AbstractService {
 
     /**
      * @param $companyId
+     * @param bool $excludeProviders
      * @return array
      * @throws \Exception
      */
-    public function getContractorRecords($companyId) {
+    public function getContractorRecords($companyId, $excludeProviders = false) {
         $date = $this->getDate();
         $date->setTime(23, 59, 59);
 
@@ -73,7 +75,9 @@ class TotalReceivableService extends AbstractService {
             'tsn.contractor_id = con.contractor_id AND tsn.contractor_type = con.contractor_type',
             ['contractor_name']);
         $select->where->equalTo('tsn.company_id', $companyId);
-        //$select->where->notIn('tsn.contractor_type', [ContractorCustomer::TYPE_CUSTOMER]);
+        if ($excludeProviders) {
+            $select->where->notIn('tsn.contractor_type', [ContractorCustomer::TYPE_PROVIDER]);
+        }
         $select->where->lessThanOrEqualTo('tsn.created', $this->date->format('Y-m-d H:i:s'));
         $select->having->nest()->greaterThan('credit', 0)->or->greaterThan('debit', 0);
 

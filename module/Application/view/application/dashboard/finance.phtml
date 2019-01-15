@@ -101,7 +101,7 @@
                                     <?= $this->translate('Company balance') ?>:
                                 </a>
                             </td>
-                            <td class="text-right"><?= $this->currencyFormat($this->checkingAccount->getTotal()) ?></td>
+                            <td class="text-right"><?php echo $this->currencyFormat($this->checkingAccount->getTotal()) ?></td>
                         </tr>
                         <tr>
                             <td>

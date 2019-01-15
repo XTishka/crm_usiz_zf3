@@ -1,57 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="39a7e7bb-839e-4cc8-9bc0-47f1f661ff9c" name="Default Changelist" comment="- Добавляет фильтрацию для Перевозчиков по коду ОКПО и Названию&#10;- Исправляет отображение суммы веса в договорах &#10;  (была ошибка, не считало тысячные)&#10;- Исправлена ошибка процента отсева при добавлении скипов">
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/AbstractContainer.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/AbstractService.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/AbstractServiceFactory.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/AccountsPayableContainer.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/AccountsPayableService.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/CharterCapitalContainer.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/CharterCapitalService.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/ContainerInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/CustomerReceivablesContainerInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/CustomerReceivablesServiceInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/Interface/AccountsPayableContainerInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/Interface/AccountsPayableServiceInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/Interface/CharterCapitalContainerInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/Interface/CharterCapitalServiceInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/Interface/CustomerReceivablesContainerInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/Interface/CustomerReceivablesServiceInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/Interface/DebtToCarriersContainerInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/Interface/DebtToCarriersServiceInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/Interface/DebtToOthersContainerInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/Interface/DebtToOthersServiceInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/Interface/DebtToPlantsContainerInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/Interface/DebtToPlantsServiceInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/Interface/DebtToProvidersContainerInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/Interface/DebtToProvidersServiceInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/Interface/PrepayFromCustomersContainerInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/Interface/PrepayFromCustomersServiceInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/Interface/PrepayToCarriersContainerInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/Interface/PrepayToCarriersServiceInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/Interface/PrepayToOthersContainerInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/Interface/PrepayToOthersServiceInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/Interface/PrepayToPlantsContainerInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/Interface/PrepayToPlantsServiceInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/Interface/PrepayToProvidersContainerInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/Interface/PrepayToProvidersServiceInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/Interface/TotalReceivablesContainerInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/Interface/TotalReceivablesServiceInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/PrepayToOthersServiceInterface.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/ServiceInterface.php" afterDir="false" />
+    <list default="true" id="39a7e7bb-839e-4cc8-9bc0-47f1f661ff9c" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/module/Application/config/module.config.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Application/config/module.config.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/module/Application/config/router.config.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Application/config/router.config.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/module/Application/language/ru_RU.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Application/language/ru_RU.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/module/Application/src/Application/Controller/ApiController.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Application/src/Application/Controller/ApiController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Application/config/navigation.config.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Application/config/navigation.config.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/module/Application/src/Application/Controller/DashboardController.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Application/src/Application/Controller/DashboardController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/module/Application/src/Application/Controller/PlantDashboardController.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Application/src/Application/Controller/PlantDashboardController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/module/Application/src/Application/Model/AccountsPayableContainer.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/AccountsPayableContainer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/module/Application/src/Application/Model/AccountsPayableService.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/AccountsPayableService.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/module/Application/src/Application/Service/Repository/ApiDb.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Application/src/Application/Service/Repository/ApiDb.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Application/src/Application/Model/CheckingAccountService.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/CheckingAccountService.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/AccountPayableService.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/AccountPayableService.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/TotalReceivableService.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/TotalReceivableService.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/module/Application/view/application/dashboard/finance.phtml" beforeDir="false" afterPath="$PROJECT_DIR$/module/Application/view/application/dashboard/finance.phtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/module/Application/view/application/plant-dashboard/finance.phtml" beforeDir="false" afterPath="$PROJECT_DIR$/module/Application/view/application/plant-dashboard/finance.phtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Contractor/config/module.config.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Contractor/config/module.config.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Document/src/Document/Controller/TransactionController.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Document/src/Document/Controller/TransactionController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Document/src/Document/Service/Repository/PurchaseWagonDb.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Document/src/Document/Service/Repository/PurchaseWagonDb.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Reports/config/module.config.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Reports/config/module.config.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Reports/config/router.config.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Reports/config/router.config.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Reports/src/Reports/Controller/DailyController.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Reports/src/Reports/Controller/DailyController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Reports/src/Reports/Controller/DailyControllerFactory.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Reports/src/Reports/Controller/DailyControllerFactory.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Reports/src/Reports/Controller/PurchaseWagonsController.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Reports/src/Reports/Controller/PurchaseWagonsController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Reports/src/Reports/Controller/ShipmentsController.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Reports/src/Reports/Controller/ShipmentsController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Reports/src/Reports/Form/PurchaseWagonsFilterForm.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Reports/src/Reports/Form/PurchaseWagonsFilterForm.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Reports/view/reports/daily/index.phtml" beforeDir="false" afterPath="$PROJECT_DIR$/module/Reports/view/reports/daily/index.phtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/module/User/config/acl.config.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/User/config/acl.config.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -94,7 +63,42 @@
     <select />
   </component>
   <component name="FileEditorManager">
-    <leaf />
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/module/Application/src/Application/Model/ProvidersReceivableServiceFactory.php">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/module/Application/src/Application/Model/AccountsReceivableContainer.php">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/module/Application/src/Application/Model/CarriersReceivableContainer.php">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/module/Application/src/Application/Model/CustomerPayableContainer.php">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/module/Application/src/Application/Model/ProvidersReceivableContainer.php">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/module/User/config/acl.config.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="373">
+              <caret line="355" column="50" selection-start-line="355" selection-start-column="50" selection-end-line="355" selection-end-column="50" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
@@ -102,7 +106,6 @@
       <find>furnace</find>
       <find>fur</find>
       <find>layout-sidebar</find>
-      <find>contractor</find>
       <find>carrier</find>
       <find>ContractorControllerFactory</find>
       <find>ContractorCommonFilter</find>
@@ -127,6 +130,7 @@
       <find>getContractorType</find>
       <find>РЕДАКТИРОВАТЬ ДАННЫЕ КОМПАНИИ</find>
       <find>ContractorType</find>
+      <find>contractor</find>
     </findStrings>
     <replaceStrings>
       <replace>Common</replace>
@@ -144,7 +148,6 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/module/Contractor/src/Contractor/View/Helper/ContractorCommonMenu.php" />
-        <option value="$PROJECT_DIR$/module/User/config/acl.config.php" />
         <option value="$PROJECT_DIR$/module/Application/config/navigation.config.php" />
         <option value="$PROJECT_DIR$/module/Transport/view/transport/carrier/index.phtml" />
         <option value="$PROJECT_DIR$/module/Contractor/src/Contractor/Form/ContractorCommonFilterFactory.php" />
@@ -194,6 +197,7 @@
         <option value="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/TotalReceivablesServiceInterface.php" />
         <option value="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/DebtToPlantsServiceInterface.php" />
         <option value="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/DebtToProvidersServiceInterface.php" />
+        <option value="$PROJECT_DIR$/module/User/config/acl.config.php" />
       </list>
     </option>
   </component>
@@ -322,6 +326,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -338,7 +343,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -410,7 +414,9 @@
       <workItem from="1547023091519" duration="4000" />
       <workItem from="1547025823997" duration="2360000" />
       <workItem from="1547308779207" duration="29000" />
-      <workItem from="1547308853983" duration="249000" />
+      <workItem from="1547308853983" duration="2282000" />
+      <workItem from="1547310924098" duration="1781000" />
+      <workItem from="1547562988904" duration="352000" />
     </task>
     <task id="LOCAL-00001" summary="- Добавляет фильтрацию для Перевозчиков по коду ОКПО и Названию&#10;- Исправляет отображение суммы веса в договорах &#10;  (была ошибка, не считало тысячные)&#10;- Исправлена ошибка процента отсева при добавлении скипов">
       <created>1541689056611</created>
@@ -433,11 +439,18 @@
       <option name="project" value="LOCAL" />
       <updated>1547027307365</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="- Добавление класса расчета состояния Предприяте/Финансы">
+      <created>1547309185005</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1547309185005</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="104343000" />
+    <option name="totallyTimeSpent" value="108509000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1176" extended-state="6" />
@@ -513,125 +526,10 @@
     <MESSAGE value="- Добавляет фильтрацию для Перевозчиков по коду ОКПО и Названию&#10;- Исправляет отображение суммы веса в договорах &#10;  (была ошибка, не считало тысячные)&#10;- Исправлена ошибка процента отсева при добавлении скипов" />
     <MESSAGE value="- Добавляет пересчет вагонов при изменении тарифов&#10;- Исправляет суммарные данные скипов" />
     <MESSAGE value="- Внедрение нового класса финансов." />
-    <option name="LAST_COMMIT_MESSAGE" value="- Внедрение нового класса финансов." />
+    <MESSAGE value="- Добавление класса расчета состояния Предприяте/Финансы" />
+    <option name="LAST_COMMIT_MESSAGE" value="- Добавление класса расчета состояния Предприяте/Финансы" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/module/Contractor/src/Contractor/Form/Element/ContractorSelectFactory.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="295">
-          <caret line="37" column="72" selection-start-line="37" selection-start-column="72" selection-end-line="37" selection-end-column="72" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/vendor/container-interop/container-interop/src/Interop/Container/ContainerInterface.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="12" column="37" selection-start-line="12" selection-start-column="37" selection-end-line="12" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/module/Contractor/src/Contractor/Form/ContractorAbstractFactory.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="731">
-          <caret line="43" column="34" lean-forward="true" selection-start-line="43" selection-start-column="34" selection-end-line="43" selection-end-column="34" />
-          <folding>
-            <element signature="e#35#57#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/module/Contractor/src/Contractor/Form/ContractorAbstract.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1244">
-          <caret line="4" selection-start-line="4" selection-end-line="5" selection-end-column="19" />
-          <folding>
-            <element signature="e#35#65#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/module/Contractor/view/contractor/contractor-plant/index.phtml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="64" selection-start-line="5" selection-start-column="47" selection-end-line="5" selection-end-column="64" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/module/Contractor/view/contractor/contractor-consignee/edit.phtml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" column="83" selection-start-line="15" selection-start-column="47" selection-end-line="15" selection-end-column="83" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/module/Contractor/view/contractor/contractor-plant/edit.phtml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-102">
-          <caret line="15" column="79" selection-start-line="15" selection-start-column="47" selection-end-line="15" selection-end-column="79" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/module/Contractor/src/Contractor/View/Helper/ContractorCommonMenu.php">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/module/Application/language/ru_RU.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="103" lean-forward="true" selection-start-line="5" selection-start-column="103" selection-end-line="5" selection-end-column="103" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/module/Contractor/src/Contractor/View/Helper/ContractorAbstractMenuFactory.php">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/module/Contractor/src/Contractor/Service/Repository/DatabaseContractorAbstract.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="543">
-          <caret line="143" column="38" lean-forward="true" selection-start-line="143" selection-start-column="38" selection-end-line="143" selection-end-column="38" />
-          <folding>
-            <element signature="e#49#90#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/vendor/zendframework/zend-db/src/Sql/Sql.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="346">
-          <caret line="131" column="20" selection-start-line="131" selection-start-column="20" selection-end-line="131" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/module/Contractor/src/Contractor/Form/ContractorCommon.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" lean-forward="true" selection-start-line="3" selection-end-line="3" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/module/Contractor/src/Contractor/Form/ContractorCommonFilter.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
-          <caret line="25" column="60" lean-forward="true" selection-start-line="25" selection-start-column="60" selection-end-line="25" selection-end-column="60" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/module/Contractor/src/Contractor/Service/ContractorAbstractManager.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="61" column="68" lean-forward="true" selection-start-line="61" selection-start-column="68" selection-end-line="61" selection-end-column="68" />
-          <folding>
-            <element signature="e#38#69#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/vendor/zendframework/zend-db/src/ResultSet/HydratingResultSet.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="371">
-          <caret line="94" column="20" selection-start-line="94" selection-start-column="20" selection-end-line="94" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/module/Contractor/src/Contractor/Entity/ContractorCommon.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="98">
@@ -870,6 +768,70 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/module/Application/src/Application/Model/Finance/AccountsPayableContainer.php">
       <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module/Application/src/Application/Model/CheckingAccountService.php">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module/Application/src/Application/Model/CheckingAccountContainer.php">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module/Application/src/Application/Model/CheckingAccountServiceFactory.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="182">
+          <caret line="15" column="1" selection-start-line="15" selection-start-column="1" selection-end-line="15" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module/Application/src/Application/Model/AccountsReceivableService.php">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module/Application/src/Application/Model/CarriersReceivableService.php">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module/Application/src/Application/Model/CustomerPayableService.php">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module/Application/src/Application/Model/ProvidersReceivableService.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="224">
+          <caret line="21" column="24" lean-forward="true" selection-start-line="21" selection-start-column="24" selection-end-line="21" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module/Application/src/Application/Model/AccountsReceivableServiceFactory.php">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module/Application/src/Application/Model/CarriersReceivableServiceFactory.php">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module/Application/src/Application/Model/CustomerPayableServiceFactory.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="182">
+          <caret line="15" column="1" lean-forward="true" selection-start-line="15" selection-start-column="1" selection-end-line="15" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module/Application/src/Application/Model/ProvidersReceivableServiceFactory.php">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module/Application/src/Application/Model/AccountsReceivableContainer.php">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module/Application/src/Application/Model/CarriersReceivableContainer.php">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module/Application/src/Application/Model/CustomerPayableContainer.php">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module/Application/src/Application/Model/ProvidersReceivableContainer.php">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module/User/config/acl.config.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="373">
+          <caret line="355" column="50" selection-start-line="355" selection-start-column="50" selection-end-line="355" selection-end-column="50" />
+        </state>
+      </provider>
     </entry>
   </component>
 </project>

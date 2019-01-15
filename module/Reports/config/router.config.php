@@ -40,6 +40,15 @@ return [
                         ],
                     ],
                 ],
+                'finance' => [
+                    'type'    => 'segment',
+                    'options' => [
+                        'route'    => '/finance',
+                        'defaults' => [
+                            'controller' => Controller\FinanceController::class,
+                        ],
+                    ],
+                ],
             ],
         ],
     ],

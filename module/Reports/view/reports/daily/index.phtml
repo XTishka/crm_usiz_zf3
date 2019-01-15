@@ -222,7 +222,7 @@
                         <i class="fa fa-money fa-fw"></i>
                         <?= $this->translate('Company receivable sum') ?></div>
                     <div class="panel-body">
-                        <?php if ($this->accountsReceivable && $this->accountsReceivable->count()): ?>
+                        <?php if ($this->totalReceivable && $this->totalReceivable->count()): ?>
                             <table class="table-data table-grid">
                                 <thead>
                                 <tr>
@@ -232,7 +232,7 @@
                                 </thead>
                                 <tbody>
                                 <?php /** @var ArrayObject $row */
-                                foreach ($this->accountsReceivable as $row): ?>
+                                foreach ($this->totalReceivable as $row): ?>
                                     <tr>
                                         <td class="text-left hint"><?= $this->escapeHtml($row->offsetGet('contractor_name')) ?></td>
                                         <td class="text-right"><?= $this->currencyFormat($row->offsetGet('amount')) ?></td>
@@ -242,11 +242,11 @@
                                 <tfoot>
                                 <tr>
                                     <th class="text-left"><?= $this->translate('Total values') ?>:</th>
-                                    <th class="text-right"><?= $this->currencyFormat($this->accountsReceivable->getTotal()) ?></th>
+                                    <th class="text-right"><?= $this->currencyFormat($this->totalReceivable->total()) ?></th>
                                 </tr>
                                 </tfoot>
                             </table>
-                            <?php $blockTotalSum = bcadd($blockTotalSum, $this->accountsReceivable->getTotal(), 2) ?>
+                            <?php $blockTotalSum = bcadd($blockTotalSum, $this->totalReceivable->total(), 2) ?>
                         <?php else: ?>
                             <div class="text-center">
                                 <img src="<?= $this->basePath('img/empty.svg') ?>" alt="Empty folder"
@@ -263,7 +263,7 @@
                         <i class="fa fa-money fa-fw"></i>
                         <?= $this->translate('Company prepayment sum') ?></div>
                     <div class="panel-body">
-                        <?php if ($this->providersReceivable && $this->providersReceivable->count()): ?>
+                        <?php if ($this->prepayToProvider && $this->prepayToProvider->count()): ?>
                             <table class="table-data table-grid">
                                 <thead>
                                 <tr>
@@ -274,7 +274,7 @@
                                 <tbody>
                                 <?php
                                 /** @var ArrayObject $row */ ?>
-                                <?php foreach ($this->providersReceivable as $row): ?>
+                                <?php foreach ($this->prepayToProvider as $row): ?>
                                     <tr>
                                         <td class="text-left hint"><?= $this->escapeHtml($row->offsetGet('contractor_name')) ?></td>
                                         <td class="text-right"><?= $this->currencyFormat($row->offsetGet('amount')) ?></td>
@@ -284,11 +284,11 @@
                                 <tfoot>
                                 <tr>
                                     <th class="text-left"><?= $this->translate('Total values') ?>:</th>
-                                    <th class="text-right"><?= $this->currencyFormat($this->providersReceivable->getTotal()) ?></th>
+                                    <th class="text-right"><?= $this->currencyFormat($this->prepayToProvider->total()) ?></th>
                                 </tr>
                                 </tfoot>
                             </table>
-                            <?php $blockTotalSum = $this->providersReceivable->getTotal() ?>
+                            <?php $blockTotalSum = bcadd($blockTotalSum, $this->prepayToProvider->total(), 2) ?>
                         <?php else: ?>
                             <div class="text-center">
                                 <img src="<?= $this->basePath('img/empty.svg') ?>" alt="Empty folder"
@@ -413,11 +413,11 @@
                                 <tfoot>
                                 <tr>
                                     <th class="text-left"><?= $this->translate('Total values') ?>:</th>
-                                    <th class="text-right"><?= $this->currencyFormat($this->accountsPayable->getTotal()) ?></th>
+                                    <th class="text-right"><?= $this->currencyFormat($this->accountsPayable->total()) ?></th>
                                 </tr>
                                 </tfoot>
                             </table>
-                            <?php $blockTotalSum = bcadd($blockTotalSum, $this->accountsPayable->getTotal(), 2) ?>
+                            <?php $blockTotalSum = bcadd($blockTotalSum, $this->accountsPayable->total(), 2) ?>
                         <?php else: ?>
                             <div class="text-center">
                                 <img src="<?= $this->basePath('img/empty.svg') ?>" alt="Empty folder"
@@ -434,7 +434,7 @@
                         <i class="fa fa-money fa-fw"></i>
                         <?= $this->translate('Customer prepayment sum') ?></div>
                     <div class="panel-body">
-                        <?php if ($this->customerPrepayments && $this->customerPrepayments->count()): ?>
+                        <?php if ($this->prepayFromCustomer && $this->prepayFromCustomer->count()): ?>
                             <table class="table-data table-grid">
                                 <thead>
                                 <tr>
@@ -444,24 +444,22 @@
                                 </thead>
                                 <tbody>
                                 <?php
-                                $totalAmount = 0;
                                 /** @var ArrayObject $row */ ?>
-                                <?php foreach ($this->customerPrepayments as $row): ?>
+                                <?php foreach ($this->prepayFromCustomer as $row): ?>
                                     <tr>
                                         <td class="text-left hint"><?= $this->escapeHtml($row->offsetGet('contractor_name')) ?></td>
                                         <td class="text-right"><?= $this->currencyFormat($row->offsetGet('amount')) ?></td>
                                     </tr>
-                                    <?php $totalAmount = bcadd($totalAmount, $row->offsetGet('amount')) ?>
                                 <?php endforeach; ?>
                                 </tbody>
                                 <tfoot>
                                 <tr>
                                     <th class="text-left"><?= $this->translate('Total values') ?>:</th>
-                                    <th class="text-right"><?= $this->currencyFormat($totalAmount) ?></th>
+                                    <th class="text-right"><?= $this->currencyFormat($this->prepayFromCustomer->total()) ?></th>
                                 </tr>
                                 </tfoot>
                             </table>
-                            <?php $blockTotalSum = bcadd($blockTotalSum, $totalAmount, 4) ?>
+                            <?php $blockTotalSum = bcadd($blockTotalSum, $this->prepayFromCustomer->total(), 4) ?>
                         <?php else: ?>
                             <div class="text-center">
                                 <img src="<?= $this->basePath('img/empty.svg') ?>" alt="Empty folder"

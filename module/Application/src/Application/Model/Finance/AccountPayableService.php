@@ -29,12 +29,13 @@ class AccountPayableService extends AbstractService {
 
     /**
      * @param $companyId
+     * @param bool $excludeCustomer
      * @return ContainerInterface
      * @throws \Exception
      */
-    public function getRecords($companyId): ContainerInterface {
+    public function getRecords($companyId, $excludeCustomer = false): ContainerInterface {
         $data = array_merge(
-            $this->getContractorRecords($companyId),
+            $this->getContractorRecords($companyId, $excludeCustomer),
             $this->getCarrierRecords($companyId)
         );
 
@@ -51,10 +52,11 @@ class AccountPayableService extends AbstractService {
 
     /**
      * @param $companyId
+     * @param bool $excludeCustomer
      * @return array
      * @throws \Exception
      */
-    public function getContractorRecords($companyId) {
+    public function getContractorRecords($companyId, $excludeCustomer = false) {
         $date = $this->getDate();
         $date->setTime(23, 59, 59);
 
@@ -73,7 +75,9 @@ class AccountPayableService extends AbstractService {
             'tsn.contractor_id = con.contractor_id AND tsn.contractor_type = con.contractor_type',
             ['contractor_name']);
         $select->where->equalTo('tsn.company_id', $companyId);
-        //$select->where->notIn('tsn.contractor_type', [ContractorCustomer::TYPE_CUSTOMER]);
+        if ($excludeCustomer) {
+            $select->where->notIn('tsn.contractor_type', [ContractorCustomer::TYPE_CUSTOMER]);
+        }
         $select->where->lessThanOrEqualTo('tsn.created', $this->date->format('Y-m-d H:i:s'));
         $select->having->nest()->greaterThan('credit', 0)->or->greaterThan('debit', 0);
 

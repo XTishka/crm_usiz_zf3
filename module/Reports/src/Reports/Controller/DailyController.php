@@ -2,16 +2,18 @@
 
 namespace Reports\Controller;
 
-use Application\Model\AccountsPayableService;
-use Application\Model\AccountsReceivableService;
 use Application\Model\CheckingAccountService;
-use Application\Model\ProvidersReceivableService;
+use Application\Model\Finance\AccountPayableService;
+use Application\Model\Finance\PrepayFromCustomerService;
+use Application\Model\Finance\DebtToProviderService;
+use Application\Model\Finance\PrepayToProviderService;
+use Application\Model\Finance\TotalReceivableService;
 use Application\Service\Repository\ApiDb;
 use Bank\Service\RecordManager;
 use Contractor\Entity\ContractorAbstract;
 use Contractor\Entity\ContractorCompany;
 use Contractor\Service\ContractorCompanyManager;
-use Document\Domain\PurchaseWagonEntity;
+//use Document\Domain\PurchaseWagonEntity;
 use Manufacturing\Domain\WarehouseLogEntity;
 use Reports\Form\DailyFilterForm;
 use Zend\Db\Adapter\Adapter;
@@ -19,6 +21,7 @@ use Zend\Db\Adapter\Driver\ResultInterface;
 use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\Sql\Join;
 use Zend\Db\Sql\Sql;
+use Zend\Db\Sql\Where;
 use Zend\Http\Request;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -28,14 +31,19 @@ class DailyController extends AbstractActionController {
     /** @var Request */
     protected $request;
 
-    /** @var AccountsPayableService */
-    protected $accountsPayableService;
+    /** @var AccountPayableService */
+    protected $accountPayableService;
 
-    /** @var AccountsReceivableService */
-    protected $accountsReceivableService;
+    /** @var TotalReceivableService */
+    protected $totalReceivableService;
 
     /** @var CheckingAccountService */
-    protected $checkingAccountService;
+    //protected $checkingAccountService;
+
+    /**
+     * @var PrepayFromCustomerService
+     */
+    protected $prepayFromCustomerService;
 
     /** @var Adapter */
     protected $db;
@@ -52,35 +60,44 @@ class DailyController extends AbstractActionController {
     /** @var RecordManager */
     protected $recordManager;
 
-    /** @var ProvidersReceivableService */
-    protected $providersReceivableService;
+    /** @var DebtToProviderService */
+    protected $prepayToProviderService;
 
     /**
      * DailyController constructor.
-     * @param DailyFilterForm $dailyFilterForm
      * @param Adapter $db
+     * @param AccountPayableService $accountPayableService
+     * @param TotalReceivableService $totalReceivableService
+     * @param PrepayFromCustomerService $prepayFromCustomerService
+     * @param DailyFilterForm $dailyFilterForm
      * @param ContractorCompanyManager $contractorCompanyManager
+     * @param ApiDb $apiDbRepository
+     * @param RecordManager $recordManager
+     * @param PrepayToProviderService $prepayToProviderService
      */
     public function __construct(
-        AccountsPayableService $accountsPayableService,
-        AccountsReceivableService $accountsReceivableService,
-        CheckingAccountService $checkingAccountService,
-        DailyFilterForm $dailyFilterForm,
         Adapter $db,
+        AccountPayableService $accountPayableService,
+        TotalReceivableService $totalReceivableService,
+        //CheckingAccountService $checkingAccountService,
+        PrepayFromCustomerService $prepayFromCustomerService,
+        DailyFilterForm $dailyFilterForm,
         ContractorCompanyManager $contractorCompanyManager,
         ApiDb $apiDbRepository,
         RecordManager $recordManager,
-        ProvidersReceivableService $providersReceivableService) {
-        $this->accountsPayableService = $accountsPayableService;
-        $this->accountsReceivableService = $accountsReceivableService;
-        $this->checkingAccountService = $checkingAccountService;
+        PrepayToProviderService $prepayToProviderService) {
+        $this->db = $db;
+
+        $this->accountPayableService = $accountPayableService;
+        $this->totalReceivableService = $totalReceivableService;
+        //$this->checkingAccountService = $checkingAccountService;
+        $this->prepayFromCustomerService = $prepayFromCustomerService;
 
         $this->dailyFilterForm = $dailyFilterForm;
-        $this->db = $db;
         $this->contractorCompanyManager = $contractorCompanyManager;
         $this->apiDbRepository = $apiDbRepository;
         $this->recordManager = $recordManager;
-        $this->providersReceivableService = $providersReceivableService;
+        $this->prepayToProviderService = $prepayToProviderService;
     }
 
 
@@ -106,9 +123,10 @@ class DailyController extends AbstractActionController {
                 /** @var ContractorCompany $company */
                 $company = $this->contractorCompanyManager->getContractorById($filteredData['company_id']);
                 $plantId = $company->getPlantId();
-                $warehouseMaterials = $this->getWarehouseMaterials($company->getPlantId(), $date);
-                $warehouseBeginMonth = $this->getBeginMonthWarehouseMaterials($company->getPlantId(), $date);
+                $warehouseMaterials = $this->getWarehouseMaterials($plantId, $date);
+                $warehouseBeginMonth = $this->getBeginMonthWarehouseMaterials($plantId, $date);
                 $purchaseMaterials = $this->getPurchaseMaterials($company->getContractorId(), $date);
+
 
                 //$dataA = array_merge_recursive($warehouseMaterials, $warehouseBeginMonth, $purchaseMaterials);
                 $dataA = [];
@@ -181,16 +199,19 @@ class DailyController extends AbstractActionController {
                 $viewModel->setVariable('customerDebts', $this->apiDbRepository->getCustomerDebtsPaginator(
                     $company->getContractorId(), $date->format('d.m.Y')));
 
-                $viewModel->setVariable('customerPrepayments', $this->apiDbRepository->getCustomerPrepaymentOperationsPaginator(
-                    $company->getContractorId(), $date->format('d.m.Y')));
                 $viewModel->setVariable('bankRecords', $this->recordManager->getBankAmountRowset(
                     $company->getContractorId(), $date));
 
                 /* ------------------------- */
-                $viewModel->setVariable('providersReceivable', $this->providersReceivableService->getRecords($company->getContractorId(), $date->format('d.m.Y')));
-                $viewModel->setVariable('accountsPayable', $this->accountsPayableService->getRecords($company->getContractorId(), $date->format('d.m.Y')));
-                $viewModel->setVariable('accountsReceivable', $this->accountsReceivableService->getRecords($company->getContractorId(), $date->format('d.m.Y')));
-                $viewModel->setVariable('checkingAccount', $this->checkingAccountService->getRecords($company->getContractorId(), $date->format('d.m.Y')));
+                $this->prepayToProviderService->setDate($date);
+                $this->accountPayableService->setDate($date);
+                $this->prepayFromCustomerService->setDate($date);
+                $this->totalReceivableService->setDate($date);
+
+                $viewModel->setVariable('prepayFromCustomer', $this->prepayFromCustomerService->getRecords($company->getContractorId()));
+                $viewModel->setVariable('prepayToProvider', $this->prepayToProviderService->getRecords($company->getContractorId()));
+                $viewModel->setVariable('accountsPayable', $this->accountPayableService->getRecords($company->getContractorId(), true));
+                $viewModel->setVariable('totalReceivable', $this->totalReceivableService->getRecords($company->getContractorId(), true));
                 /* ------------------------- */
             }
 
@@ -283,6 +304,7 @@ class DailyController extends AbstractActionController {
 
     /**
      * @param $plantId
+     * @param null $date
      * @return array
      * @throws \Exception
      */
@@ -290,7 +312,7 @@ class DailyController extends AbstractActionController {
         $sql = new Sql($this->db);
         $select = $sql->select(['a' => 'warehouses']);
         $select->columns([]);
-        $select->join(['b' => 'warehouses_logs'], 'a.warehouse_id = b.warehouse_id', ['contractor_id', 'resource_price', 'resource_weight', 'direction']);
+        $select->join(['b' => 'warehouses_logs'], 'a.warehouse_id = b.warehouse_id', ['contractor_id', 'resource_price', 'resource_weight', 'direction', 'created']);
         $select->join(['c' => 'materials'], 'b.resource_id = c.material_id', ['material_name']);
         $select->join(['d' => 'material_types'], 'c.type_id = d.type_id', ['material_type' => 'name']);
         $select->join(['e' => 'contractors'], 'b.contractor_id = e.contractor_id', ['contractor_name']);
@@ -300,8 +322,10 @@ class DailyController extends AbstractActionController {
         if ($date instanceof \DateTime) {
             $beginMonth = clone $date;
             $beginMonth->modify('first day of this month');
-            $select->where->lessThanOrEqualTo('b.created', $date->format('Y-m-d'));
+            $select->where->lessThan('b.created', $beginMonth->format('Y-m-d'));
         }
+
+        //echo $select->getSqlString($this->db->platform);exit;
 
         $dataSource = $sql->prepareStatementForSqlObject($select)->execute();
 
@@ -339,6 +363,7 @@ class DailyController extends AbstractActionController {
 
     /**
      * @param $companyId
+     * @param null $date
      * @return array
      * @throws \Exception
      */
@@ -348,15 +373,22 @@ class DailyController extends AbstractActionController {
         $select->columns(['contractor_id' => 'provider_id']);
         $select->join(['b' => 'purchase_wagons'], 'a.contract_id = b.contract_id', ['material_price', 'loading_weight']);
 
-        $select->join(['c' => 'materials'], 'a.material_id = c.material_id', ['material_name']);
+        $select->join(['c' => 'materials'], 'a.material_id = c.material_id', ['material_id', 'material_name']);
         $select->join(['d' => 'material_types'], 'c.type_id = d.type_id', ['material_type' => 'name']);
 
         $select->join(['e' => 'contractors'], 'a.provider_id = e.contractor_id', ['contractor_name']);
         $select->where->equalTo('a.company_id', $companyId);
         $select->where->equalTo('e.contractor_type', ContractorAbstract::TYPE_PROVIDER);
-        $select->where->equalTo('b.status', PurchaseWagonEntity::STATUS_LOADED);
+        //$select->where->equalTo('b.status', PurchaseWagonEntity::STATUS_LOADED);
         if ($date instanceof \DateTime) {
-            $select->where->lessThanOrEqualTo('loading_date', $date->format('Y-m-d'));
+            //$select->where->lessThanOrEqualTo('loading_date', $date->format('Y-m-d'));
+
+            $select->where->nest()
+                ->lessThan('b.loading_date', 'b.unloading_date', Where::TYPE_IDENTIFIER, Where::TYPE_IDENTIFIER)
+                ->or
+                ->isNull('b.unloading_date');
+            $select->where->lessThanOrEqualTo('b.loading_date', $date->format('Y-m-d'));
+
         }
 
         $dataSource = $sql->prepareStatementForSqlObject($select)->execute();
@@ -366,6 +398,9 @@ class DailyController extends AbstractActionController {
 
         $resultSet = new ResultSet();
         $resultSet->initialize($dataSource);
+
+        //echo '<pre>'; print_r($resultSet->toArray()); exit;
+
 
         $data = [];
         /** @var \ArrayObject $item */

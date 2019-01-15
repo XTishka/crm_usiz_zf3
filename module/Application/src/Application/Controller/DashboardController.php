@@ -2,11 +2,11 @@
 
 namespace Application\Controller;
 
-use Application\Model\AccountsPayableService;
-use Application\Model\AccountsReceivableService;
-use Application\Model\CarriersReceivableService;
+//use Application\Model\AccountsPayableService;
+//use Application\Model\AccountsReceivableService;
+//use Application\Model\CarriersReceivableService;
+//use Application\Model\CustomerPayableService;
 use Application\Model\CheckingAccountService;
-use Application\Model\CustomerPayableService;
 use Application\Model\Finance\AccountPayableService;
 use Application\Model\Finance\CharterCapitalService;
 use Application\Model\Finance\CustomerReceivableService;
@@ -20,7 +20,7 @@ use Application\Model\Finance\PrepayToOtherService;
 use Application\Model\Finance\PrepayToPlantService;
 use Application\Model\Finance\PrepayToProviderService;
 use Application\Model\Finance\TotalReceivableService;
-use Application\Model\ProvidersReceivableService;
+//use Application\Model\ProvidersReceivableService;
 use Bank\Service\RecordManager;
 use Contractor\Entity\ContractorCompany;
 use Contractor\Entity\ContractorPlant;
@@ -39,6 +39,11 @@ class DashboardController extends AbstractActionController {
      * @var Http\Request
      */
     protected $request;
+
+    /**
+     * @var CheckingAccountService
+     */
+    protected $checkingAccountService;
 
     /**
      * @var ContractorCompanyManager
@@ -69,20 +74,6 @@ class DashboardController extends AbstractActionController {
      * @var RecordManager
      */
     protected $recordManager;
-
-    /**
-     * @var CheckingAccountService
-     */
-    protected $checkingAccountService;
-
-    /**
-     * @var CustomerPayableService
-     */
-    protected $customerPayableService;
-
-    /** @var ProvidersReceivableService */
-    protected $providersReceivableService;
-
 
     /**
      * @var CustomerReceivableService
@@ -145,7 +136,7 @@ class DashboardController extends AbstractActionController {
     protected $debtToOtherService;
 
     /**
-     * @var AccountsPayableService
+     * @var AccountPayableService
      */
     protected $accountPayableService;
 
@@ -294,7 +285,6 @@ class DashboardController extends AbstractActionController {
         $viewModel->setVariable('warehouseBalance', $this->warehouseLogManager->getTotalMaterialBalances($company->getPlantId(), $date));
         $viewModel->setVariable('expectedMaterials', $this->purchaseWagonManager->getExpectedMaterialWeight($companyId, $date));
         $viewModel->setVariable('checkingAccount', $this->checkingAccountService->getRecords($companyId, $date));
-
         /* -------------------------- */
 
         $viewModel->setVariable('customerReceivableContainer', $this->customerReceivableService->getRecords($companyId));

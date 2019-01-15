@@ -92,10 +92,10 @@ class ShipmentsController extends AbstractActionController {
         $select->join(['c' => 'contractors'], 'b.customer_id = c.contractor_id', ['customer' => 'contractor_name'], Join::JOIN_LEFT);
         $select->join(['d' => 'contractors'], 'b.consignee_id = d.contractor_id', ['consignee' => 'contractor_name'], Join::JOIN_LEFT);
         $select->join(['e' => 'products'], 'b.product_id = e.product_id', ['product' => 'product_name']);
-        $select->join(['f' => 'rates'], 'a.rate_id = f.rate_id', []);
-        $select->join(['g' => 'rates_values'], 'f.rate_id = g.rate_id', ['transport_price' => 'price']);
-        $select->join(['h' => 'stations'], 'f.station_id = h.station_id', ['station' => 'station_name']);
-        $select->join(['i' => 'carriers'], 'a.carrier_id = i.carrier_id', ['carrier' => 'carrier_name']);
+        $select->join(['f' => 'rates'], 'a.rate_id = f.rate_id', [], Join::JOIN_LEFT);
+        $select->join(['g' => 'rates_values'], 'f.rate_id = g.rate_id', ['transport_price' => 'price'], Join::JOIN_LEFT);
+        $select->join(['h' => 'stations'], 'f.station_id = h.station_id', ['station' => 'station_name'], Join::JOIN_LEFT);
+        $select->join(['i' => 'carriers'], 'a.carrier_id = i.carrier_id', ['carrier' => 'carrier_name'], Join::JOIN_LEFT);
 
         $select->group('a.wagon_id');
 

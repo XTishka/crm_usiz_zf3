@@ -11,12 +11,14 @@ return [
             Controller\DailyController::class          => Controller\DailyControllerFactory::class,
             Controller\PurchaseWagonsController::class => Controller\PurchaseWagonsControllerFactory::class,
             Controller\ShipmentsController::class      => Controller\ShipmentsControllerFactory::class,
+            Controller\FinanceController::class        => Controller\FinanceControllerFactory::class,
         ],
     ],
     'form_elements'   => [
-        'factories' => [
-            Form\PurchaseWagonsFilterForm::class => InvokableFactory::class,
-            Form\ShipmentsFilterForm::class      => InvokableFactory::class,
+        'invokables' => [
+            Form\FinanceFilterForm::class,
+            Form\PurchaseWagonsFilterForm::class,
+            Form\ShipmentsFilterForm::class,
         ],
     ],
     'input_filters'   => [

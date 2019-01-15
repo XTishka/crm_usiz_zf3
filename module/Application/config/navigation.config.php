@@ -22,6 +22,11 @@ return [
                     'icon'  => 'fa fa-table fa-fw',
                     'route' => 'reports/shipments',
                 ],
+                'finances'      => [
+                    'label' => 'Finances',
+                    'icon'  => 'fa fa-table fa-fw',
+                    'route' => 'reports/finance',
+                ],
             ],
         ],
         /*
@@ -85,18 +90,6 @@ return [
             'icon'  => 'fa fa-users fa-fw',
             'uri'   => '#none',
             'pages' => [
-                'contractorCommon'   => [
-                    'label' => 'All Contractors',
-                    'icon'  => 'fa fa-users fa-fw',
-                    'route' => 'contractorCommon',
-                    'pages' => [
-                        'edit' => [
-                            'label'   => 'Add new contractor',
-                            'route'   => 'contractorProvider/edit',
-                            'visible' => false,
-                        ],
-                    ],
-                ],
                 'contractorProvider'   => [
                     'label' => 'Providers',
                     'icon'  => 'fa fa-download fa-fw',

@@ -14,6 +14,7 @@ use Zend\Db\ResultSet\ResultSet;
 use Zend\Db\Sql\Expression;
 use Zend\Db\Sql\Join;
 use Zend\Db\Sql\Sql;
+use Zend\Db\Sql\Where;
 use Zend\Hydrator\ClassMethods;
 use Zend\Hydrator\Strategy\DateTimeFormatterStrategy;
 use Zend\Paginator;
@@ -37,18 +38,27 @@ class PurchaseWagonDb extends Repository\AbstractDb {
         $select->join(['b' => PurchaseContractDb::TABLE_PURCHASE_CONTRACTS], 'a.contract_id = b.contract_id', []);
         $select->join(['c' => MaterialDb::TABLE_MATERIALS], 'b.material_id = c.material_id', ['material_name']);
         $select->columns([
-            'weight' => new Expression('SUM(loading_weight)'),
-            'amount' => new Expression('SUM(material_price + delivery_price)'),
+            'weight'   => new Expression('SUM(loading_weight)'),
+            'amount'   => new Expression('SUM(material_price + delivery_price)'),
         ]);
-        $select->where->isNull('a.unloading_date');
         $select->where->equalTo('b.company_id', $companyId);
+        $select->where->nest()
+            ->lessThan('a.loading_date', 'a.unloading_date', Where::TYPE_IDENTIFIER, Where::TYPE_IDENTIFIER)
+            ->or
+            ->isNull('a.unloading_date');
         $select->where->lessThanOrEqualTo('a.loading_date', $date->format('Y-m-d'));
-        $select->group('c.material_id');
+        $select->group(['c.material_id']);
+
+        //echo $select->getSqlString($this->dbAdapter->platform);
 
         $dataSource = $sql->prepareStatementForSqlObject($select)->execute();
         $resultSet = new ResultSet('array');
         $resultSet->initialize($dataSource);
-        return $resultSet->toArray();
+        $data = $resultSet->toArray();
+
+        //echo '<pre>'; print_r($data); exit;
+
+        return $data;
 
     }
 

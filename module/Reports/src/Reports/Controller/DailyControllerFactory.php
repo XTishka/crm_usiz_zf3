@@ -2,10 +2,10 @@
 
 namespace Reports\Controller;
 
-use Application\Model\AccountsPayableService;
-use Application\Model\AccountsReceivableService;
-use Application\Model\CheckingAccountService;
-use Application\Model\ProvidersReceivableService;
+use Application\Model\Finance\AccountPayableService;
+use Application\Model\Finance\PrepayFromCustomerService;
+use Application\Model\Finance\PrepayToProviderService;
+use Application\Model\Finance\TotalReceivableService;
 use Application\Service\Repository\ApiDb;
 use Bank\Service\RecordManager;
 use Contractor\Service\ContractorCompanyManager;
@@ -17,21 +17,26 @@ use Zend\ServiceManager\Factory\FactoryInterface;
 class DailyControllerFactory implements FactoryInterface {
 
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null) {
-        $accountsPayableService = $container->get(AccountsPayableService::class);
-        $accountsReceivableService = $container->get(AccountsReceivableService::class);
-        $checkingAccountService = $container->get(CheckingAccountService::class);
-        $dailyFilterForm = $container->get('FormElementManager')->get(DailyFilterForm::class);
         $db = $container->get(Adapter::class);
+        $accountPayableService = $container->get(AccountPayableService::class);
+        $totalReceivableService = $container->get(TotalReceivableService::class);
+        $prepayFromCustomerService = $container->get(PrepayFromCustomerService::class);
+        $dailyFilterForm = $container->get('FormElementManager')->get(DailyFilterForm::class);
         $contractorCompanyManager = $container->get(ContractorCompanyManager::class);
         $apiDbRepository = $container->get(ApiDb::class);
         $recordManager = $container->get(RecordManager::class);
-        $providersReceivableService = $container->get(ProvidersReceivableService::class);
+        $prepayToProviderService = $container->get(PrepayToProviderService::class);
         return new DailyController(
-            $accountsPayableService,
-            $accountsReceivableService,
-            $checkingAccountService,
-            $dailyFilterForm, $db, $contractorCompanyManager, $apiDbRepository, $recordManager,
-            $providersReceivableService);
+            $db,
+            $accountPayableService,
+            $totalReceivableService,
+            //$checkingAccountService,
+            $prepayFromCustomerService,
+            $dailyFilterForm,
+            $contractorCompanyManager,
+            $apiDbRepository,
+            $recordManager,
+            $prepayToProviderService);
     }
 
 }

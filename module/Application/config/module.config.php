@@ -2,13 +2,16 @@
 
 namespace Application;
 
+use Zend\I18n\Translator\TranslatorInterface;
+use Zend\I18n\Translator\TranslatorServiceFactory;
 use Zend\Mvc\Controller\LazyControllerAbstractFactory;
+use Zend\Mvc\I18n\Translator;
 use Zend\ServiceManager\Factory\InvokableFactory;
 
 return [
-    'navigation'      => require_once __DIR__ . '/navigation.config.php',
-    'router'          => require_once __DIR__ . '/router.config.php',
-    'controllers'     => [
+    'navigation'         => require_once __DIR__ . '/navigation.config.php',
+    'router'             => require_once __DIR__ . '/router.config.php',
+    'controllers'        => [
         'factories' => [
             Controller\Api\Plant\AccountPayableController::class => LazyControllerAbstractFactory::class,
             Controller\Api\AccountPayableController::class       => LazyControllerAbstractFactory::class,
@@ -35,7 +38,7 @@ return [
             Controller\TestController::class                     => Controller\TestControllerFactory::class,
         ],
     ],
-    'form_elements'   => [
+    'form_elements'      => [
         'factories' => [
             Form\Element\CountrySelect::class    => Form\Element\CountrySelectFactory::class,
             Form\Element\CurrentTaxNumber::class => Form\Element\CurrentTaxNumberFactory::class,
@@ -48,31 +51,32 @@ return [
             Form\Tax::class                      => Form\TaxFactory::class,
         ],
     ],
-    'hydrators'       => [
+    'hydrators'          => [
         'factories' => [
             Hydrator\ValueObject::class => InvokableFactory::class,
         ],
     ],
-    'input_filters'   => [
+    'input_filters'      => [
         'factories' => [
             InputFilter\Country::class => InvokableFactory::class,
             InputFilter\Tax::class     => InvokableFactory::class,
         ],
     ],
-    'service_manager' => [
+    'service_manager'    => [
         'factories' => [
-            Service\Repository\ApiDb::class                  => Service\Repository\ApiDbFactory::class,
-            Service\Repository\CountryDb::class              => Service\Repository\CountryDbFactory::class,
-            Service\Repository\TaxDb::class                  => Service\Repository\TaxDbFactory::class,
-            Service\CountryManager::class                    => Service\CountryManagerFactory::class,
-            Service\TaxManager::class                        => Service\TaxManagerFactory::class,
+
+            Service\Repository\ApiDb::class         => Service\Repository\ApiDbFactory::class,
+            Service\Repository\CountryDb::class     => Service\Repository\CountryDbFactory::class,
+            Service\Repository\TaxDb::class         => Service\Repository\TaxDbFactory::class,
+            Service\CountryManager::class           => Service\CountryManagerFactory::class,
+            Service\TaxManager::class               => Service\TaxManagerFactory::class,
             /* -------------------------------------------------------------------------------------------------------- */
-            //Model\AccountsPayableService::class            => Model\AccountsPayableServiceFactory::class,
-            Model\AccountsReceivableService::class           => Model\AccountsReceivableServiceFactory::class,
-            Model\CarriersReceivableService::class           => Model\CarriersReceivableServiceFactory::class,
+            Model\AccountsReceivableService::class  => Model\AccountsReceivableServiceFactory::class,
+            Model\CarriersReceivableService::class  => Model\CarriersReceivableServiceFactory::class,
+            Model\CustomerPayableService::class     => Model\CustomerPayableServiceFactory::class,
+            Model\ProvidersReceivableService::class => Model\ProvidersReceivableServiceFactory::class,
+
             Model\CheckingAccountService::class              => Model\CheckingAccountServiceFactory::class,
-            Model\CustomerPayableService::class              => Model\CustomerPayableServiceFactory::class,
-            Model\ProvidersReceivableService::class          => Model\ProvidersReceivableServiceFactory::class,
             Model\PurchaseWagonsService::class               => Model\PurchaseWagonsServiceFactory::class,
             Model\SaleWagonsService::class                   => Model\SaleWagonsServiceFactory::class,
             /* -------------------------------------------------------------------------------------------------------- */
@@ -93,7 +97,7 @@ return [
             /* -------------------------------------------------------------------------------------------------------- */
         ],
     ],
-    'translator'      => [
+    'translator'         => [
         'locale'                    => 'ru_RU',
         'translation_file_patterns' => [
             [
@@ -103,7 +107,7 @@ return [
             ],
         ],
     ],
-    'view_manager'    => [
+    'view_manager'       => [
         'display_not_found_reason' => true,
         'display_exceptions'       => true,
         'doctype'                  => 'HTML5',
@@ -125,7 +129,7 @@ return [
         'strategies'               => ['ViewJsonStrategy'],
 
     ],
-    'view_helpers'    => [
+    'view_helpers'       => [
         'aliases'   => [
             'currencyFormat' => View\Helper\CurrencyFormat::class,
         ],
@@ -133,7 +137,7 @@ return [
             View\Helper\CurrencyFormat::class => InvokableFactory::class,
         ],
     ],
-    'validators'      => [
+    'validators'         => [
         'aliases'   => [
             'AppDbNoRecordExists' => Validator\Db\NoRecordExists::class,
         ],

@@ -352,6 +352,17 @@ return [
                 ],
             ],
         ],
+        'contractorCommon' => [
+            'route'           => 'contractorCommon',
+            'child_resources' => [
+                'edit'   => [
+                    'route' => 'edit',
+                ],
+                'delete' => [
+                    'route' => 'delete',
+                ],
+            ],
+        ],
         'contractorAdditional' => [
             'route'           => 'contractorAdditional',
             'child_resources' => [
@@ -651,6 +662,9 @@ return [
                 ],
                 'purchaseWagons' => [
                     'route' => 'purchaseWagons',
+                ],
+                'finance' => [
+                    'route' => 'finance',
                 ],
             ],
         ],

@@ -34,10 +34,10 @@ class PurchaseWagonsController extends AbstractActionController {
     protected $rateManager;
 
     /**
-     * ShipmentsController constructor.
+     * PurchaseWagonsController constructor.
+     * @param PurchaseWagonsFilterForm $formPurchaseWagonsFilter
      * @param DatabaseAdapter $db
      * @param RateManager $rateManager
-     * @param ShipmentsFilterForm $formShipmentsFilter
      */
     public function __construct(PurchaseWagonsFilterForm $formPurchaseWagonsFilter, DatabaseAdapter $db, RateManager $rateManager) {
         $this->formPurchaseWagonsFilter = $formPurchaseWagonsFilter;
@@ -92,10 +92,10 @@ class PurchaseWagonsController extends AbstractActionController {
         $select->join(['b' => 'purchase_contracts'], 'a.contract_id = b.contract_id', ['contract_price_without_tax' => 'price', 'tax']);
         $select->join(['c' => 'contractors'], 'b.provider_id = c.contractor_id', ['provider' => 'contractor_name'], Join::JOIN_LEFT);
         $select->join(['e' => 'materials'], 'b.material_id = e.material_id', ['material' => 'material_name']);
-        $select->join(['f' => 'rates'], 'a.rate_id = f.rate_id', []);
+        $select->join(['f' => 'rates'], 'a.rate_id = f.rate_id', [], Join::JOIN_LEFT);
         //$select->join(['g' => 'rates_values'], 'f.rate_id = g.rate_id', ['transport_price' => 'price']);
-        $select->join(['h' => 'stations'], 'f.station_id = h.station_id', ['station' => 'station_name']);
-        $select->join(['i' => 'carriers'], 'a.carrier_id = i.carrier_id', ['carrier' => 'carrier_name']);
+        $select->join(['h' => 'stations'], 'f.station_id = h.station_id', ['station' => 'station_name'], Join::JOIN_LEFT);
+        $select->join(['i' => 'carriers'], 'a.carrier_id = i.carrier_id', ['carrier' => 'carrier_name'], Join::JOIN_LEFT);
 
         $select->group('a.wagon_id');
 
@@ -119,7 +119,6 @@ class PurchaseWagonsController extends AbstractActionController {
             $select->where->equalTo('a.status', $data['status']);
         }
 
-
         if (key_exists('period_begin', $data) && key_exists('period_end', $data)) {
             $pBegin = \DateTime::createFromFormat('d.m.Y', $data['period_begin']);
             $pEnd = \DateTime::createFromFormat('d.m.Y', $data['period_end']);
@@ -127,6 +126,7 @@ class PurchaseWagonsController extends AbstractActionController {
                 ->greaterThanOrEqualTo('a.loading_date', $pBegin->format('Y-m-d'))->and
                 ->lessThanOrEqualTo('a.loading_date', $pEnd->format('Y-m-d'));
         }
+
 
         $dataSource = $sql->prepareStatementForSqlObject($select)->execute();
 
@@ -217,7 +217,7 @@ class PurchaseWagonsController extends AbstractActionController {
             $sheet->getStyle(sprintf('D%d', $index))->getNumberFormat()->setFormatCode('dd.mm.yyyy');
             $sheet->getCell(sprintf('E%d', $index))->setValue($wagon['loading_weight']);
             $sheet->getStyle(sprintf('E%s', $index))->getNumberFormat()->setFormatCode('#,##0.00_-"т."');
-            $sheet->getCell(sprintf('F%d', $index))->setValue($wagon['unloading_date']->format('d.m.Y'));
+            $sheet->getCell(sprintf('F%d', $index))->setValue(empty($wagon['unloading_date']) ? null : $wagon['unloading_date']->format('d.m.Y'));
             $sheet->getStyle(sprintf('F%d', $index))->getNumberFormat()->setFormatCode('dd.mm.yyyy');
             $sheet->getCell(sprintf('G%d', $index))->setValue($wagon['unloading_weight']);
             $sheet->getStyle(sprintf('G%s', $index))->getNumberFormat()->setFormatCode('#,##0.00_-"т."');

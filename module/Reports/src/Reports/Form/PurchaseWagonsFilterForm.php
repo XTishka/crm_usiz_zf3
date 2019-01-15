@@ -50,13 +50,14 @@ class PurchaseWagonsFilterForm extends Form implements InputFilterProviderInterf
             'options' => [
                 'disable_inarray_validator' => true,
                 'label'                     => 'Select carrier',
-            ]
+            ],
         ]);
 
         $this->add([
             'type'    => MaterialSelect::class,
             'name'    => 'material_id',
             'options' => [
+                'empty_option'              => 'Please choose product',
                 'disable_inarray_validator' => true,
                 'label'                     => 'Select product',
             ],
@@ -72,8 +73,8 @@ class PurchaseWagonsFilterForm extends Form implements InputFilterProviderInterf
                 ],
                 'empty_option'              => 'Select wagon status',
                 'disable_inarray_validator' => true,
-                'label'                     => 'Select wagon status'
-            ]
+                'label'                     => 'Select wagon status',
+            ],
 
         ]);
 
@@ -139,7 +140,7 @@ class PurchaseWagonsFilterForm extends Form implements InputFilterProviderInterf
                     ['name' => 'ToInt'],
                 ],
             ],
-            'product_id'    => [
+            'material_id'    => [
                 'required' => false,
                 'filters'  => [
                     ['name' => 'ToInt'],
@@ -147,9 +148,6 @@ class PurchaseWagonsFilterForm extends Form implements InputFilterProviderInterf
             ],
             'status'        => [
                 'required' => false,
-                'filters'  => [
-                    ['name' => 'ToInt'],
-                ],
             ],
             'period_begin'  => [
                 'required'   => false,

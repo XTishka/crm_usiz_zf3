@@ -27,6 +27,7 @@ class CheckingAccountService {
      * @param $companyId
      * @param null $dateTime
      * @return CheckingAccountContainer
+     * @throws \Exception
      */
     public function getRecords($companyId, $dateTime = null) {
 

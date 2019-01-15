@@ -86,6 +86,7 @@ class TransactionController extends AbstractActionController {
      * @param Form\TransactionProvider $transactionProviderForm
      * @param Form\TransactionCompany $transactionCompanyForm
      * @param Form\TransactionPlant $transactionPlantForm
+     * @param Form\FinanceTransactionImport $financeTransactionImportForm
      * @param Service\FinanceManager $financeManager
      * @param ContractorCompanyManager $contractorCompanyManager
      * @param ContractorPlantManager $contractorPlantManager
@@ -357,17 +358,17 @@ class TransactionController extends AbstractActionController {
                  * @var TransactionEntity $transactionPlant
                  */
                 $transactionCompany = $form->getObject();
-                $transactionPlant = clone $transactionCompany;
 
                 // Инверсия транзакции для компании
-                $transactionPlant->setContractorType($transactionCompany::CONTRACTOR_COMPANY);
-                $transactionPlant->setCompanyId($transactionCompany->getContractorId());
-                $transactionPlant->setContractorId($transactionCompany->getCompanyId());
-                $transactionPlant->setCredit($transactionCompany->getDebit());
-                $transactionPlant->setDebit($transactionCompany->getCredit());
+                //$transactionPlant = clone $transactionCompany;
+                //$transactionPlant->setContractorType($transactionCompany::CONTRACTOR_COMPANY);
+                //$transactionPlant->setCompanyId($transactionCompany->getContractorId());
+                //$transactionPlant->setContractorId($transactionCompany->getCompanyId());
+                //$transactionPlant->setCredit($transactionCompany->getDebit());
+                //$transactionPlant->setDebit($transactionCompany->getCredit());
 
                 $transactionCompany = $this->financeManager->saveTransaction($transactionCompany);
-                $this->financeManager->saveTransaction($transactionPlant);
+                //$this->financeManager->saveTransaction($transactionPlant);
 
                 $messenger->addMessage('Transaction was fully completed.', 'success');
                 $this->plugin('Redirect')->toRoute('dashboard/finance', ['company' => $transactionCompany->getCompanyId()]);
