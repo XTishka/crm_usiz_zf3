@@ -1,0 +1,232 @@
+<div class="layout-toolbar">
+    <h1><i class="fa fa-table fa-fw"></i><?=
+        $title = $this->translate('Finance report') ?></h1>
+    <?php $this->headTitle($title) ?>
+</div>
+
+<?= $this->partial('partial/messenger', ['messenger' => $this->messenger]); ?>
+
+<div class="panel">
+    <div class="panel-header">
+        <div class="panel-title">
+            <i class="fa fa-navicon fa-fw"></i>
+            <?= $this->translate('Select report params') ?>
+        </div>
+    </div>
+    <div class="panel-body">
+        <?= $this->form()->openTag($this->form) ?>
+
+        <div class="row">
+            <div class="col-md">
+                <div class="form-row">
+                    <?= $this->formLabel($this->form->get('company_id')) ?>
+                    <?= $this->formSelect($this->form->get('company_id')) ?>
+                    <?= $this->formElementErrors($this->form->get('company_id')) ?>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-md-6">
+                        <div class="form-row">
+                            <?= $this->formLabel($this->form->get('contractor_type')) ?>
+                            <?= $this->formSelect($this->form->get('contractor_type')) ?>
+                            <?= $this->formElementErrors($this->form->get('contractor_type')) ?>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-6">
+                        <div class="form-row">
+                            <?= $this->formLabel($this->form->get('contractor_id')) ?>
+                            <?= $this->formSelect($this->form->get('contractor_id')) ?>
+                            <?= $this->formElementErrors($this->form->get('contractor_id')) ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-md-6">
+                        <div class="form-row">
+                            <?= $this->formLabel($this->form->get('transaction_route')) ?>
+                            <?= $this->formSelect($this->form->get('transaction_route')) ?>
+                            <?= $this->formElementErrors($this->form->get('transaction_route')) ?>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-6">
+                        <div class="form-row">
+                            <?= $this->formLabel($this->form->get('transaction_type')) ?>
+                            <?= $this->formSelect($this->form->get('transaction_type')) ?>
+                            <?= $this->formElementErrors($this->form->get('transaction_type')) ?>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-xs-12 col-md-12">
+                        <div class="form-row">
+                            <?= $this->formSubmit($this->form->get('submit')) ?>
+                            <?= $this->formSubmit($this->form->get('html')) ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="row">
+                    <div class="col-md">
+                        <?= $this->formLabel($this->form->get('period_begin')) ?>
+                        <?= $this->formHidden($this->form->get('period_begin')) ?>
+                        <?= $this->formElementErrors($this->form->get('period_begin')) ?>
+                    </div>
+                    <div class="col-md">
+                        <?= $this->formLabel($this->form->get('period_end')) ?>
+                        <?= $this->formHidden($this->form->get('period_end')) ?>
+                        <?= $this->formElementErrors($this->form->get('period_end')) ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?= $this->form()->closeTag() ?>
+    </div>
+</div>
+
+<?php if (count($this->logs)): ?>
+    <div class="panel">
+        <div class="panel-header">
+            <div class="panel-title">
+                <i class="fa fa-navicon fa-fw"></i>
+                <?= $this->translate('Report data') ?>
+            </div>
+        </div>
+        <div class="panel-body">
+            <table class="table-data">
+                <?php $totalDebit = 0; ?>
+                <?php $totalCredit = 0; ?>
+
+                <?php $this->placeholder('table')->captureStart(); ?>
+
+
+                <?php /** @var ArrayObject $row */ ?>
+                <?php foreach ($this->logs as $row): ?>
+                    <tr>
+                        <td class="text-left"><?= $this->escapeHtml($row->offsetGet('contractor_name')) ?>
+                            <div class="hint"><?= $this->escapeHtml($row->offsetGet('comment')) ?></div>
+                        </td>
+                        <td class="text-right">
+                            <?= $this->currencyFormat($row->offsetGet('debit')) ?>
+                            <?php $totalDebit = bcadd($totalDebit, $row->offsetGet('debit'), 4) ?>
+                        </td>
+                        <td class="text-right">
+                            <?= $this->currencyFormat($row->offsetGet('credit')) ?>
+                            <?php $totalCredit = bcadd($totalCredit, $row->offsetGet('credit'), 4) ?>
+                        </td>
+                        <td class="text-right text-center">
+                            <?php if (\Document\Domain\TransactionEntity::TRANSACTION_DEBT === $row->offsetGet('transaction_type')): ?>
+                                <div class="text-warning"><?= $this->translate('Debt') ?></div>
+                            <?php elseif (\Document\Domain\TransactionEntity::TRANSACTION_PAYMENT === $row->offsetGet('transaction_type')): ?>
+                                <div class="text-success"><?= $this->translate('Payment') ?></div>
+                            <?php else: ?>
+                                <div class="text-error"><?= $this->translate('Unsupported transaction type') ?></div>
+                            <?php endif ?>
+
+                        </td>
+                        <td class="text-right">
+                            <?= $this->dateFormat((new DateTime($row->offsetGet('created'))), IntlDateFormatter::MEDIUM, IntlDateFormatter::NONE) ?>
+                            <div class="hint"><?= $this->dateFormat((new DateTime($row->offsetGet('created'))), IntlDateFormatter::NONE, IntlDateFormatter::LONG) ?></div>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+
+
+                <?php $this->placeholder('table')->captureEnd(); ?>
+
+                <thead>
+                <tr>
+                    <th class="text-left"><?= $this->translate('Contractor') ?></th>
+                    <th class="text-right" style="width:10rem"><?= $this->translate('Debit') ?></th>
+                    <th class="text-right" style="width:10rem"><?= $this->translate('Credit') ?></th>
+                    <th class="text-center" style="width:15rem"><?= $this->translate('Operation type') ?></th>
+                    <th class="text-right" style="width:15rem"><?= $this->translate('Date') ?></th>
+                </tr>
+                <tr style="border-top:1px solid #dedede">
+                    <th><?= $this->translate('Total') ?>:</th>
+                    <th class="text-right"><?= $this->currencyFormat($totalDebit) ?></th>
+                    <th class="text-right"><?= $this->currencyFormat($totalCredit) ?></th>
+                    <th colspan="2" class="text-right">
+                        <?= $this->translate('Balance') ?>:
+                        <?= $this->currencyFormat(bcsub($totalDebit, $totalCredit, 4)) ?>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <?= $this->placeholder('table') ?>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <th><?= $this->translate('Total') ?>:</th>
+                    <th class="text-right"><?= $this->currencyFormat($totalDebit) ?></th>
+                    <th class="text-right"><?= $this->currencyFormat($totalCredit) ?></th>
+                    <th colspan="2" class="text-right">
+                        <?= $this->translate('Balance') ?>:
+                        <?= $this->currencyFormat(bcsub($totalDebit, $totalCredit, 4)) ?>
+                    </th>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+<?php else: ?>
+    <div class="text-center">
+        <img src="<?= $this->basePath('img/empty.svg') ?>" alt="Empty folder" style="max-width:200px">
+        <h3><?= $this->translate('Nothing found') ?></h3>
+    </div>
+<?php endif ?>
+
+
+<?php
+$this->headLink()->appendStylesheet('/css/datepicker.min.css');
+$this->inlineScript()->appendFile($this->basePath('/js/vendor/datepicker.min.js'));
+
+$this->inlineScript()->captureStart();
+echo /** @lang JavaScript */
+<<<JS
+$(document).ready(function() {
+    var contractorTypeSel = $('select[name=contractor_type]'),
+        contractorTypeVal = contractorTypeSel.val(),
+        contractorIdSel = $('select[name=contractor_id]');
+    
+    contractorTypeSel.on('change', function(e) {
+      //console.log(e.target.value);
+      contractorIdSel.find('option:not([value=""])').hide().filter('[data-type='+e.target.value+']').show();
+    });
+    
+    if (contractorTypeVal.length) {
+      contractorIdSel.find('option:not([value=""])').hide().filter('[data-type='+contractorTypeVal+']').show();
+    }
+    
+  var periodBegin = $('input[name=period_begin]'),
+        periodEnd   = $('input[name=period_end]'),
+        beginPts    = periodBegin.val().split('.'),
+        endPts      = periodEnd.val().split('.'),
+        dpBegin     = periodBegin.datepicker({
+            inline   : true,
+            startDate: (beginPts.length === 3) ?
+                new Date(parseInt(beginPts[2]), parseInt(beginPts[1]) - 1, 1) :
+                new Date(),
+            onSelect : function (fd, date) {
+                periodEnd.data('datepicker').update('minDate', date);
+                periodEnd.focus();
+            }
+        }).data('datepicker'),
+        dpEnd       = periodEnd.datepicker({
+            inline   : true,
+            startDate: (endPts.length === 3) ?
+                new Date(parseInt(endPts[2]), parseInt(endPts[1]) - 1, 1) :
+                new Date(),
+            onSelect : function (fd, date) {
+                periodBegin.data('datepicker').update('maxDate', date);
+            }
+        }).data('datepicker');
+    if (beginPts.length === 3) {
+        dpBegin.selectDate(new Date(beginPts[2], beginPts[1] - 1, beginPts[0]));
+    }
+    if (endPts.length === 3) {
+        dpEnd.selectDate(new Date(parseInt(endPts[2]), parseInt(endPts[1]) - 1, parseInt(endPts[0])));
+    }
+})
+JS;
+echo $this->inlineScript()->captureEnd();

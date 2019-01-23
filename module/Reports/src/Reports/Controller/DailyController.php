@@ -399,6 +399,10 @@ class DailyController extends AbstractActionController {
         $resultSet = new ResultSet();
         $resultSet->initialize($dataSource);
 
+//        echo "<pre>";
+//        print_r($resultSet->toArray());
+//        echo "</pre>";
+
         //echo '<pre>'; print_r($resultSet->toArray()); exit;
 
 

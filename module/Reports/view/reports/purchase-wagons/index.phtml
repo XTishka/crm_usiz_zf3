@@ -86,6 +86,8 @@
                 $materialPriceWithoutTax = 0;
                 $totalPrice = 0;
                 $totalPriceWithoutTax = 0;
+                $totalLoadedWeight = 0;
+                $totalUnloadedWeight = 0;
                 ?>
                 <thead>
                 <tr>
@@ -102,6 +104,7 @@
                     <th class="text-right">Итого с/без НДС</th>
                 </tr>
                 </thead>
+
                 <tbody>
                 <?php foreach ($this->wagons as $wagon): ?>
                     <tr>
@@ -123,6 +126,8 @@
                         <td><?= $wagon['material'] ?></td>
                         <td class="text-right">
                             <?= number_format($wagon['loading_weight'], 2, ',', ' ') ?>
+                            <?php $totalUnloadedWeight += $wagon['unloading_weight'] ?>
+                            <?php $totalLoadedWeight += $wagon['loading_weight'] ?>
                             <div class="hint"><?= number_format($wagon['unloading_weight'], 2, ',', ' ') ?></div>
                         </td>
                         <td class="text-right"><?= number_format($wagon['price_per_ton'], 2, ',', ' ') ?></td>
@@ -151,13 +156,18 @@
                 </tbody>
                 <tfoot>
                 <tr>
-                    <th colspan="7" class="text-right">
+                    <th colspan="5" class="text-right">
                         <?= $this->translate('Total values') ?>:
+                    </th>
+                    <th class="text-right">
+                        <?= number_format($totalLoadedWeight, 2, ',', ' ') ?>
+                        <div class="hint"><?= number_format($totalLoadedWeight, 2, ',', ' ') ?></div>
                     </th>
                     <th class="text-right">
                         <?= number_format($transportPrice, 2, ',', ' ') ?>
                         <div class="hint"><?= number_format($transportPriceWithoutTax, 2, ',', ' ') ?></div>
                     </th>
+                    <th></th>
                     <th class="text-right">
                         <?= number_format($contractPrice, 2, ',', ' ') ?>
                         <div class="hint"><?= number_format($contractPriceWithoutTax, 2, ',', ' ') ?></div>

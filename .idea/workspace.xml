@@ -2,26 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="39a7e7bb-839e-4cc8-9bc0-47f1f661ff9c" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/module/Contractor/src/Contractor/Form/Element/ContractorAllSelect.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/module/Contractor/src/Contractor/Form/Element/ContractorAllSelectFactory.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/module/Contractor/src/Contractor/Form/Element/ContractorTypeSelect.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/module/Reports/src/Reports/Controller/FinanceController.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/module/Reports/src/Reports/Controller/FinanceControllerFactory.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/module/Reports/src/Reports/Form/FinanceFilterForm.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/module/Reports/view/reports/finance/index.phtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/module/Application/config/module.config.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Application/config/module.config.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/module/Application/config/navigation.config.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Application/config/navigation.config.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/module/Application/src/Application/Controller/DashboardController.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Application/src/Application/Controller/DashboardController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/module/Application/src/Application/Model/CheckingAccountService.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/CheckingAccountService.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/AccountPayableService.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/AccountPayableService.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/TotalReceivableService.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/TotalReceivableService.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/module/Application/view/application/dashboard/finance.phtml" beforeDir="false" afterPath="$PROJECT_DIR$/module/Application/view/application/dashboard/finance.phtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/module/Contractor/config/module.config.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Contractor/config/module.config.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/module/Document/src/Document/Controller/TransactionController.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Document/src/Document/Controller/TransactionController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/module/Document/src/Document/Service/Repository/PurchaseWagonDb.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Document/src/Document/Service/Repository/PurchaseWagonDb.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/module/Reports/config/module.config.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Reports/config/module.config.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/module/Reports/config/router.config.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Reports/config/router.config.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/module/Reports/src/Reports/Controller/DailyController.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Reports/src/Reports/Controller/DailyController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/module/Reports/src/Reports/Controller/DailyControllerFactory.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Reports/src/Reports/Controller/DailyControllerFactory.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/module/Reports/src/Reports/Controller/PurchaseWagonsController.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Reports/src/Reports/Controller/PurchaseWagonsController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/module/Reports/src/Reports/Controller/ShipmentsController.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Reports/src/Reports/Controller/ShipmentsController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/module/Reports/src/Reports/Form/PurchaseWagonsFilterForm.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Reports/src/Reports/Form/PurchaseWagonsFilterForm.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/module/Reports/view/reports/daily/index.phtml" beforeDir="false" afterPath="$PROJECT_DIR$/module/Reports/view/reports/daily/index.phtml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/module/User/config/acl.config.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/User/config/acl.config.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Reports/view/reports/purchase-wagons/index.phtml" beforeDir="false" afterPath="$PROJECT_DIR$/module/Reports/view/reports/purchase-wagons/index.phtml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -64,36 +55,29 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/module/Application/src/Application/Model/ProvidersReceivableServiceFactory.php">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/module/Application/src/Application/Model/AccountsReceivableContainer.php">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/module/Application/src/Application/Model/CarriersReceivableContainer.php">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/module/Application/src/Application/Model/CustomerPayableContainer.php">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/module/Application/src/Application/Model/ProvidersReceivableContainer.php">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/module/User/config/acl.config.php">
+        <entry file="file://$PROJECT_DIR$/module/Reports/src/Reports/Controller/DailyController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="373">
-              <caret line="355" column="50" selection-start-line="355" selection-start-column="50" selection-end-line="355" selection-end-column="50" />
+            <state relative-caret-position="151">
+              <caret line="101" selection-start-line="101" selection-end-line="101" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/module/Contractor/src/Contractor/Entity/ContractorAbstract.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="714">
+              <caret line="52" column="10" selection-start-line="52" selection-start-column="10" selection-end-line="52" selection-end-column="10" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/module/Reports/view/reports/daily/index.phtml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2044">
+              <caret line="146" column="61" selection-start-line="146" selection-start-column="61" selection-end-line="146" selection-end-column="61" />
             </state>
           </provider>
         </entry>
@@ -102,8 +86,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>furnaceActio</find>
-      <find>furnace</find>
       <find>fur</find>
       <find>layout-sidebar</find>
       <find>carrier</find>
@@ -131,6 +113,9 @@
       <find>РЕДАКТИРОВАТЬ ДАННЫЕ КОМПАНИИ</find>
       <find>ContractorType</find>
       <find>contractor</find>
+      <find>contractor_id</find>
+      <find>loading_date</find>
+      <find>getPurchaseMaterials</find>
     </findStrings>
     <replaceStrings>
       <replace>Common</replace>
@@ -147,9 +132,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/module/Contractor/src/Contractor/View/Helper/ContractorCommonMenu.php" />
-        <option value="$PROJECT_DIR$/module/Application/config/navigation.config.php" />
-        <option value="$PROJECT_DIR$/module/Transport/view/transport/carrier/index.phtml" />
         <option value="$PROJECT_DIR$/module/Contractor/src/Contractor/Form/ContractorCommonFilterFactory.php" />
         <option value="$PROJECT_DIR$/module/Contractor/config/module.config.php" />
         <option value="$PROJECT_DIR$/module/Contractor/src/Contractor/Controller/ContractorCommonControllerFactory.php" />
@@ -198,6 +180,9 @@
         <option value="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/DebtToPlantsServiceInterface.php" />
         <option value="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/DebtToProvidersServiceInterface.php" />
         <option value="$PROJECT_DIR$/module/User/config/acl.config.php" />
+        <option value="$PROJECT_DIR$/module/Reports/src/Reports/Controller/PurchaseWagonsController.php" />
+        <option value="$PROJECT_DIR$/module/Reports/view/reports/purchase-wagons/index.phtml" />
+        <option value="$PROJECT_DIR$/module/Reports/src/Reports/Controller/DailyController.php" />
       </list>
     </option>
   </component>
@@ -326,7 +311,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -339,10 +323,74 @@
               <item name="dev-usiz.local" type="462c0819:PsiDirectoryNode" />
               <item name="module" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="CRM USIZ :: ZF3" type="b2602c69:ProjectViewProjectNode" />
+              <item name="dev-usiz.local" type="462c0819:PsiDirectoryNode" />
+              <item name="module" type="462c0819:PsiDirectoryNode" />
+              <item name="Reports" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="CRM USIZ :: ZF3" type="b2602c69:ProjectViewProjectNode" />
+              <item name="dev-usiz.local" type="462c0819:PsiDirectoryNode" />
+              <item name="module" type="462c0819:PsiDirectoryNode" />
+              <item name="Reports" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="CRM USIZ :: ZF3" type="b2602c69:ProjectViewProjectNode" />
+              <item name="dev-usiz.local" type="462c0819:PsiDirectoryNode" />
+              <item name="module" type="462c0819:PsiDirectoryNode" />
+              <item name="Reports" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="Reports" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="CRM USIZ :: ZF3" type="b2602c69:ProjectViewProjectNode" />
+              <item name="dev-usiz.local" type="462c0819:PsiDirectoryNode" />
+              <item name="module" type="462c0819:PsiDirectoryNode" />
+              <item name="Reports" type="462c0819:PsiDirectoryNode" />
+              <item name="view" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="CRM USIZ :: ZF3" type="b2602c69:ProjectViewProjectNode" />
+              <item name="dev-usiz.local" type="462c0819:PsiDirectoryNode" />
+              <item name="module" type="462c0819:PsiDirectoryNode" />
+              <item name="Reports" type="462c0819:PsiDirectoryNode" />
+              <item name="view" type="462c0819:PsiDirectoryNode" />
+              <item name="reports" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="CRM USIZ :: ZF3" type="b2602c69:ProjectViewProjectNode" />
+              <item name="dev-usiz.local" type="462c0819:PsiDirectoryNode" />
+              <item name="module" type="462c0819:PsiDirectoryNode" />
+              <item name="Reports" type="462c0819:PsiDirectoryNode" />
+              <item name="view" type="462c0819:PsiDirectoryNode" />
+              <item name="reports" type="462c0819:PsiDirectoryNode" />
+              <item name="daily" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="CRM USIZ :: ZF3" type="b2602c69:ProjectViewProjectNode" />
+              <item name="dev-usiz.local" type="462c0819:PsiDirectoryNode" />
+              <item name="module" type="462c0819:PsiDirectoryNode" />
+              <item name="Reports" type="462c0819:PsiDirectoryNode" />
+              <item name="view" type="462c0819:PsiDirectoryNode" />
+              <item name="reports" type="462c0819:PsiDirectoryNode" />
+              <item name="finance" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="CRM USIZ :: ZF3" type="b2602c69:ProjectViewProjectNode" />
+              <item name="dev-usiz.local" type="462c0819:PsiDirectoryNode" />
+              <item name="module" type="462c0819:PsiDirectoryNode" />
+              <item name="Reports" type="462c0819:PsiDirectoryNode" />
+              <item name="view" type="462c0819:PsiDirectoryNode" />
+              <item name="reports" type="462c0819:PsiDirectoryNode" />
+              <item name="purchase-wagons" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -416,7 +464,9 @@
       <workItem from="1547308779207" duration="29000" />
       <workItem from="1547308853983" duration="2282000" />
       <workItem from="1547310924098" duration="1781000" />
-      <workItem from="1547562988904" duration="352000" />
+      <workItem from="1547562988904" duration="11360000" />
+      <workItem from="1547722863924" duration="599000" />
+      <workItem from="1548233160479" duration="1486000" />
     </task>
     <task id="LOCAL-00001" summary="- Добавляет фильтрацию для Перевозчиков по коду ОКПО и Названию&#10;- Исправляет отображение суммы веса в договорах &#10;  (была ошибка, не считало тысячные)&#10;- Исправлена ошибка процента отсева при добавлении скипов">
       <created>1541689056611</created>
@@ -446,16 +496,23 @@
       <option name="project" value="LOCAL" />
       <updated>1547309185005</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="- Финансовый отчет">
+      <created>1547563375363</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1547563375363</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="108509000" />
+    <option name="totallyTimeSpent" value="121602000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1176" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49953052" visible="true" weight="0.14375" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49953052" visible="true" weight="0.20052083" />
       <window_info id="Structure" order="1" sideWeight="0.5004695" side_tool="true" weight="0.20052083" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -469,14 +526,14 @@
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.4741784" />
       <window_info anchor="bottom" id="File Transfer" order="9" weight="0.3027179" />
       <window_info anchor="bottom" id="Database Changes" order="10" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="11" visible="true" weight="0.31958762" />
-      <window_info anchor="bottom" id="Event Log" order="12" side_tool="true" />
-      <window_info anchor="bottom" id="Messages" order="13" weight="0.3298872" />
-      <window_info anchor="bottom" id="Database Console" order="14" weight="0.4718045" />
+      <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
+      <window_info anchor="bottom" id="Messages" order="12" weight="0.3298872" />
+      <window_info anchor="bottom" id="Database Console" order="13" weight="0.4718045" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="Database" order="3" weight="0.14270833" />
+      <window_info active="true" anchor="right" id="Terminal" order="4" visible="true" weight="0.37864584" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -527,71 +584,10 @@
     <MESSAGE value="- Добавляет пересчет вагонов при изменении тарифов&#10;- Исправляет суммарные данные скипов" />
     <MESSAGE value="- Внедрение нового класса финансов." />
     <MESSAGE value="- Добавление класса расчета состояния Предприяте/Финансы" />
-    <option name="LAST_COMMIT_MESSAGE" value="- Добавление класса расчета состояния Предприяте/Финансы" />
+    <MESSAGE value="- Финансовый отчет" />
+    <option name="LAST_COMMIT_MESSAGE" value="- Финансовый отчет" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/module/Contractor/src/Contractor/Entity/ContractorCommon.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="98">
-          <caret line="7" column="49" selection-start-line="7" selection-start-column="38" selection-end-line="7" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/module/Contractor/src/Contractor/Entity/ContractorAbstract.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2142">
-          <caret line="154" selection-start-line="154" selection-end-line="154" />
-          <folding>
-            <element signature="e#37#60#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/module/Contractor/view/contractor/contractor-common/index.phtml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="836">
-          <caret line="142" column="39" lean-forward="true" selection-start-line="142" selection-start-column="39" selection-end-line="142" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/module/Contractor/src/Contractor/Controller/ContractorCommonController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="868">
-          <caret line="62" column="28" selection-start-line="62" selection-start-column="28" selection-end-line="62" selection-end-column="28" />
-          <folding>
-            <element signature="e#41#61#0#PHP" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/module/Application/src/Application/Model/Finance/PrepayToCarriersContainerInterface.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="70">
-          <caret line="5" column="47" selection-start-line="5" selection-start-column="47" selection-end-line="5" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/module/Application/src/Application/Model/Finance/PrepayToPlantsContainerInterface.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="140">
-          <caret line="10" column="42" selection-start-line="10" selection-start-column="10" selection-end-line="10" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/module/Application/src/Application/Model/Finance/PrepayToOthersContainerInterface.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="140">
-          <caret line="10" column="42" selection-start-line="10" selection-start-column="10" selection-end-line="10" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/module/Application/src/Application/Model/Finance/CustomerReceivablesContainerInterface.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="294">
-          <caret line="23" column="36" selection-start-line="23" selection-start-column="36" selection-end-line="23" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/module/Application/src/Application/Model/Finance/PrepayToProvidersContainerInterface.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="168">
@@ -811,9 +807,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/module/Application/src/Application/Model/ProvidersReceivableServiceFactory.php">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/module/Application/src/Application/Model/AccountsReceivableContainer.php">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -830,6 +823,65 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="373">
           <caret line="355" column="50" selection-start-line="355" selection-start-column="50" selection-end-line="355" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module/Application/src/Application/Model/ProvidersReceivableServiceFactory.php">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module/Reports/src/Reports/Form/PurchaseWagonsFilterForm.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="252">
+          <caret line="39" column="37" selection-start-line="39" selection-start-column="26" selection-end-line="39" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/stubs/bcmath/bcmath.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1790">
+          <caret line="22" column="9" selection-start-line="22" selection-start-column="9" selection-end-line="22" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module/Reports/view/reports/finance/index.phtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-435">
+          <caret line="100" lean-forward="true" selection-start-line="100" selection-end-line="100" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module/Reports/view/reports/purchase-wagons/index.phtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="279">
+          <caret line="106" selection-start-line="106" selection-end-line="106" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module/Reports/src/Reports/Controller/PurchaseWagonsController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1372">
+          <caret line="126" column="53" selection-start-line="126" selection-start-column="53" selection-end-line="126" selection-end-column="53" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module/Reports/src/Reports/Controller/DailyController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="151">
+          <caret line="101" selection-start-line="101" selection-end-line="101" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module/Contractor/src/Contractor/Entity/ContractorAbstract.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="714">
+          <caret line="52" column="10" selection-start-line="52" selection-start-column="10" selection-end-line="52" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/module/Reports/view/reports/daily/index.phtml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2044">
+          <caret line="146" column="61" selection-start-line="146" selection-start-column="61" selection-end-line="146" selection-end-column="61" />
         </state>
       </provider>
     </entry>
