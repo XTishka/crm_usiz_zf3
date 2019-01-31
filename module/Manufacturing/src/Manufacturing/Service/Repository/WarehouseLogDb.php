@@ -97,6 +97,11 @@ class WarehouseLogDb extends AbstractDb {
         return $data;
     }
 
+    /**
+     * @param int $plantId
+     * @return array
+     * @throws Exception\ErrorException
+     */
     public function fetchMaterialBalances(int $plantId) {
         $sql = new Sql($this->dbAdapter);
         $select = $sql->select(['a' => self::TABLE_WAREHOUSES_LOGS]);
@@ -114,26 +119,12 @@ class WarehouseLogDb extends AbstractDb {
         $select->join(['d' => MaterialDb::TABLE_MATERIALS], 'a.resource_id = d.material_id', ['material_name']);
         $select->join(['e' => DropoutManager::TABLE_DROPOUTS], 'd.material_id = e.material_id', ['dropout' => new Expression('IFNULL(value, 0)')], Join::JOIN_LEFT);
 
-        /*
-        $select->columns([
-            'weight' => new Expression('(
-                (SELECT COALESCE(SUM(resource_weight), 0) FROM warehouses_logs WHERE warehouse_id = a.warehouse_id AND contractor_id = a.contractor_id AND a.resource_id = resource_id AND direction = ?) -
-                (SELECT COALESCE(SUM(resource_weight), 0) FROM warehouses_logs WHERE warehouse_id = a.warehouse_id AND contractor_id = a.contractor_id AND a.resource_id = resource_id AND direction = ?)
-                )',
-                [WarehouseLogEntity::DIRECTION_INPUT, WarehouseLogEntity::DIRECTION_OUTPUT]),
-            'price'  => new Expression('(
-                (SELECT COALESCE(SUM(resource_price), 0) FROM warehouses_logs WHERE warehouse_id = a.warehouse_id AND contractor_id = a.contractor_id AND a.resource_id = resource_id AND direction = ?) -
-                (SELECT COALESCE(SUM(resource_price), 0) FROM warehouses_logs WHERE warehouse_id = a.warehouse_id AND contractor_id = a.contractor_id AND a.resource_id = resource_id AND direction = ?)
-                )',
-                [WarehouseLogEntity::DIRECTION_INPUT, WarehouseLogEntity::DIRECTION_OUTPUT]),
-        ]);
-        */
         $select->where->equalTo('b.warehouse_type', WarehouseEntity::TYPE_MATERIAL_WAREHOUSE);
         $select->where->equalTo('b.plant_id', $plantId);
         $select->group('a.log_id');
         $select->order('material_name ASC');
 
-        //CREATE TEMPORARY TABLE temp1 ENGINE=MEMORY AS (select * from table1)
+        //echo $select->getSqlString($this->dbAdapter->platform);
 
         $dataSource = $sql->prepareStatementForSqlObject($select)->execute();
 
@@ -143,29 +134,29 @@ class WarehouseLogDb extends AbstractDb {
         $resultSet = new ResultSet(ResultSet::TYPE_ARRAY);
         $resultSet->initialize($dataSource);
 
-        //echo '<pre style="font-size: 11px">';print_r($resultSet->toArray());echo '</pre>';exit;
-
         $data = [];
+
         foreach ($resultSet as $item) {
-            $index = \join([
-                $item['resource_id'],
-                $item['contractor_id'],
-                $item['warehouse_id'],
-            ]);
-            if (array_key_exists($index, $data)) {
-                if ($item['direction'] == 'input') {
-                    $data[$index]['weight'] = bcadd($data[$index]['weight'], $item['weight'], 4);
-                    $data[$index]['price'] = bcadd($data[$index]['price'], $item['price'], 4);
 
-                } else {
-                    $data[$index]['weight'] = bcsub($data[$index]['weight'], $item['weight'], 4);
-                    $data[$index]['price'] = bcsub($data[$index]['price'], $item['price'], 4);
-                }
-            } else {
+            $index = join([$item['resource_id'], $item['contractor_id'], $item['warehouse_id']]);
+
+            if (!array_key_exists($index, $data)) {
                 $data[$index] = $item;
+                $data[$index]['weight'] = 0;
+                $data[$index]['price'] = 0;
             }
-        }
 
+            if ($item['direction'] == 'input') {
+                $data[$index]['weight'] = bcadd($data[$index]['weight'], $item['weight'], 4);
+                $data[$index]['price'] = bcadd($data[$index]['price'], $item['price'], 4);
+
+            } else {
+                $data[$index]['weight'] = bcsub($data[$index]['weight'], $item['weight'], 4);
+                $data[$index]['price'] = bcsub($data[$index]['price'], $item['price'], 4);
+            }
+
+        }
+        //exit;
         return $data;
     }
 
@@ -249,10 +240,11 @@ class WarehouseLogDb extends AbstractDb {
         return $object;
     }
 
-    public function deleteLogByWagonId($wagonId) {
+    public function deleteLogByWagonId($wagonId, $direction) {
         $sql = new Sql($this->dbAdapter);
         $action = $sql->delete(self::TABLE_WAREHOUSES_LOGS);
         $action->where->equalTo('wagon_id', $wagonId);
+        $action->where->equalTo('direction', $direction);
         $dataSource = $sql->prepareStatementForSqlObject($action)->execute();
         if (!$dataSource instanceof ResultInterface)
             throw new Exception\ErrorException('Delete transaction was not commit.');

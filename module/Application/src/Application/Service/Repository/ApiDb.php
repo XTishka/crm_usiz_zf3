@@ -113,16 +113,25 @@ class ApiDb extends AbstractDb {
         return $paginator;
     }
 
-    public function getBankBalancesPaginator($companyId) {
+    public function getBankBalancesPaginator($companyId, $dateStr = null) {
         $companyId = intval($companyId);
         $sql = new Sql($this->dbAdapter);
 
-        $date = (new \DateTime())->setTime(23, 59, 59);
+        if (trim($dateStr)) {
+            $date = \DateTime::createFromFormat('d.m.Y', $dateStr);
+        } else {
+            $date = (new \DateTime('now'));
+        }
+        $date->setTime(23, 59, 59);
+
+        $dateSub = clone $date;
+        $dateSub->sub(new \DateInterval('P1D'));
+
 
         $subSel = $sql->select(RecordManager::TABLE_RECORDS);
         $subSel->columns(['record_id', 'bank_id', 'date' => new Expression('MAX(date)')]);
         $subSel->where->equalTo('company_id', $companyId);
-        $subSel->where->lessThanOrEqualTo('date', $date->format('Y-m-d'));
+        $subSel->where->lessThanOrEqualTo('date', $dateSub->format('Y-m-d'));
         $subSel->group('bank_id');
 
         $select = $sql->select(['t1' => RecordManager::TABLE_RECORDS]);

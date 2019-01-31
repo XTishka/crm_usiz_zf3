@@ -67,19 +67,8 @@ class RateController extends AbstractActionController {
     }
 
     /**
-     * RateController constructor.
-     * @param RateManager $rateManager
-     * @param Form\AddRate $addRateForm
-     * @param Form\Rate $rateForm
-     * @param Form\RateFilter $rateFilterForm
-     * public function construct(RateManager $rateManager, Form\AddRate $addRateForm, Form\Rate $rateForm, Form\RateFilter $rateFilterForm) {
-     * $this->rateManager = $rateManager;
-     * $this->addRateForm = $addRateForm;
-     * $this->rateForm = $rateForm;
-     * $this->rateFilterForm = $rateFilterForm;
-     * }
+     * @return ViewModel
      */
-
     public function indexAction() {
         $queryParams = $this->params()->fromQuery();
         $filterForm = $this->rateFilterForm;
@@ -92,7 +81,7 @@ class RateController extends AbstractActionController {
         $pageNumber = $this->params()->fromQuery('page');
         $paginator = $this->rateManager->getRatesPaginator(null, $queryParams);
         $paginator->setCurrentPageNumber($pageNumber);
-        $paginator->setItemCountPerPage(50);
+        $paginator->setItemCountPerPage(20);
         $viewModel = new ViewModel();
         $viewModel->setVariable('messenger', $messenger);
         $viewModel->setVariable('paginator', $paginator);

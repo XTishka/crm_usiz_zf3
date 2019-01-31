@@ -19,6 +19,7 @@ return [
             Controller\ContractorCustomerController::class   => Controller\ContractorControllerFactory::class,
             Controller\ContractorPlantController::class      => Controller\ContractorControllerFactory::class,
             Controller\ContractorProviderController::class   => Controller\ContractorControllerFactory::class,
+            Controller\ContractorCommonController::class     => Controller\ContractorCommonControllerFactory::class,
         ],
     ],
     'form_elements'   => [

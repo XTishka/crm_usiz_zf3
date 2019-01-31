@@ -80,7 +80,7 @@ class RateManager {
         return $options;
     }
 
-    public function getRatesByParams(array $params = null) {
+    public function getRatesByParams(array $params = null, $deleted = false) {
         $options = array_map(function ($data) {
             $periodBegin = new \DateTime($data['period_begin']);
             $periodEnd = new \DateTime($data['period_end']);
@@ -94,7 +94,7 @@ class RateManager {
                 'label'      => sprintf('%s [%s-%s]', $data['rate_type'], $periodBegin->format('d.m.Y'), $periodEnd->format('d.m.Y')),
                 'value'      => $data['rate_id'],
             ];
-        }, $this->rateDbRepository->fetchRatesByParams($params));
+        }, $this->rateDbRepository->fetchRatesByParams($params, $deleted));
         return $options;
     }
 

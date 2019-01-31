@@ -1,9 +1,9 @@
 <?php
 /**
  * @var \Document\Domain\SaleContractEntity $contract
- * @var \Zend\Form\Element\Collection $collection
- * @var \Zend\Form\Form $form
- * @var \Zend\Form\Fieldset $fieldset
+ * @var \Zend\Form\Element\Collection       $collection
+ * @var \Zend\Form\Form                     $form
+ * @var \Zend\Form\Fieldset                 $fieldset
  */
 $form->setAttribute('action', $this->url('saleWagon/loading', ['contract' => $contract->getContractId()]));
 $form->prepare();
@@ -169,7 +169,8 @@ $(document).ready(function () {
     $.ajax('/carrier/value-options', {
         data      : {
             carrier_type: '{$this->contract->getCarrierType()}',
-            country     : '{$this->contract->getCountry()}'
+            country     : '{$this->contract->getCountry()}',
+            company     : '{$this->contract->getCompanyId()}'
         },
         type      : 'post',
         success   : function (res) {
@@ -195,7 +196,11 @@ $(document).ready(function () {
     aSel.on('change', function () {
         bSel.prop('disabled', true);
         $.ajax('/rate/value-options', {
-            data      : {direction: 'outgoingDirection', carrier: aSel.val()},
+            data      : {
+                direction: 'outgoingDirection',
+                carrier: aSel.val(),
+                company     : '{$this->contract->getCompanyId()}'
+             },
             type      : 'post',
             success   : function (res) {
                 bSel.empty();

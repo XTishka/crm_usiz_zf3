@@ -117,15 +117,23 @@ class FinanceController extends AbstractActionController {
         }
 
         if (key_exists('contractor_type', $params) && $params['contractor_type']) {
-            $selectA->where->equalTo('a.contractor_type', trim($params['contractor_type']));
+            if (ContractorAbstract::TYPE_CARRIER != $params['contractor_type']) {
+                $selectA->where->equalTo('a.contractor_type', trim($params['contractor_type']));
+                $selectB->where->notEqualTo('a.contractor_type', ContractorAbstract::TYPE_CARRIER);
+            } else {
+                $selectA->where->equalTo('a.contractor_type', ContractorAbstract::TYPE_CARRIER);
+                $selectB->where->equalTo('a.contractor_type', ContractorAbstract::TYPE_CARRIER);
+            }
         }
 
         if (key_exists('contractor_id', $params) && $params['contractor_id']) {
             if (preg_match('/^(con|car)_\d+$/u', $params['contractor_id'], $matches)) {
                 if ('con' == $matches[1]) {
-                    $selectA->where->equalTo('a.contractor_id', preg_replace('/^\w+(\d+)/', '$1', $params['contractor_id']));
+                    $selectA->where->equalTo('a.contractor_id', preg_replace('/^\w+_(\d+)/', '$1', $params['contractor_id']));
+                    $selectB->where->notEqualTo('a.contractor_type', ContractorAbstract::TYPE_CARRIER);
                 } elseif ('car' == $matches[1]) {
-                    $selectB->where->equalTo('a.contractor_id', preg_replace('/^\w+(\d+)/', '$1', $params['contractor_id']));
+                    $selectA->where->equalTo('a.contractor_type', ContractorAbstract::TYPE_CARRIER);
+                    $selectB->where->equalTo('a.contractor_id', preg_replace('/^\w+_(\d+)/', '$1', $params['contractor_id']));
                 }
             }
         }
@@ -158,10 +166,10 @@ class FinanceController extends AbstractActionController {
                 ->lessThanOrEqualTo(new Expression('DATE(a.created)'), $pEnd->format('Y-m-d'));
         }
 
-        $select = $sql->select(['a' => $selectA->combine($selectB)]);
-        $select->order('created DESC');
+        $select = $sql->select(['ab' => $selectA->combine($selectB)]);
+        $select->order('ab.created DESC');
 
-        //echo $select->getSqlString($this->db->platform);
+        //echo $select->getSqlString($this->db->platform); exit;
 
         $dataSource = $sql->prepareStatementForSqlObject($select)->execute();
 

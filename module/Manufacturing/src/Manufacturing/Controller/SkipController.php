@@ -69,8 +69,10 @@ class SkipController extends AbstractActionController {
         $date = $this->params()->fromQuery('date');
         $furnaces = $this->skipManager->getFurnaceLogByPlantId($company->getPlantId(), $date);
         $viewModel = new ViewModel();
+        $paginator = $this->skipManager->getFurnaceDataByPlantId($company->getPlantId(), $date);
         $viewModel->setVariable('furnaces', $furnaces);
         $viewModel->setVariable('company', $company);
+        $viewModel->setVariable('paginator', $paginator);
         $viewModel->setTerminal(true);
         return $viewModel;
     }

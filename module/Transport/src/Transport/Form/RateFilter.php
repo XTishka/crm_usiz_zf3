@@ -4,6 +4,8 @@ namespace Transport\Form;
 
 use Contractor\Form\Element\ContractorCompanySelect;
 use Contractor\Form\Element\ContractorPlantSelect;
+use Transport\Form\Element\CarrierSelect;
+use Transport\Form\Element\RateTypeSelect;
 use Zend\Form\Form;
 
 class RateFilter extends Form {
@@ -28,6 +30,24 @@ class RateFilter extends Form {
             'options' => [
                 'empty_option' => 'Select the company for the rate',
                 'label'        => 'Company for the rate',
+            ],
+        ]);
+
+        $this->add([
+            'type'    => CarrierSelect::class,
+            'name'    => 'carrier_id',
+            'options' => [
+                'empty_option' => 'Select the carrier for the rate',
+                'label'        => 'Carrier for the rate',
+            ],
+        ]);
+
+        $this->add([
+            'type'    => RateTypeSelect::class,
+            'name'    => 'rate_type',
+            'options' => [
+                'empty_option' => 'Select the type for the rate',
+                'label'        => 'Rate for the rate',
             ],
         ]);
 

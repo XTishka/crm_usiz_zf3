@@ -17,7 +17,7 @@ class DailyFilterForm extends Form implements InputFilterProviderInterface {
         $this->setAttribute('id', 'formShipmentsFilter');
 
         $periodBegin = new \DateTime();
-        $periodEnd = clone $periodBegin;
+        $periodEnd   = clone $periodBegin;
         $periodEnd->add(new \DateInterval('P10D'));
 
         $this->add([
@@ -25,13 +25,13 @@ class DailyFilterForm extends Form implements InputFilterProviderInterface {
             'name'       => 'company_id',
             'attributes' => [
                 'class' => 'input-inline',
-                'style' => 'max-width:150px'
+                'style' => 'max-width:150px',
             ],
             'options'    => [
                 'label'            => 'Select company',
                 'label_attributes' => [
-                    'class' => 'label-inline'
-                ]
+                    'class' => 'label-inline',
+                ],
             ],
         ]);
 
@@ -39,15 +39,16 @@ class DailyFilterForm extends Form implements InputFilterProviderInterface {
             'type'       => 'text',
             'name'       => 'date',
             'attributes' => [
-                'value' => $periodBegin->format('d.m.Y'),
-                'class' => 'input-inline',
-                'size'  => 10
+                'value'        => $periodBegin->format('d.m.Y'),
+                'class'        => 'input-inline',
+                'autocomplete' => 'off',
+                'size'         => 10,
             ],
             'options'    => [
                 'label'            => 'Date',
                 'label_attributes' => [
-                    'class' => 'label-inline'
-                ]
+                    'class' => 'label-inline',
+                ],
             ],
         ]);
 

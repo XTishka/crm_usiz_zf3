@@ -23,8 +23,10 @@ class WarehouseLogManager {
     }
 
     /**
-     * @param $plantId
-     * @return \Zend\Db\ResultSet\ResultSet
+     * @param      $plantId
+     * @param null $date
+     *
+     * @return array
      * @throws Exception\ErrorException
      */
     public function getTotalMaterialBalances($plantId, $date = null) {
@@ -86,9 +88,9 @@ class WarehouseLogManager {
         return new Result('success', 'Warehouse transaction successfully saved', $object);
     }
 
-    public function deleteLogByWagonId($wagonId) {
+    public function deleteLogByWagonId($wagonId, $direction) {
         try {
-            $this->warehouseLogDbRepository->deleteLogByWagonId($wagonId);
+            $this->warehouseLogDbRepository->deleteLogByWagonId($wagonId, $direction);
         } catch (Exception\ErrorException $exception) {
             return new Result('error', $exception->getMessage());
         }

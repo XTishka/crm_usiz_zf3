@@ -394,7 +394,7 @@ class SaleWagonManager {
             // Удаление старых записей о задолженностях
             $this->financeManager->deleteTransactionByWagonId($object->getWagonId(), TransactionEntity::CONTRACT_SALE);
             // Удаление старых записей по складах
-            $this->warehouseLogManager->deleteLogByWagonId($object->getWagonId());
+            $this->warehouseLogManager->deleteLogByWagonId($object->getWagonId(), WarehouseLogEntity::DIRECTION_OUTPUT);
 
             if ($contract::CONDITIONS_TYPE_FCA != $contract->getConditions()) {
 
@@ -535,8 +535,7 @@ class SaleWagonManager {
             $warehouseTransaction->setResourceId($contract->getProductId());
             $warehouseTransaction->setWagonId($object->getWagonId());
             $warehouseTransaction->setResourceWeight($object->getLoadingWeight());
-            $warehouseTransaction->setComment(sprintf('Отгрузка продукции по договору %s в вагон %s',
-                $contract->getContractNumber(), $object->getWagonNumber()));
+            $warehouseTransaction->setComment(sprintf('Отгрузка продукции по договору %s в вагон %s', $contract->getContractNumber(), $object->getWagonNumber()));
             $warehouseTransaction->setCreated($object->getLoadingDate());
 
             $this->warehouseLogManager->output($warehouseTransaction);
@@ -564,7 +563,7 @@ class SaleWagonManager {
             // Удаление старых записей о задолженностях
             $this->financeManager->deleteTransactionByWagonId($wagonId, TransactionEntity::CONTRACT_SALE);
             // Удаление старых записей по складах
-            $this->warehouseLogManager->deleteLogByWagonId($wagonId);
+            $this->warehouseLogManager->deleteLogByWagonId($wagonId, WarehouseLogEntity::DIRECTION_OUTPUT);
             $wagonId = intval($wagonId);
             $this->saleWagonDbRepository->deleteWagonById($wagonId);
         } catch (Exception\ErrorException $exception) {
@@ -582,7 +581,7 @@ class SaleWagonManager {
                     // Удаление старых записей о задолженностях
                     $this->financeManager->deleteTransactionByWagonId($wagonId, TransactionEntity::CONTRACT_SALE);
                     // Удаление старых записей по складах
-                    $this->warehouseLogManager->deleteLogByWagonId($wagonId);
+                    $this->warehouseLogManager->deleteLogByWagonId($wagonId, WarehouseLogEntity::DIRECTION_OUTPUT);
                     $wagonId = intval($wagonId);
                     $this->saleWagonDbRepository->deleteWagonById($wagonId);
                 }

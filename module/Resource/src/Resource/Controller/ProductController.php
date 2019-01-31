@@ -40,6 +40,7 @@ class ProductController extends AbstractActionController {
         $pageNumber = $this->params()->fromQuery('page');
         $paginator = $this->productManager->getProductsPaginator();
         $paginator->setCurrentPageNumber($pageNumber);
+        $paginator->setItemCountPerPage(100);
         $viewModel = new ViewModel();
         $viewModel->setVariable('messenger', $messenger);
         $viewModel->setVariable('paginator', $paginator);

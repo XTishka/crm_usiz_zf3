@@ -75,7 +75,8 @@ class ApiController extends AbstractActionController {
 
     public function bankBalancesAction() {
         $companyId = $this->params()->fromRoute('company');
-        $paginator = $this->apiDbRepository->getBankBalancesPaginator($companyId);
+        $date = $this->params()->fromQuery('date');
+        $paginator = $this->apiDbRepository->getBankBalancesPaginator($companyId, $date);
         $viewModel = new ViewModel();
         $viewModel->setTerminal(true);
         $viewModel->setVariable('paginator', $paginator);

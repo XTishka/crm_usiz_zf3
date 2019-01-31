@@ -3,6 +3,7 @@
 namespace Document\Service\Repository;
 
 use Application\Service\Repository;
+use Contractor\Service\Repository\DatabaseContractorAbstract;
 use Transport\Service\Repository\CarrierDb;
 use Document\Domain\PurchaseWagonEntity as WagonEntity;
 use Document\Exception;
@@ -37,6 +38,9 @@ class PurchaseWagonDb extends Repository\AbstractDb {
         $select = $sql->select(['a' => self::TABLE_PURCHASE_WAGONS]);
         $select->join(['b' => PurchaseContractDb::TABLE_PURCHASE_CONTRACTS], 'a.contract_id = b.contract_id', []);
         $select->join(['c' => MaterialDb::TABLE_MATERIALS], 'b.material_id = c.material_id', ['material_name']);
+        $select->join(['d' => DatabaseContractorAbstract::TABLE_CONTRACTORS], 'b.provider_id = d.contractor_id', [
+            'contractor_name'
+        ]);
         $select->columns([
             'weight'   => new Expression('SUM(loading_weight)'),
             'amount'   => new Expression('SUM(material_price + delivery_price)'),
@@ -46,8 +50,13 @@ class PurchaseWagonDb extends Repository\AbstractDb {
             ->lessThan('a.loading_date', 'a.unloading_date', Where::TYPE_IDENTIFIER, Where::TYPE_IDENTIFIER)
             ->or
             ->isNull('a.unloading_date');
-        $select->where->lessThanOrEqualTo('a.loading_date', $date->format('Y-m-d'));
-        $select->group(['c.material_id']);
+        $select->where->lessThanOrEqualTo('a.loading_date', $date->format('Y-m-d'))
+            ->and->nest()
+            ->greaterThan('a.unloading_date', $date->format('Y-m-d'))
+            ->or
+            ->isNull('a.unloading_date');
+
+        $select->group(['c.material_id', 'd.contractor_id']);
 
         //echo $select->getSqlString($this->dbAdapter->platform);
 

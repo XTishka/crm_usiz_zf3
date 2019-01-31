@@ -3,10 +3,12 @@
 namespace Manufacturing\Service\Repository;
 
 use Application\Service\Repository\AbstractDb;
+use Contractor\Service\Repository\DatabaseContractorAbstract;
 use DateTime;
 use Manufacturing\Domain\SkipCommonEntity;
 use Manufacturing\Domain\SkipMaterialEntity;
 use Manufacturing\Exception\ErrorException;
+use Resource\Service\Repository\MaterialDb;
 use Zend\Db\Adapter\Driver\ResultInterface;
 use Zend\Db\ResultSet\HydratingResultSet;
 use Zend\Db\ResultSet\ResultSet;
@@ -17,11 +19,42 @@ use Zend\Db\Sql\Sql;
 class DatabaseSkip extends AbstractDb {
 
     const TABLE_SKIP_COMMON    = 'skip_common';
+
     const TABLE_SKIP_MATERIALS = 'skip_materials';
+
+    public function fetchMaterialsData($plantId, DateTime $date = null) {
+        $date = ($date instanceof DateTime) ? $date : new DateTime();
+        $sql  = new Sql($this->dbAdapter);
+
+        $select = $sql->select(['a' => self::TABLE_SKIP_COMMON]);
+        $select->join(['b' => self::TABLE_SKIP_MATERIALS], 'a.skip_id = b.skip_id', [
+            'weight'         => new Expression('SUM(weight)'),
+            'dropout_weight' => new Expression('SUM(dropout_weight)'),
+            'product_weight' => new Expression('SUM(product_weight)'),
+        ]);
+        $select->join(['c' => MaterialDb::TABLE_MATERIALS], 'b.material_id = c.material_id', ['material_name']);
+        $select->join(['d' => DatabaseContractorAbstract::TABLE_CONTRACTORS], 'b.provider_id = d.contractor_id', ['contractor_name']);
+
+        $dateStart = clone $date;
+        $dateStart->modify('first day of this month');
+
+        $dateEnd = clone $date;
+        $dateEnd->modify('last day of this month');
+
+        $select->where->between('date', $dateStart->format('Y-m-d'), $dateEnd->format('Y-m-d'));
+
+        $select->group(['b.material_id', 'b.provider_id']);
+
+        $dataSource = $sql->prepareStatementForSqlObject($select)->execute($select);
+        $resultSet  = new ResultSet();
+        $resultSet->initialize($dataSource);
+
+        return $resultSet;
+    }
 
     public function fetchSkipLogsArray($furnaceId, DateTime $date = null) {
         $date = ($date instanceof DateTime) ? $date : new DateTime();
-        $sql = new Sql($this->dbAdapter);
+        $sql  = new Sql($this->dbAdapter);
 
         /*
         $select = $sql->select(['a' => self::TABLE_SKIP_COMMON]);
@@ -40,7 +73,8 @@ class DatabaseSkip extends AbstractDb {
 
         $selectA = $sql->select(['a' => self::TABLE_SKIP_COMMON]);
         $selectA->columns(['skip_id', 'date']);
-        $selectA->join(['b' => self::TABLE_SKIP_MATERIALS], 'a.skip_id = b.skip_id', ['weight_material' => new Expression('SUM(b.weight)'), 'product_weight', 'dropout_weight']);
+        $selectA->join(['b' => self::TABLE_SKIP_MATERIALS], 'a.skip_id = b.skip_id',
+            ['weight_material' => new Expression('SUM(b.weight)'), 'product_weight', 'dropout_weight']);
         $selectA->where->equalTo('a.furnace_id', $furnaceId);
         $selectA->where->greaterThanOrEqualTo('date', $date->format('Y-m-d'));
         $selectA->where->notEqualTo('b.dropout', 0);
@@ -49,7 +83,7 @@ class DatabaseSkip extends AbstractDb {
         $selectB = $sql->select(['a' => self::TABLE_SKIP_COMMON]);
         $selectB->columns(['skip_id', 'date']);
         $selectB->join(['b' => self::TABLE_SKIP_MATERIALS], 'a.skip_id = b.skip_id', [
-            'weight_coal' => new Expression('SUM(b.weight)')
+            'weight_coal' => new Expression('SUM(b.weight)'),
         ]);
         $selectB->where->equalTo('a.furnace_id', $furnaceId);
         $selectB->where->greaterThanOrEqualTo('date', $date->format('Y-m-d'));
@@ -60,7 +94,7 @@ class DatabaseSkip extends AbstractDb {
         $select->join(['q2' => $selectB], 'q1.skip_id = q2.skip_id', ['weight_coal']);
 
         $dataSource = $sql->prepareStatementForSqlObject($select)->execute();
-        $resultSet = new ResultSet(ResultSet::TYPE_ARRAY);
+        $resultSet  = new ResultSet(ResultSet::TYPE_ARRAY);
         $resultSet->initialize($dataSource);
         $data = $resultSet->toArray();
 
@@ -71,18 +105,20 @@ class DatabaseSkip extends AbstractDb {
 
     /**
      * @param int $skipId
+     *
      * @return SkipCommonEntity
      * @throws ErrorException
      */
     public function fetchOneSkipById(int $skipId) {
-        $sql = new Sql($this->dbAdapter);
+        $sql          = new Sql($this->dbAdapter);
         $selectCommon = $sql->select(self::TABLE_SKIP_COMMON);
         $selectCommon->where->equalTo('skip_id', $skipId);
 
         $dataSourceCommon = $sql->prepareStatementForSqlObject($selectCommon)->execute();
 
-        if (!$dataSourceCommon instanceof ResultInterface || !$dataSourceCommon->count())
+        if (!$dataSourceCommon instanceof ResultInterface || !$dataSourceCommon->count()) {
             throw new ErrorException('Skip data was not found.');
+        }
 
         $resultSetCommon = new HydratingResultSet($this->hydrator, $this->prototype);
         $resultSetCommon->initialize($dataSourceCommon);
@@ -95,8 +131,9 @@ class DatabaseSkip extends AbstractDb {
 
         $dataSourceMaterial = $sql->prepareStatementForSqlObject($selectMaterial)->execute();
 
-        if (!$dataSourceMaterial instanceof ResultInterface || !$dataSourceMaterial->count())
+        if (!$dataSourceMaterial instanceof ResultInterface || !$dataSourceMaterial->count()) {
             throw new ErrorException('Skip material data was not found.');
+        }
 
         $resultSetMaterial = new HydratingResultSet($this->hydrator, new SkipMaterialEntity());
         $resultSetMaterial->initialize($dataSourceMaterial);
@@ -113,6 +150,7 @@ class DatabaseSkip extends AbstractDb {
 
     /**
      * @param SkipCommonEntity $object
+     *
      * @return SkipCommonEntity
      * @throws ErrorException
      */
@@ -125,41 +163,46 @@ class DatabaseSkip extends AbstractDb {
             $action = $sql->update(self::TABLE_SKIP_COMMON);
             $action->set($data);
             $action->where->equalTo('skip_id', $skipId);
-        } else {
+        }
+        else {
             $action = $sql->insert(self::TABLE_SKIP_COMMON);
             $action->values($data);
         }
 
         $dataSource = $sql->prepareStatementForSqlObject($action)->execute();
 
-        if (!$dataSource instanceof ResultInterface)
+        if (!$dataSource instanceof ResultInterface) {
             throw new ErrorException('Skip data was not saved.');
+        }
 
         if ($generatedId = $dataSource->getGeneratedValue()) {
             $object->setSkipId($generatedId);
-        } else {
+        }
+        else {
             $delete = $sql->delete(self::TABLE_SKIP_MATERIALS);
             $delete->where->equalTo('skip_id', $object->getSkipId());
             $dataSource = $sql->prepareStatementForSqlObject($delete)->execute();
-            if (!$dataSource instanceof ResultInterface)
+            if (!$dataSource instanceof ResultInterface) {
                 throw new ErrorException('Skip materials data was not deleted.');
+            }
         }
 
         /** @var SkipMaterialEntity $material */
         foreach ($object->getMaterials() as $material) {
             if ($material->getDropout()) {
-                $dropoutWeight = ((float)$material->getWeight() * 100) / (100 - $material->getDropout()) - $material->getWeight();
+                $dropoutWeight = ((float) $material->getWeight() * 100) / (100 - $material->getDropout()) - $material->getWeight();
                 $material->setDropoutWeight($dropoutWeight);
                 $productWeight = 0.58 * $material->getWeight();
                 $material->setProductWeight($productWeight);
             }
-            $values = $this->hydrator->extract($material);
+            $values            = $this->hydrator->extract($material);
             $values['skip_id'] = $object->getSkipId();
-            $insert = $sql->insert(self::TABLE_SKIP_MATERIALS);
+            $insert            = $sql->insert(self::TABLE_SKIP_MATERIALS);
             $insert->values($values);
             $dataSource = $sql->prepareStatementForSqlObject($insert)->execute();
-            if (!$dataSource instanceof ResultInterface)
+            if (!$dataSource instanceof ResultInterface) {
                 throw new ErrorException('Skip material data was not saved.');
+            }
         }
 
         return $object;
@@ -167,6 +210,7 @@ class DatabaseSkip extends AbstractDb {
 
     /**
      * @param $skipId
+     *
      * @throws ErrorException
      */
     public function deleteSkip($skipId) {
@@ -175,14 +219,16 @@ class DatabaseSkip extends AbstractDb {
         $action = $sql->delete(self::TABLE_SKIP_MATERIALS);
         $action->where->equalTo('skip_id', $skipId);
         $dataSource = $sql->prepareStatementForSqlObject($action)->execute();
-        if (!$dataSource instanceof ResultInterface)
+        if (!$dataSource instanceof ResultInterface) {
             throw new ErrorException('Skip material transaction was not saved.');
+        }
 
         $action = $sql->delete(self::TABLE_SKIP_COMMON);
         $action->where->equalTo('skip_id', $skipId);
         $dataSource = $sql->prepareStatementForSqlObject($action)->execute();
-        if (!$dataSource instanceof ResultInterface)
+        if (!$dataSource instanceof ResultInterface) {
             throw new ErrorException('Skip common transaction was not saved.');
+        }
     }
 
 }

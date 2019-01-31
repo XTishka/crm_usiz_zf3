@@ -7,9 +7,6 @@ use DateTime;
 
 abstract class ContractorAbstract {
 
-    /**
-     * Не явный
-     */
     const TYPE_COMMON = 'common';
 
     /**
@@ -55,92 +52,107 @@ abstract class ContractorAbstract {
 
     /**
      * Идентификатор контрагента
+     *
      * @var int
      */
     protected $contractorId;
 
     /**
      * Тип контрагента
+     *
      * @var null
      */
-    protected $contractorType;
+    protected $contractorType = null;
 
     /**
      * Название контрагента
+     *
      * @var string
      */
     protected $contractorName = '';
 
     /**
      * Полное название обслуживающего клиента
+     *
      * @var string
      */
     protected $fullName = '';
 
     /**
      * Описание обслуживающего клиента
+     *
      * @var string
      */
     protected $description = '';
 
     /**
      * Код клиента в ЕГДРПОУ
+     *
      * @var string
      */
     protected $registerCode = '';
 
     /**
      * Рассчетный счет клиента
+     *
      * @var string
      */
     protected $bankAccount = '';
 
     /**
      * Объект почтового адреса обслуживающего клиента
+     *
      * @var Domain\AddressValueObject
      */
     protected $address;
 
     /**
      * An array containing EmailValueObject objects
+     *
      * @var array
      */
     protected $emails = [];
 
     /**
      * An array containing PhoneValueObject objects
+     *
      * @var array
      */
     protected $phones = [];
 
     /**
      * Объект контактного лица обслуживающего клиента
+     *
      * @var Domain\PersonValueObject
      */
     protected $person;
 
     /**
      * Дата последнего обновления записи в базе данных
+     *
      * @var DateTime
      */
     protected $updated;
 
     /**
      * Дата создания записи в базе данных
+     *
      * @var DateTime
      */
     protected $created;
 
     /**
      * Возвращает идентификатор контрагента
+     *
      * @return int
      */
     public function getContractorId(): int {
-        return (int)$this->contractorId;
+        return (int) $this->contractorId;
     }
 
     /**
      * Утанавливает идентификатор клиента
+     *
      * @param int $contractorId
      */
     public function setContractorId(int $contractorId) {
@@ -149,23 +161,22 @@ abstract class ContractorAbstract {
 
     /**
      * Возвращает тип контрагента
+     *
      * @return string
      */
     public function getContractorType(): string {
-        if ($this->contractorType == self::TYPE_COMMON) $this->contractorType = 'test';
         return $this->contractorType;
     }
 
-    /**
-     * Возвращает тип контрагента
-     * @return string
-     */
-    public function setContractorType(): string {
-        return $this->contractorType;
+    public function setContractorType($type) {
+        if (self::TYPE_COMMON == $this->contractorType) {
+            $this->contractorType = trim($type);
+        }
     }
 
     /**
      * Возвращает название контрагента
+     *
      * @return string
      */
     public function getContractorName(): string {
@@ -174,6 +185,7 @@ abstract class ContractorAbstract {
 
     /**
      * Устанавливает название контрагента
+     *
      * @param string $contractorName
      */
     public function setContractorName(string $contractorName) {
@@ -182,6 +194,7 @@ abstract class ContractorAbstract {
 
     /**
      * Возвращает полное название клиента
+     *
      * @return string
      */
     public function getFullName(): string {
@@ -190,6 +203,7 @@ abstract class ContractorAbstract {
 
     /**
      * Устанавливает полное название клиента
+     *
      * @param string $fullName
      */
     public function setFullName(string $fullName) {
@@ -198,6 +212,7 @@ abstract class ContractorAbstract {
 
     /**
      * Возвращает описание клиента
+     *
      * @return string
      */
     public function getDescription(): string {
@@ -206,6 +221,7 @@ abstract class ContractorAbstract {
 
     /**
      * Устанавливает описание клиента
+     *
      * @param string $description
      */
     public function setDescription(string $description) {
@@ -214,6 +230,7 @@ abstract class ContractorAbstract {
 
     /**
      * Возвращает код клиента в ЕГДРПОУ
+     *
      * @return string
      */
     public function getRegisterCode(): string {
@@ -222,6 +239,7 @@ abstract class ContractorAbstract {
 
     /**
      * Устанавливает код клиента в ЕГДРПОУ
+     *
      * @param string $registerCode
      */
     public function setRegisterCode(string $registerCode) {
@@ -230,6 +248,7 @@ abstract class ContractorAbstract {
 
     /**
      * Возвращает рассчетный счет клиента
+     *
      * @return string
      */
     public function getBankAccount(): string {
@@ -238,6 +257,7 @@ abstract class ContractorAbstract {
 
     /**
      * Устанавливает рассчетный счет клиента
+     *
      * @param string $bankAccount
      */
     public function setBankAccount(string $bankAccount) {
@@ -246,16 +266,19 @@ abstract class ContractorAbstract {
 
     /**
      * Возвращает объект адреса клиента
+     *
      * @return Domain\AddressValueObject
      */
     public function getAddress(): Domain\AddressValueObject {
-        if (!$this->address instanceof Domain\AddressValueObject)
+        if (!$this->address instanceof Domain\AddressValueObject) {
             $this->address = Domain\AddressValueObject::factory();
+        }
         return $this->address;
     }
 
     /**
      * Устанавливает объект адреса клиента
+     *
      * @param Domain\AddressValueObject $address
      */
     public function setAddress(Domain\AddressValueObject $address) {
@@ -264,6 +287,7 @@ abstract class ContractorAbstract {
 
     /**
      * Возвращает массив объектов EmailValueObject с адресами электронной почты клиента
+     *
      * @return array
      */
     public function getEmails(): array {
@@ -272,6 +296,7 @@ abstract class ContractorAbstract {
 
     /**
      * Устанавливает массив объектов EmailValueObject с адресами электронной почты клиента
+     *
      * @param array $emails
      */
     public function setEmails(array $emails) {
@@ -280,6 +305,7 @@ abstract class ContractorAbstract {
 
     /**
      * Возвращает массив объектов PhoneValueObject с номерами телефонов клиента
+     *
      * @return array
      */
     public function getPhones(): array {
@@ -288,6 +314,7 @@ abstract class ContractorAbstract {
 
     /**
      * Устанавливает массив объектов PhoneValueObject с номерами телефонов клиента
+     *
      * @param array $phones
      */
     public function setPhones(array $phones) {
@@ -296,16 +323,19 @@ abstract class ContractorAbstract {
 
     /**
      * Возвращает объект PersonValueObject с именем контактного лица клиента
+     *
      * @return Domain\PersonValueObject
      */
     public function getPerson(): Domain\PersonValueObject {
-        if (!$this->person instanceof Domain\PersonValueObject)
+        if (!$this->person instanceof Domain\PersonValueObject) {
             $this->person = Domain\PersonValueObject::factory();
+        }
         return $this->person;
     }
 
     /**
      * Устанавливает объект PersonValueObject с именем контактного лица клиента
+     *
      * @param Domain\PersonValueObject $person
      */
     public function setPerson(Domain\PersonValueObject $person) {
@@ -315,16 +345,19 @@ abstract class ContractorAbstract {
     /**
      * Возвращает объект даты и времени обновления текущей записи, если значение пустое,
      * тогда будет возвращен объект DateTime с текущим значением даты и времени.
+     *
      * @return DateTime
      */
     public function getUpdated(): DateTime {
-        if (!$this->updated instanceof DateTime)
+        if (!$this->updated instanceof DateTime) {
             $this->updated = new DateTime($this->updated);
+        }
         return $this->updated;
     }
 
     /**
      * Устанавливает объект даты и времени обновления текущей записи.
+     *
      * @param DateTime $updated
      */
     public function setUpdated(DateTime $updated) {
@@ -334,16 +367,19 @@ abstract class ContractorAbstract {
     /**
      * Возвращает объект даты и времени создания текущей записи, если значение пустое,
      * тогда будет возвращен объект DateTime с текущим значением даты и времени.
+     *
      * @return DateTime
      */
     public function getCreated(): DateTime {
-        if (!$this->created instanceof DateTime)
+        if (!$this->created instanceof DateTime) {
             $this->created = new DateTime($this->created);
+        }
         return $this->created;
     }
 
     /**
      * Устанавливает объект даты и времени создания текущей записи.
+     *
      * @param DateTime $created
      */
     public function setCreated(DateTime $created) {

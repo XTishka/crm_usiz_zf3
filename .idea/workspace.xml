@@ -1,18 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="39a7e7bb-839e-4cc8-9bc0-47f1f661ff9c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/module/Contractor/src/Contractor/Form/Element/ContractorAllSelect.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Contractor/src/Contractor/Form/Element/ContractorAllSelectFactory.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Contractor/src/Contractor/Form/Element/ContractorTypeSelect.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Reports/src/Reports/Controller/FinanceController.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Reports/src/Reports/Controller/FinanceControllerFactory.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Reports/src/Reports/Form/FinanceFilterForm.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/module/Reports/view/reports/finance/index.phtml" afterDir="false" />
+    <list default="true" id="39a7e7bb-839e-4cc8-9bc0-47f1f661ff9c" name="Default Changelist" comment="- Финансовый отчет">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/deployment.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deployment.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Application/config/navigation.config.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Application/config/navigation.config.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Application/language/ru_RU.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Application/language/ru_RU.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Application/src/Application/Controller/ApiController.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Application/src/Application/Controller/ApiController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Application/src/Application/Controller/DashboardController.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Application/src/Application/Controller/DashboardController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Application/src/Application/Form/Tax.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Application/src/Application/Form/Tax.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Application/src/Application/InputFilter/Tax.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Application/src/Application/InputFilter/Tax.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/AbstractContainer.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/Finance/AbstractContainer.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Application/src/Application/Model/SkipWeightContainer.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Application/src/Application/Model/SkipWeightContainer.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Application/src/Application/Service/Repository/ApiDb.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Application/src/Application/Service/Repository/ApiDb.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Application/src/Application/Validator/Db/NoRecordExists.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Application/src/Application/Validator/Db/NoRecordExists.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Application/view/application/dashboard/finance.phtml" beforeDir="false" afterPath="$PROJECT_DIR$/module/Application/view/application/dashboard/finance.phtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Application/view/application/dashboard/index.phtml" beforeDir="false" afterPath="$PROJECT_DIR$/module/Application/view/application/dashboard/index.phtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Contractor/config/module.config.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Contractor/config/module.config.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Contractor/src/Contractor/Controller/ContractorCommonController.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Contractor/src/Contractor/Controller/ContractorCommonController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Contractor/src/Contractor/Controller/ContractorCommonControllerFactory.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Contractor/src/Contractor/Controller/ContractorCommonControllerFactory.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Contractor/src/Contractor/Entity/ContractorAbstract.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Contractor/src/Contractor/Entity/ContractorAbstract.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Contractor/src/Contractor/Service/ContractorAbstractManager.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Contractor/src/Contractor/Service/ContractorAbstractManager.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Contractor/src/Contractor/Service/Repository/DatabaseContractorAbstract.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Contractor/src/Contractor/Service/Repository/DatabaseContractorAbstract.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Contractor/src/Contractor/Service/Repository/DatabaseContractorCommon.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Contractor/src/Contractor/Service/Repository/DatabaseContractorCommon.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Contractor/view/contractor/contractor-common/index.phtml" beforeDir="false" afterPath="$PROJECT_DIR$/module/Contractor/view/contractor/contractor-common/index.phtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Contractor/view/contractor/contractor-plant/edit.phtml" beforeDir="false" afterPath="$PROJECT_DIR$/module/Contractor/view/contractor/contractor-plant/edit.phtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Dashboard/src/Dashboard/Controller/SaleContractController.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Dashboard/src/Dashboard/Controller/SaleContractController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Dashboard/view/dashboard/sale-wagon/loading.phtml" beforeDir="false" afterPath="$PROJECT_DIR$/module/Dashboard/view/dashboard/sale-wagon/loading.phtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Document/src/Document/Controller/SaleContractController.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Document/src/Document/Controller/SaleContractController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Document/src/Document/Service/PurchaseWagonManager.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Document/src/Document/Service/PurchaseWagonManager.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Document/src/Document/Service/Repository/FinanceTransactionDb.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Document/src/Document/Service/Repository/FinanceTransactionDb.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Document/src/Document/Service/Repository/PurchaseWagonDb.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Document/src/Document/Service/Repository/PurchaseWagonDb.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Document/src/Document/Service/SaleWagonManager.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Document/src/Document/Service/SaleWagonManager.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Document/view/document/sale-wagon/loading.phtml" beforeDir="false" afterPath="$PROJECT_DIR$/module/Document/view/document/sale-wagon/loading.phtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Manufacturing/src/Manufacturing/Controller/SkipController.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Manufacturing/src/Manufacturing/Controller/SkipController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Manufacturing/src/Manufacturing/Form/Fieldset/SkipMaterial.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Manufacturing/src/Manufacturing/Form/Fieldset/SkipMaterial.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Manufacturing/src/Manufacturing/Service/Repository/DatabaseSkip.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Manufacturing/src/Manufacturing/Service/Repository/DatabaseSkip.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Manufacturing/src/Manufacturing/Service/Repository/WarehouseLogDb.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Manufacturing/src/Manufacturing/Service/Repository/WarehouseLogDb.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Manufacturing/src/Manufacturing/Service/SkipManager.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Manufacturing/src/Manufacturing/Service/SkipManager.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Manufacturing/src/Manufacturing/Service/WarehouseLogManager.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Manufacturing/src/Manufacturing/Service/WarehouseLogManager.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Manufacturing/view/manufacturing/skip/index.phtml" beforeDir="false" afterPath="$PROJECT_DIR$/module/Manufacturing/view/manufacturing/skip/index.phtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/module/Reports/src/Reports/Controller/DailyController.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Reports/src/Reports/Controller/DailyController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Reports/src/Reports/Controller/DailyControllerFactory.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Reports/src/Reports/Controller/DailyControllerFactory.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Reports/src/Reports/Controller/FinanceController.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Reports/src/Reports/Controller/FinanceController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/module/Reports/src/Reports/Controller/PurchaseWagonsController.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Reports/src/Reports/Controller/PurchaseWagonsController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Reports/src/Reports/Form/DailyFilterForm.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Reports/src/Reports/Form/DailyFilterForm.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Reports/view/reports/daily/index.phtml" beforeDir="false" afterPath="$PROJECT_DIR$/module/Reports/view/reports/daily/index.phtml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/module/Reports/view/reports/purchase-wagons/index.phtml" beforeDir="false" afterPath="$PROJECT_DIR$/module/Reports/view/reports/purchase-wagons/index.phtml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Resource/src/Resource/Controller/ProductController.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Resource/src/Resource/Controller/ProductController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Transport/src/Transport/Controller/CarrierController.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Transport/src/Transport/Controller/CarrierController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Transport/src/Transport/Controller/RateController.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Transport/src/Transport/Controller/RateController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Transport/src/Transport/Controller/StationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Transport/src/Transport/Controller/StationController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Transport/src/Transport/Form/AddRate.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Transport/src/Transport/Form/AddRate.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Transport/src/Transport/Form/Rate.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Transport/src/Transport/Form/Rate.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Transport/src/Transport/Form/RateFilter.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Transport/src/Transport/Form/RateFilter.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Transport/src/Transport/InputFilter/Rate.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Transport/src/Transport/InputFilter/Rate.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Transport/src/Transport/Service/RateManager.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Transport/src/Transport/Service/RateManager.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Transport/src/Transport/Service/Repository/RateDb.php" beforeDir="false" afterPath="$PROJECT_DIR$/module/Transport/src/Transport/Service/Repository/RateDb.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/module/Transport/view/transport/rate/index.phtml" beforeDir="false" afterPath="$PROJECT_DIR$/module/Transport/view/transport/rate/index.phtml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -54,35 +100,7 @@
     <select />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/module/Reports/src/Reports/Controller/DailyController.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="151">
-              <caret line="101" selection-start-line="101" selection-end-line="101" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/module/Contractor/src/Contractor/Entity/ContractorAbstract.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="714">
-              <caret line="52" column="10" selection-start-line="52" selection-start-column="10" selection-end-line="52" selection-end-column="10" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/module/Reports/view/reports/daily/index.phtml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2044">
-              <caret line="146" column="61" selection-start-line="146" selection-start-column="61" selection-end-line="146" selection-end-column="61" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf />
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
@@ -132,7 +150,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/module/Contractor/src/Contractor/Form/ContractorCommonFilterFactory.php" />
         <option value="$PROJECT_DIR$/module/Contractor/config/module.config.php" />
         <option value="$PROJECT_DIR$/module/Contractor/src/Contractor/Controller/ContractorCommonControllerFactory.php" />
         <option value="$PROJECT_DIR$/module/Contractor/src/Contractor/Form/ContractorAbstract.php" />
@@ -183,6 +200,7 @@
         <option value="$PROJECT_DIR$/module/Reports/src/Reports/Controller/PurchaseWagonsController.php" />
         <option value="$PROJECT_DIR$/module/Reports/view/reports/purchase-wagons/index.phtml" />
         <option value="$PROJECT_DIR$/module/Reports/src/Reports/Controller/DailyController.php" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -299,98 +317,33 @@
     </include_path>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="736" />
+    <option name="x" value="735" />
     <option name="width" value="1191" />
     <option name="height" value="1167" />
   </component>
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
-    <ConfirmationsSetting value="2" id="Add" />
-  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
             <path>
-              <item name="CRM USIZ :: ZF3" type="b2602c69:ProjectViewProjectNode" />
+              <item name="dev-usiz.local" type="b2602c69:ProjectViewProjectNode" />
               <item name="dev-usiz.local" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
-              <item name="CRM USIZ :: ZF3" type="b2602c69:ProjectViewProjectNode" />
+              <item name="dev-usiz.local" type="b2602c69:ProjectViewProjectNode" />
               <item name="dev-usiz.local" type="462c0819:PsiDirectoryNode" />
               <item name="module" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="CRM USIZ :: ZF3" type="b2602c69:ProjectViewProjectNode" />
-              <item name="dev-usiz.local" type="462c0819:PsiDirectoryNode" />
-              <item name="module" type="462c0819:PsiDirectoryNode" />
-              <item name="Reports" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="CRM USIZ :: ZF3" type="b2602c69:ProjectViewProjectNode" />
-              <item name="dev-usiz.local" type="462c0819:PsiDirectoryNode" />
-              <item name="module" type="462c0819:PsiDirectoryNode" />
-              <item name="Reports" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="CRM USIZ :: ZF3" type="b2602c69:ProjectViewProjectNode" />
-              <item name="dev-usiz.local" type="462c0819:PsiDirectoryNode" />
-              <item name="module" type="462c0819:PsiDirectoryNode" />
-              <item name="Reports" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="Reports" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="CRM USIZ :: ZF3" type="b2602c69:ProjectViewProjectNode" />
-              <item name="dev-usiz.local" type="462c0819:PsiDirectoryNode" />
-              <item name="module" type="462c0819:PsiDirectoryNode" />
-              <item name="Reports" type="462c0819:PsiDirectoryNode" />
-              <item name="view" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="CRM USIZ :: ZF3" type="b2602c69:ProjectViewProjectNode" />
-              <item name="dev-usiz.local" type="462c0819:PsiDirectoryNode" />
-              <item name="module" type="462c0819:PsiDirectoryNode" />
-              <item name="Reports" type="462c0819:PsiDirectoryNode" />
-              <item name="view" type="462c0819:PsiDirectoryNode" />
-              <item name="reports" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="CRM USIZ :: ZF3" type="b2602c69:ProjectViewProjectNode" />
-              <item name="dev-usiz.local" type="462c0819:PsiDirectoryNode" />
-              <item name="module" type="462c0819:PsiDirectoryNode" />
-              <item name="Reports" type="462c0819:PsiDirectoryNode" />
-              <item name="view" type="462c0819:PsiDirectoryNode" />
-              <item name="reports" type="462c0819:PsiDirectoryNode" />
-              <item name="daily" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="CRM USIZ :: ZF3" type="b2602c69:ProjectViewProjectNode" />
-              <item name="dev-usiz.local" type="462c0819:PsiDirectoryNode" />
-              <item name="module" type="462c0819:PsiDirectoryNode" />
-              <item name="Reports" type="462c0819:PsiDirectoryNode" />
-              <item name="view" type="462c0819:PsiDirectoryNode" />
-              <item name="reports" type="462c0819:PsiDirectoryNode" />
-              <item name="finance" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="CRM USIZ :: ZF3" type="b2602c69:ProjectViewProjectNode" />
-              <item name="dev-usiz.local" type="462c0819:PsiDirectoryNode" />
-              <item name="module" type="462c0819:PsiDirectoryNode" />
-              <item name="Reports" type="462c0819:PsiDirectoryNode" />
-              <item name="view" type="462c0819:PsiDirectoryNode" />
-              <item name="reports" type="462c0819:PsiDirectoryNode" />
-              <item name="purchase-wagons" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -400,7 +353,7 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-    <property name="settings.editor.selected.configurable" value="terminal" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -467,6 +420,7 @@
       <workItem from="1547562988904" duration="11360000" />
       <workItem from="1547722863924" duration="599000" />
       <workItem from="1548233160479" duration="1486000" />
+      <workItem from="1548930909377" duration="309000" />
     </task>
     <task id="LOCAL-00001" summary="- Добавляет фильтрацию для Перевозчиков по коду ОКПО и Названию&#10;- Исправляет отображение суммы веса в договорах &#10;  (была ошибка, не считало тысячные)&#10;- Исправлена ошибка процента отсева при добавлении скипов">
       <created>1541689056611</created>
@@ -507,12 +461,12 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="121602000" />
+    <option name="totallyTimeSpent" value="121973000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1176" extended-state="6" />
+    <frame x="-7" y="-7" width="1295" height="704" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49953052" visible="true" weight="0.20052083" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49953052" visible="true" weight="0.24980484" />
       <window_info id="Structure" order="1" sideWeight="0.5004695" side_tool="true" weight="0.20052083" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -524,7 +478,7 @@
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" weight="0.4741784" />
-      <window_info anchor="bottom" id="File Transfer" order="9" weight="0.3027179" />
+      <window_info anchor="bottom" id="File Transfer" order="9" weight="0.30252102" />
       <window_info anchor="bottom" id="Database Changes" order="10" />
       <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
       <window_info anchor="bottom" id="Messages" order="12" weight="0.3298872" />
@@ -533,7 +487,7 @@
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="Database" order="3" weight="0.14270833" />
-      <window_info active="true" anchor="right" id="Terminal" order="4" visible="true" weight="0.37864584" />
+      <window_info active="true" anchor="right" id="Terminal" order="4" visible="true" weight="0.42857143" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -580,6 +534,9 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$/crm_usiz_zf3" />
+    </ignored-roots>
     <MESSAGE value="- Добавляет фильтрацию для Перевозчиков по коду ОКПО и Названию&#10;- Исправляет отображение суммы веса в договорах &#10;  (была ошибка, не считало тысячные)&#10;- Исправлена ошибка процента отсева при добавлении скипов" />
     <MESSAGE value="- Добавляет пересчет вагонов при изменении тарифов&#10;- Исправляет суммарные данные скипов" />
     <MESSAGE value="- Внедрение нового класса финансов." />
@@ -588,13 +545,6 @@
     <option name="LAST_COMMIT_MESSAGE" value="- Финансовый отчет" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/module/Application/src/Application/Model/Finance/PrepayToProvidersContainerInterface.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="168">
-          <caret line="12" selection-start-line="12" selection-end-line="31" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/module/Application/src/Application/Model/Finance/TotalReceivablesContainerInterface.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="154">
@@ -882,6 +832,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2044">
           <caret line="146" column="61" selection-start-line="146" selection-start-column="61" selection-end-line="146" selection-end-column="61" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="6" selection-start-column="6" selection-end-column="6" />
         </state>
       </provider>
     </entry>

@@ -224,7 +224,8 @@ $(document).ready(function () {
     $.ajax('/carrier/value-options', {
         data      : {
             carrier_type: '{$this->contract->getCarrierType()}',
-            //country     : '{$this->contract->getCountry()}'
+            //country     : '{$this->contract->getCountry()}',
+            company     : '{$this->contract->getCompanyId()}'
         },
         type      : 'post',
         success   : function (res) {
@@ -254,7 +255,8 @@ $(document).ready(function () {
                 direction: 'outgoingDirection',
                 carrier: aSel.val(),
                 station: '{$contract->getStationId()}',
-                period: true
+                period: true,
+                company     : '{$this->contract->getCompanyId()}'
             },
             type      : 'post',
             success   : function (res) {

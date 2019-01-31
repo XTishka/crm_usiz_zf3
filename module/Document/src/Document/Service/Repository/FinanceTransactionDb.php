@@ -584,6 +584,7 @@ class FinanceTransactionDb extends AbstractDb implements FinanceTransactionDbInt
      */
     public function saveTransaction(TransactionEntity $transaction) {
         $data = $this->hydrator->extract($transaction);
+
         $sql = new Sql($this->dbAdapter);
         if ($transactionId = $transaction->getTransactionId()) {
             $action = $sql->update(self::TABLE_FINANCE_TRANSACTIONS);

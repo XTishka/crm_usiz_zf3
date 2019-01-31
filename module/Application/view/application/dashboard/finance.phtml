@@ -57,7 +57,9 @@
                                 </td>
                                 <td>
                                     <a data-extended="true"
-                                       href="<?= $this->url('api/materialAssets', ['company' => $company->getContractorId(), 'material' => $material->offsetGet('material_id')], ['query' => ['date' => $this->date]]) ?>">
+                                       href="<?= $this->url('api/materialAssets',
+                                           ['company' => $company->getContractorId(), 'material' => $material->offsetGet('material_id')],
+                                           ['query' => ['date' => $this->date]]) ?>">
                                         <?= $this->escapeHtml($material->offsetGet('material_name')) ?>
                                     </a>
                                 </td>
@@ -77,7 +79,8 @@
                         </tr>
                         <?php foreach ($this->expectedMaterials as $material): ?>
                             <tr>
-                                <td colspan="2"><?= $this->escapeHtml($material['material_name']) ?></td>
+                                <td><?= $this->escapeHtml($material['contractor_name']) ?></td>
+                                <td><?= $this->escapeHtml($material['material_name']) ?></td>
                                 <td class="text-right">
                                     <?= $this->numberFormat($material['weight'], NumberFormatter::DECIMAL, NumberFormatter::TYPE_DEFAULT, null, 3, [
                                         NumberFormatter::POSITIVE_SUFFIX => sprintf(' %s.', $this->translate('tons'))]) ?>
@@ -97,7 +100,8 @@
                         <tr>
                             <td>
                                 <a data-extended="true"
-                                   href="<?= $this->url('api/companyDebits', ['company' => $company->getContractorId()], ['query' => ['date' => $this->date]]) ?>">
+                                   href="<?= $this->url('api/companyDebits', ['company' => $company->getContractorId()],
+                                       ['query' => ['date' => $this->date]]) ?>">
                                     <?= $this->translate('Company balance') ?>:
                                 </a>
                             </td>
@@ -106,7 +110,8 @@
                         <tr>
                             <td>
                                 <a data-extended="true"
-                                   href="<?= $this->url('api/bankBalances', ['company' => $company->getContractorId()], ['query' => ['date' => $this->date]]) ?>">
+                                   href="<?= $this->url('api/bankBalances', ['company' => $company->getContractorId()],
+                                       ['query' => ['date' => $this->date]]) ?>">
                                     <?= $this->translate('Bank balances') ?>:
                                 </a>
                             </td>
@@ -129,7 +134,8 @@
                         <tr>
                             <td>
                                 <a data-extended="true"
-                                   href="<?= $this->url('api/assets/customer-receivable', ['company' => $company->getContractorId()], ['query' => ['date' => $this->date]]) ?>">
+                                   href="<?= $this->url('api/assets/customer-receivable', ['company' => $company->getContractorId()],
+                                       ['query' => ['date' => $this->date]]) ?>">
                                     <?= $this->translate('Customers receivable') ?>:
                                 </a>
                             </td>
@@ -138,7 +144,8 @@
                         <tr>
                             <td>
                                 <a data-extended="true"
-                                   href="<?= $this->url('api/assets/prepay-to-provider', ['company' => $company->getContractorId()], ['query' => ['date' => $this->date]]) ?>">
+                                   href="<?= $this->url('api/assets/prepay-to-provider', ['company' => $company->getContractorId()],
+                                       ['query' => ['date' => $this->date]]) ?>">
                                     <?= $this->translate('Prepay to providers') ?>:
                                 </a>
                             </td>
@@ -147,7 +154,8 @@
                         <tr>
                             <td>
                                 <a data-extended="true"
-                                   href="<?= $this->url('api/assets/prepay-to-carrier', ['company' => $company->getContractorId()], ['query' => ['date' => $this->date]]) ?>">
+                                   href="<?= $this->url('api/assets/prepay-to-carrier', ['company' => $company->getContractorId()],
+                                       ['query' => ['date' => $this->date]]) ?>">
                                     <?= $this->translate('Prepay to carriers') ?>:
                                 </a>
                             </td>
@@ -156,7 +164,8 @@
                         <tr>
                             <td>
                                 <a data-extended="true"
-                                   href="<?= $this->url('api/assets/prepay-to-plant', ['company' => $company->getContractorId()], ['query' => ['date' => $this->date]]) ?>">
+                                   href="<?= $this->url('api/assets/prepay-to-plant', ['company' => $company->getContractorId()],
+                                       ['query' => ['date' => $this->date]]) ?>">
                                     <?= $this->translate('Prepay to plants') ?>:
                                 </a>
                             </td>
@@ -165,7 +174,8 @@
                         <tr>
                             <td>
                                 <a data-extended="true"
-                                   href="<?= $this->url('api/assets/prepay-to-other', ['company' => $company->getContractorId()], ['query' => ['date' => $this->date]]) ?>">
+                                   href="<?= $this->url('api/assets/prepay-to-other', ['company' => $company->getContractorId()],
+                                       ['query' => ['date' => $this->date]]) ?>">
                                     <?= $this->translate('Prepay to other contractors') ?>:
                                 </a>
                             </td>
@@ -174,7 +184,8 @@
                         <tr>
                             <th>
                                 <a data-extended="true"
-                                   href="<?= $this->url('api/assets/total-receivable', ['company' => $company->getContractorId()], ['query' => ['date' => $this->date]]) ?>">
+                                   href="<?= $this->url('api/assets/total-receivable', ['company' => $company->getContractorId()],
+                                       ['query' => ['date' => $this->date]]) ?>">
                                     <?= $this->translate('Total accounts receivable') ?>:
                                 </a>
                             </th>
@@ -199,7 +210,8 @@
                         <tr>
                             <td>
                                 <a data-extended="true"
-                                   href="<?= $this->url('api/liabilities/charter-capital', ['company' => $company->getContractorId()], ['query' => ['date' => $this->date]]) ?>">
+                                   href="<?= $this->url('api/liabilities/charter-capital', ['company' => $company->getContractorId()],
+                                       ['query' => ['date' => $this->date]]) ?>">
                                     <?= $this->translate('Charter capital') ?>:
                                 </a>
                             </td>
@@ -208,7 +220,8 @@
                         <tr>
                             <td>
                                 <a data-extended="true"
-                                   href="<?= $this->url('api/liabilities/prepay-from-customer', ['company' => $company->getContractorId()], ['query' => ['date' => $this->date]]) ?>">
+                                   href="<?= $this->url('api/liabilities/prepay-from-customer', ['company' => $company->getContractorId()],
+                                       ['query' => ['date' => $this->date]]) ?>">
                                     <?= $this->translate('Customer prepayments') ?>:
                                 </a>
                             </td>
@@ -217,7 +230,8 @@
                         <tr>
                             <td>
                                 <a data-extended="true"
-                                   href="<?= $this->url('api/liabilities/debt-to-carrier', ['company' => $company->getContractorId()], ['query' => ['date' => $this->date]]) ?>">
+                                   href="<?= $this->url('api/liabilities/debt-to-carrier', ['company' => $company->getContractorId()],
+                                       ['query' => ['date' => $this->date]]) ?>">
                                     <?= $this->translate('Debt to carriers') ?>:
                                 </a>
                             </td>
@@ -226,7 +240,8 @@
                         <tr>
                             <td>
                                 <a data-extended="true"
-                                   href="<?= $this->url('api/liabilities/debt-to-provider', ['company' => $company->getContractorId()], ['query' => ['date' => $this->date]]) ?>">
+                                   href="<?= $this->url('api/liabilities/debt-to-provider', ['company' => $company->getContractorId()],
+                                       ['query' => ['date' => $this->date]]) ?>">
                                     <?= $this->translate('Debt to providers') ?>:
                                 </a>
                             </td>
@@ -235,7 +250,8 @@
                         <tr>
                             <td>
                                 <a data-extended="true"
-                                   href="<?= $this->url('api/liabilities/debt-to-plant', ['company' => $company->getContractorId()], ['query' => ['date' => $this->date]]) ?>">
+                                   href="<?= $this->url('api/liabilities/debt-to-plant', ['company' => $company->getContractorId()],
+                                       ['query' => ['date' => $this->date]]) ?>">
                                     <?= $this->translate('Debt to plants') ?>:
                                 </a>
                             </td>
@@ -244,7 +260,8 @@
                         <tr>
                             <td>
                                 <a data-extended="true"
-                                   href="<?= $this->url('api/liabilities/debt-to-other', ['company' => $company->getContractorId()], ['query' => ['date' => $this->date]]) ?>">
+                                   href="<?= $this->url('api/liabilities/debt-to-other', ['company' => $company->getContractorId()],
+                                       ['query' => ['date' => $this->date]]) ?>">
                                     <?= $this->translate('Debt to other contractors') ?>:
                                 </a>
                             </td>
@@ -253,7 +270,8 @@
                         <tr>
                             <th>
                                 <a data-extended="true"
-                                   href="<?= $this->url('api/liabilities/accounts-payable', ['company' => $company->getContractorId()], ['query' => ['date' => $this->date]]) ?>">
+                                   href="<?= $this->url('api/liabilities/accounts-payable', ['company' => $company->getContractorId()],
+                                       ['query' => ['date' => $this->date]]) ?>">
                                     <?= $this->translate('Total accounts payable') ?>:
                                 </a>
                             </th>
@@ -308,27 +326,32 @@
                                         <?= $this->translate('Import transactions') ?></a>
                                     <ul class="dropdown-list">
                                         <li>
-                                            <a href="<?= $this->url('transaction/provider/edit', [], ['query' => ['company' => $company->getContractorId()]]) ?>">
+                                            <a href="<?= $this->url('transaction/provider/edit', [],
+                                                ['query' => ['company' => $company->getContractorId()]]) ?>">
                                                 <i class="fa fa-download fa-fw"></i>
                                                 <?= $this->translate('Provider contractor') ?></a>
                                         </li>
                                         <li>
-                                            <a href="<?= $this->url('transaction/customer/edit', [], ['query' => ['company' => $company->getContractorId()]]) ?>">
+                                            <a href="<?= $this->url('transaction/customer/edit', [],
+                                                ['query' => ['company' => $company->getContractorId()]]) ?>">
                                                 <i class="fa fa-upload fa-fw"></i>
                                                 <?= $this->translate('Customer contractor') ?></a>
                                         </li>
                                         <li>
-                                            <a href="<?= $this->url('transaction/carrier/edit', [], ['query' => ['company' => $company->getContractorId()]]) ?>">
+                                            <a href="<?= $this->url('transaction/carrier/edit', [],
+                                                ['query' => ['company' => $company->getContractorId()]]) ?>">
                                                 <i class="fa fa-truck fa-fw"></i>
                                                 <?= $this->translate('Carrier contractor') ?></a>
                                         </li>
                                         <li>
-                                            <a href="<?= $this->url('transaction/additional/edit', [], ['query' => ['company' => $company->getContractorId()]]) ?>">
+                                            <a href="<?= $this->url('transaction/additional/edit', [],
+                                                ['query' => ['company' => $company->getContractorId()]]) ?>">
                                                 <i class="fa fa-plus-circle fa-fw"></i>
                                                 <?= $this->translate('Additional contractor') ?></a>
                                         </li>
                                         <li>
-                                            <a href="<?= $this->url('transaction/corporate/edit', [], ['query' => ['company' => $company->getContractorId()]]) ?>">
+                                            <a href="<?= $this->url('transaction/corporate/edit', [],
+                                                ['query' => ['company' => $company->getContractorId()]]) ?>">
                                                 <i class="fa fa-building fa-fw"></i>
                                                 <?= $this->translate('Corporate contractor') ?>
                                             </a>
@@ -346,25 +369,30 @@
                         <div class="col-md end-md">
                             <ul class="nav-tab" id="transactionMenu">
                                 <li class="active">
-                                    <a href="<?= $this->url('api/providerTransactions', ['company' => $company->getContractorId()], ['query' => ['date' => $this->date]]) ?>"><?= $this->translate('Providers') ?></a>
+                                    <a href="<?= $this->url('api/providerTransactions', ['company' => $company->getContractorId()],
+                                        ['query' => ['date' => $this->date]]) ?>"><?= $this->translate('Providers') ?></a>
                                 </li>
                                 <div class="dropdown">
                                         <span class="dropdown-toggle">
                                             <i class="fa fa-angle-down fa-fw"></i>
                                         </span>
-                                    <?= $this->contractorProviderMenu('api/providerTransactions', ['company' => $company->getContractorId()], 'dropdown-list') ?>
+                                    <?= $this->contractorProviderMenu('api/providerTransactions', ['company' => $company->getContractorId()],
+                                        'dropdown-list') ?>
                                 </div>
                                 <li>
-                                    <a href="<?= $this->url('api/customerTransactions', ['company' => $company->getContractorId()], ['query' => ['date' => $this->date]]) ?>"><?= $this->translate('Customers') ?></a>
+                                    <a href="<?= $this->url('api/customerTransactions', ['company' => $company->getContractorId()],
+                                        ['query' => ['date' => $this->date]]) ?>"><?= $this->translate('Customers') ?></a>
                                 </li>
                                 <div class="dropdown">
                                         <span class="dropdown-toggle">
                                             <i class="fa fa-angle-down fa-fw"></i>
                                         </span>
-                                    <?= $this->contractorCustomerMenu('api/customerTransactions', ['company' => $company->getContractorId()], 'dropdown-list') ?>
+                                    <?= $this->contractorCustomerMenu('api/customerTransactions', ['company' => $company->getContractorId()],
+                                        'dropdown-list') ?>
                                 </div>
                                 <li>
-                                    <a href="<?= $this->url('api/carrierTransactions', ['company' => $company->getContractorId()], ['query' => ['date' => $this->date]]) ?>"><?= $this->translate('Carriers') ?></a>
+                                    <a href="<?= $this->url('api/carrierTransactions', ['company' => $company->getContractorId()],
+                                        ['query' => ['date' => $this->date]]) ?>"><?= $this->translate('Carriers') ?></a>
                                 </li>
                                 <div class="dropdown">
                                         <span class="dropdown-toggle">
@@ -373,25 +401,30 @@
                                     <?= $this->contractorCarrierMenu('api/carrierTransactions', ['company' => $company->getContractorId()], 'dropdown-list') ?>
                                 </div>
                                 <li>
-                                    <a href="<?= $this->url('api/additionalTransactions', ['company' => $company->getContractorId()], ['query' => ['date' => $this->date]]) ?>"><?= $this->translate('Additional') ?></a>
+                                    <a href="<?= $this->url('api/additionalTransactions', ['company' => $company->getContractorId()],
+                                        ['query' => ['date' => $this->date]]) ?>"><?= $this->translate('Additional') ?></a>
                                 </li>
                                 <div class="dropdown">
                                         <span class="dropdown-toggle">
                                             <i class="fa fa-angle-down fa-fw"></i>
                                         </span>
-                                    <?= $this->contractorAdditionalMenu('api/additionalTransactions', ['company' => $company->getContractorId()], 'dropdown-list') ?>
+                                    <?= $this->contractorAdditionalMenu('api/additionalTransactions', ['company' => $company->getContractorId()],
+                                        'dropdown-list') ?>
                                 </div>
                                 <li>
-                                    <a href="<?= $this->url('api/corporateTransactions', ['company' => $company->getContractorId()], ['query' => ['date' => $this->date]]) ?>"><?= $this->translate('Corporates') ?></a>
+                                    <a href="<?= $this->url('api/corporateTransactions', ['company' => $company->getContractorId()],
+                                        ['query' => ['date' => $this->date]]) ?>"><?= $this->translate('Corporates') ?></a>
                                 </li>
                                 <div class="dropdown">
                                         <span class="dropdown-toggle">
                                             <i class="fa fa-angle-down fa-fw"></i>
                                         </span>
-                                    <?= $this->contractorCorporateMenu('api/corporateTransactions', ['company' => $company->getContractorId()], 'dropdown-list') ?>
+                                    <?= $this->contractorCorporateMenu('api/corporateTransactions', ['company' => $company->getContractorId()],
+                                        'dropdown-list') ?>
                                 </div>
                                 <li>
-                                    <a href="<?= $this->url('api/plantTransactions', ['company' => $company->getContractorId()], ['query' => ['date' => $this->date]]) ?>"><?= $this->translate('Plants') ?></a>
+                                    <a href="<?= $this->url('api/plantTransactions', ['company' => $company->getContractorId()],
+                                        ['query' => ['date' => $this->date]]) ?>"><?= $this->translate('Plants') ?></a>
                                 </li>
                                 <div class="dropdown">
                                         <span class="dropdown-toggle">
@@ -417,17 +450,24 @@ $this->headLink()->appendStylesheet($this->basePath('/css/modal.css'));
 $this->inlineScript()->appendFile($this->basePath('/js/modal.js'));
 $this->headLink()->appendStylesheet('/css/datepicker.min.css');
 $this->inlineScript()->appendFile($this->basePath('/js/vendor/datepicker.min.js'));
+$this->inlineScript()->appendFile($this->basePath('/js/vendor/moment.js'));
 $this->inlineScript()->captureStart();
 echo /** @lang JavaScript */
 <<<JS
+var indate = $('#js-finance-calendar').val();
+    indate = moment(indate || new Date(), 'DD.MM.YYYY');
 
-$('#js-finance-calendar').datepicker({
+var calendar = $('#js-finance-calendar').datepicker({
     maxDate: new Date(),
     dateFormat: 'dd.mm.yyyy',
-    onSelect: function(formattedDate, date, inst) {
-        $(location).attr('href','?date=' + formattedDate) 
+    onSelect: function(formattedDate, date) {
+        if (!!date && 0 !== moment(date).diff(indate)) {
+            $(location).attr('href','?date=' + formattedDate)
+        }
     }
 });
+
+calendar.data('datepicker').selectDate(indate.toDate());
 
 $('a[data-extended]').on('click', function(e) {
     e.preventDefault();

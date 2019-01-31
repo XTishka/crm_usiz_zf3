@@ -9,14 +9,21 @@ namespace Application\Model\Finance;
  * Контейнер записей
  *
  * Class AccountsPayableContainer
+ *
  * @package Application\Model\Finance
  */
 abstract class AbstractContainer implements ContainerInterface {
+
+    /**
+     * @var callable
+     */
+    protected $filter;
 
     protected $records = [];
 
     /**
      * AbstractContainer constructor.
+     *
      * @param array $records
      */
     public function __construct(array $records) {
@@ -24,15 +31,37 @@ abstract class AbstractContainer implements ContainerInterface {
     }
 
     /**
+     * @return callable
+     */
+    public function getFilter(): callable {
+        return $this->filter;
+    }
+
+    /**
+     * @param callable $filter
+     */
+    public function setFilter(callable $filter): void {
+        $this->filter = $filter;
+    }
+
+    /**
      * Возвращает итератор
+     *
      * @return \Traversable
      */
     public function getIterator(): \Traversable {
-        return new \ArrayIterator($this->records);
+        $iterator = new \ArrayIterator($this->records);
+        if (!is_callable($this->filter)) {
+            return $iterator;
+        }
+
+        $filtered = new \CallbackFilterIterator($iterator, $this->filter);
+        return $filtered;
     }
 
     /**
      * Возвращает количество
+     *
      * @return int
      */
     public function count(): int {
@@ -41,6 +70,7 @@ abstract class AbstractContainer implements ContainerInterface {
 
     /**
      * Возвращает общую сумму
+     *
      * @return float
      */
     public function total(): float {

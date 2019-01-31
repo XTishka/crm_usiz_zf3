@@ -124,7 +124,7 @@ class PurchaseWagonsController extends AbstractActionController {
             $pEnd = \DateTime::createFromFormat('d.m.Y', $data['period_end']);
             $select->where->nest()
                 ->greaterThanOrEqualTo('a.loading_date', $pBegin->format('Y-m-d'))->and
-                ->lessThanOrEqualTo('a.unloading_date', $pEnd->format('Y-m-d'));
+                ->lessThanOrEqualTo('a.loading_date', $pEnd->format('Y-m-d'));
         }
 
 
@@ -144,7 +144,6 @@ class PurchaseWagonsController extends AbstractActionController {
 
             $wagon['contract_price'] = bcadd($wagon['contract_price_without_tax'], bcmul($wagon['contract_price_without_tax'], bcmul($wagon['tax'], 0.01, 2), 2), 2);
 
-            $wagon['total_weight'] = bcadd($wagon['loading_weight'], $wagon['loading_weight'], 2);
             $wagon['total_price'] = bcadd($wagon['material_price'], $wagon['transport_price'], 2);
             $wagon['total_price_without_tax'] = bcadd($wagon['material_price_without_tax'], $wagon['transport_price_without_tax'], 2);
             ksort($wagon);

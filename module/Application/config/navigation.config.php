@@ -90,6 +90,18 @@ return [
             'icon'  => 'fa fa-users fa-fw',
             'uri'   => '#none',
             'pages' => [
+                'contractorCommon'   => [
+                    'label' => 'Contractors',
+                    'icon'  => 'fa fa-download fa-users',
+                    'route' => 'contractorCommon',
+                    'pages' => [
+                        'edit' => [
+                            'label'   => 'Add new contractor',
+                            'route'   => 'contractorCommon/edit',
+                            'visible' => false,
+                        ],
+                    ],
+                ],
                 'contractorProvider'   => [
                     'label' => 'Providers',
                     'icon'  => 'fa fa-download fa-fw',

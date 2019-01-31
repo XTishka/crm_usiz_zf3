@@ -290,6 +290,9 @@ class PurchaseWagonManager {
                 $currentWagon->setLoadingWeight($wagon->offsetGet('loading_weight'));
                 $currentWagon->setRateId($object->getRateId());
                 $currentWagon->setRateValueId($wagon->offsetExists('rate_value_id') ? $wagon->offsetGet('rate_value_id') : 0);
+                $currentWagon->setLoadingDate($object->getLoadingDate());
+
+                //echo '<pre>'; print_r($currentWagon); exit;
 
 
                 // Рассчет стоимости доставки по умолчанию
@@ -335,6 +338,7 @@ class PurchaseWagonManager {
                     $carrierTransaction->setWagonId($currentWagon->getWagonId());
                     $carrierTransaction->setComment(sprintf('Перевозка сырья по договору %s за вагон %s',
                         $contract->getContractNumber(), $currentWagon->getWagonNumber()));
+                    $carrierTransaction->setCreated($object->getLoadingDate());
                     //}
                 }
 
@@ -348,6 +352,7 @@ class PurchaseWagonManager {
                 $providerTransaction->setWagonId($currentWagon->getWagonId());
                 $providerTransaction->setComment(sprintf('Поставка сырья по договору %s за вагон %s',
                     $contract->getContractNumber(), $currentWagon->getWagonNumber()));
+                $providerTransaction->setCreated(clone ($object->getLoadingDate())->setTime(8, 0, 0));
 
                 // Фиксирование задолженностей в зависимости от условий доставки
                 switch ($contract->getConditions()) {
@@ -384,6 +389,7 @@ class PurchaseWagonManager {
                     $extraTransaction->setCredit(Service\TaxManager::calculate($currentWagon->getTransportPrice(), $contract->getTax()));
                     $extraTransaction->setWagonId($currentWagon->getWagonId());
                     $extraTransaction->setComment($currentWagon->getTransportComment());
+                    $extraTransaction->setCreated($object->getLoadingDate());
                     // Сохранение задолженности в базу данных
                     $this->financeManager->saveTransaction($extraTransaction);
                 }
@@ -488,7 +494,7 @@ class PurchaseWagonManager {
             // Удаление старых записей о задолженностях
             $this->financeManager->deleteTransactionByWagonId($object->getWagonId(), TransactionEntity::CONTRACT_PURCHASE);
             // Удаление старых записей по складах
-            $this->warehouseLogManager->deleteLogByWagonId($object->getWagonId());
+            $this->warehouseLogManager->deleteLogByWagonId($object->getWagonId(), WarehouseLogEntity::DIRECTION_INPUT);
 
             // Формирование задолженности перед поставщиком
             $providerTransaction = new TransactionEntity(TransactionEntity::TRANSACTION_DEBT, TransactionEntity::CONTRACTOR_PROVIDER);
@@ -574,7 +580,7 @@ class PurchaseWagonManager {
                 $warehouseLog->setWagonId($object->getWagonId());
                 $warehouseLog->setWarehouseId($contract->getWarehouseId());
                 $warehouseLog->setComment(sprintf('Разгрузка сырья по договору %s, вагон %s', $contract->getContractNumber(), $object->getWagonNumber()));
-                $warehouseLog->setCreated(clone ($object->getLoadingDate())->setTime(8, 0, 0));
+                $warehouseLog->setCreated(clone ($object->getUnloadingDate())->setTime(8, 0, 0));
 
                 $this->warehouseLogManager->input($warehouseLog);
 
@@ -604,7 +610,8 @@ class PurchaseWagonManager {
             // Удаление старых записей о задолженностях
             $this->financeManager->deleteTransactionByWagonId($wagonId);
             // Удаление старых записей по складах
-            $this->warehouseLogManager->deleteLogByWagonId($wagonId);
+            $this->warehouseLogManager->deleteLogByWagonId($wagonId, WarehouseLogEntity::DIRECTION_INPUT);
+
             $this->purchaseWagonDbRepository->commit();
         } catch (Exception\ErrorException $exception) {
             $this->purchaseWagonDbRepository->rollback();
@@ -624,7 +631,7 @@ class PurchaseWagonManager {
                     // Удаление старых записей о задолженностях
                     $this->financeManager->deleteTransactionByWagonId($wagonId);
                     // Удаление старых записей по складах
-                    $this->warehouseLogManager->deleteLogByWagonId($wagonId);
+                    $this->warehouseLogManager->deleteLogByWagonId($wagonId, WarehouseLogEntity::DIRECTION_INPUT);
                 }
             }
             $this->purchaseWagonDbRepository->commit();

@@ -1,19 +1,23 @@
 <?php
+/**
+ * Created by Bogdan Tereshchenko <development.sites@gmail.com>
+ * Copyright: 2006-2019 Bogdan Tereshchenko
+ * Link: https://zelliengroup.com/
+ */
 
 namespace Contractor\Controller;
 
-use Contractor\Form;
+
+use Contractor\Form\ContractorCommonFilter;
 use Contractor\Service\ContractorCommonManager;
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\Factory\FactoryInterface;
 
-class ContractorCommonControllerFactory implements FactoryInterface {
+class ContractorCommonControllerFactory {
 
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null) {
-        $contractorCommonManager = $container->get(ContractorCommonManager::class);
-        $contractorCommonForm = $container->get('FormElementManager')->get(Form\ContractorCommon::class);
-        $contractorCommonFilterForm = $container->get('FormElementManager')->get(Form\ContractorCommonFilter::class);
-        return new ContractorCommonController($contractorCommonForm, $contractorCommonManager, $contractorCommonFilterForm);
+    public function __invoke(ContainerInterface $container) {
+        $form = $container->get('FormElementManager')->get(ContractorCommonFilter::class);
+        $manger = $container->get(ContractorCommonManager::class);
+        return new ContractorCommonController($form, $manger);
     }
 
 }

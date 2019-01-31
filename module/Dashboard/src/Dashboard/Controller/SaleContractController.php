@@ -82,7 +82,7 @@ class SaleContractController extends AbstractActionController {
         $pageNumber = $this->params()->fromQuery('page');
         $paginator = $this->saleContractManager->getContractsPaginator($companyId);
         $paginator->setCurrentPageNumber($pageNumber);
-        $paginator->setItemCountPerPage(20);
+        $paginator->setItemCountPerPage(100);
         $viewModel = new ViewModel();
         $viewModel->setVariable('company', $company);
         $viewModel->setVariable('messenger', $messenger);

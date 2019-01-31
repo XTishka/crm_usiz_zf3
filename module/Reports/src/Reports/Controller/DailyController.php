@@ -6,6 +6,7 @@ use Application\Model\CheckingAccountService;
 use Application\Model\Finance\AccountPayableService;
 use Application\Model\Finance\PrepayFromCustomerService;
 use Application\Model\Finance\DebtToProviderService;
+use Application\Model\Finance\PrepayToCarrierService;
 use Application\Model\Finance\PrepayToProviderService;
 use Application\Model\Finance\TotalReceivableService;
 use Application\Service\Repository\ApiDb;
@@ -38,7 +39,7 @@ class DailyController extends AbstractActionController {
     protected $totalReceivableService;
 
     /** @var CheckingAccountService */
-    //protected $checkingAccountService;
+    protected $checkingAccountService;
 
     /**
      * @var PrepayFromCustomerService
@@ -63,34 +64,41 @@ class DailyController extends AbstractActionController {
     /** @var DebtToProviderService */
     protected $prepayToProviderService;
 
+    protected $prepayToCarrierService;
+
     /**
      * DailyController constructor.
-     * @param Adapter $db
-     * @param AccountPayableService $accountPayableService
-     * @param TotalReceivableService $totalReceivableService
-     * @param PrepayFromCustomerService $prepayFromCustomerService
-     * @param DailyFilterForm $dailyFilterForm
-     * @param ContractorCompanyManager $contractorCompanyManager
-     * @param ApiDb $apiDbRepository
-     * @param RecordManager $recordManager
-     * @param PrepayToProviderService $prepayToProviderService
+     *
+     * @param \Zend\Db\Adapter\Adapter                             $db
+     * @param \Application\Model\Finance\AccountPayableService     $accountPayableService
+     * @param \Application\Model\Finance\TotalReceivableService    $totalReceivableService
+     * @param \Application\Model\CheckingAccountService            $checkingAccountService
+     * @param \Application\Model\Finance\PrepayFromCustomerService $prepayFromCustomerService
+     * @param \Reports\Form\DailyFilterForm                        $dailyFilterForm
+     * @param \Contractor\Service\ContractorCompanyManager         $contractorCompanyManager
+     * @param \Application\Service\Repository\ApiDb                $apiDbRepository
+     * @param \Bank\Service\RecordManager                          $recordManager
+     * @param \Application\Model\Finance\PrepayToProviderService   $prepayToProviderService
+     * @param \Application\Model\Finance\PrepayToCarrierService    $prepayToCarrierService
      */
     public function __construct(
         Adapter $db,
         AccountPayableService $accountPayableService,
         TotalReceivableService $totalReceivableService,
-        //CheckingAccountService $checkingAccountService,
+        CheckingAccountService $checkingAccountService,
         PrepayFromCustomerService $prepayFromCustomerService,
         DailyFilterForm $dailyFilterForm,
         ContractorCompanyManager $contractorCompanyManager,
         ApiDb $apiDbRepository,
         RecordManager $recordManager,
-        PrepayToProviderService $prepayToProviderService) {
+        PrepayToProviderService $prepayToProviderService,
+        PrepayToCarrierService $prepayToCarrierService
+    ) {
         $this->db = $db;
 
         $this->accountPayableService = $accountPayableService;
         $this->totalReceivableService = $totalReceivableService;
-        //$this->checkingAccountService = $checkingAccountService;
+        $this->checkingAccountService = $checkingAccountService;
         $this->prepayFromCustomerService = $prepayFromCustomerService;
 
         $this->dailyFilterForm = $dailyFilterForm;
@@ -98,6 +106,7 @@ class DailyController extends AbstractActionController {
         $this->apiDbRepository = $apiDbRepository;
         $this->recordManager = $recordManager;
         $this->prepayToProviderService = $prepayToProviderService;
+        $this->prepayToCarrierService = $prepayToCarrierService;
     }
 
 
@@ -118,14 +127,16 @@ class DailyController extends AbstractActionController {
 
                 $date = $filteredData['date'];
                 $date = \DateTime::createFromFormat('d.m.Y', $date);
+                $dateSub = clone $date;
+                $dateSub->sub(new \DateInterval('P1D'));
 
 
                 /** @var ContractorCompany $company */
                 $company = $this->contractorCompanyManager->getContractorById($filteredData['company_id']);
                 $plantId = $company->getPlantId();
-                $warehouseMaterials = $this->getWarehouseMaterials($plantId, $date);
-                $warehouseBeginMonth = $this->getBeginMonthWarehouseMaterials($plantId, $date);
-                $purchaseMaterials = $this->getPurchaseMaterials($company->getContractorId(), $date);
+                $warehouseMaterials = $this->getWarehouseMaterials($plantId, $dateSub);
+                $warehouseBeginMonth = $this->getBeginMonthWarehouseMaterials($plantId, $dateSub);
+                $purchaseMaterials = $this->getPurchaseMaterials($company->getContractorId(), $dateSub);
 
 
                 //$dataA = array_merge_recursive($warehouseMaterials, $warehouseBeginMonth, $purchaseMaterials);
@@ -134,16 +145,24 @@ class DailyController extends AbstractActionController {
                 foreach ($warehouseBeginMonth as $key => $item) {
                     if (key_exists($key, $warehouseMaterials)) {
                         $warehouseMaterials[$key]->contractorName = $item->contractorName;
+                        $warehouseMaterials[$key]->materialName = $item->materialName;
                         $warehouseMaterials[$key]->materialType = $item->materialType;
-                        $warehouseMaterials[$key]->purchasePrice = bcadd($warehouseMaterials[$key]->purchasePrice, $item->purchasePrice, 4);
-                        $warehouseMaterials[$key]->purchaseWeight = bcadd($warehouseMaterials[$key]->purchaseWeight, $item->purchaseWeight, 4);
-                        $warehouseMaterials[$key]->warehousePrice = bcadd($warehouseMaterials[$key]->warehousePrice, $item->warehousePrice, 4);
-                        $warehouseMaterials[$key]->warehouseWeight = bcadd($warehouseMaterials[$key]->warehouseWeight, $item->warehouseWeight, 4);
-                        $warehouseMaterials[$key]->monthPrice = bcadd($warehouseMaterials[$key]->monthPrice, $item->monthPrice, 4);
-                        $warehouseMaterials[$key]->monthWeight = bcadd($warehouseMaterials[$key]->monthWeight, $item->monthWeight, 4);
+                        $warehouseMaterials[$key]->purchasePrice
+                            = bcadd($warehouseMaterials[$key]->purchasePrice, $item->purchasePrice, 4);
+                        $warehouseMaterials[$key]->purchaseWeight
+                            = bcadd($warehouseMaterials[$key]->purchaseWeight, $item->purchaseWeight, 4);
+                        $warehouseMaterials[$key]->warehousePrice
+                            = bcadd($warehouseMaterials[$key]->warehousePrice, $item->warehousePrice, 4);
+                        $warehouseMaterials[$key]->warehouseWeight
+                            = bcadd($warehouseMaterials[$key]->warehouseWeight, $item->warehouseWeight, 4);
+                        $warehouseMaterials[$key]->monthPrice
+                            = bcadd($warehouseMaterials[$key]->monthPrice, $item->monthPrice, 4);
+                        $warehouseMaterials[$key]->monthWeight
+                            = bcadd($warehouseMaterials[$key]->monthWeight, $item->monthWeight, 4);
                     } else {
                         $warehouseMaterials[$key] = new \stdClass();
                         $warehouseMaterials[$key]->contractorName = $item->contractorName;
+                        $warehouseMaterials[$key]->materialName = $item->materialName;
                         $warehouseMaterials[$key]->materialType = $item->materialType;
                         $warehouseMaterials[$key]->purchasePrice = $item->purchasePrice;
                         $warehouseMaterials[$key]->purchaseWeight = $item->purchaseWeight;
@@ -154,20 +173,29 @@ class DailyController extends AbstractActionController {
                     }
                 }
 
+
                 foreach ($purchaseMaterials as $key => $item) {
 
                     if (key_exists($key, $warehouseMaterials)) {
                         $warehouseMaterials[$key]->contractorName = $item->contractorName;
+                        $warehouseMaterials[$key]->materialName = $item->materialName;
                         $warehouseMaterials[$key]->materialType = $item->materialType;
-                        $warehouseMaterials[$key]->purchasePrice = bcadd($warehouseMaterials[$key]->purchasePrice, $item->purchasePrice, 4);
-                        $warehouseMaterials[$key]->purchaseWeight = bcadd($warehouseMaterials[$key]->purchaseWeight, $item->purchaseWeight, 4);
-                        $warehouseMaterials[$key]->warehousePrice = bcadd($warehouseMaterials[$key]->warehousePrice, $item->warehousePrice, 4);
-                        $warehouseMaterials[$key]->warehouseWeight = bcadd($warehouseMaterials[$key]->warehouseWeight, $item->warehouseWeight, 4);
-                        $warehouseMaterials[$key]->monthPrice = bcadd($warehouseMaterials[$key]->monthPrice, $item->monthPrice, 4);
-                        $warehouseMaterials[$key]->monthWeight = bcadd($warehouseMaterials[$key]->monthWeight, $item->monthWeight, 4);
+                        $warehouseMaterials[$key]->purchasePrice
+                            = bcadd($warehouseMaterials[$key]->purchasePrice, $item->purchasePrice, 4);
+                        $warehouseMaterials[$key]->purchaseWeight
+                            = bcadd($warehouseMaterials[$key]->purchaseWeight, $item->purchaseWeight, 4);
+                        $warehouseMaterials[$key]->warehousePrice
+                            = bcadd($warehouseMaterials[$key]->warehousePrice, $item->warehousePrice, 4);
+                        $warehouseMaterials[$key]->warehouseWeight
+                            = bcadd($warehouseMaterials[$key]->warehouseWeight, $item->warehouseWeight, 4);
+                        $warehouseMaterials[$key]->monthPrice
+                            = bcadd($warehouseMaterials[$key]->monthPrice, $item->monthPrice, 4);
+                        $warehouseMaterials[$key]->monthWeight
+                            = bcadd($warehouseMaterials[$key]->monthWeight, $item->monthWeight, 4);
                     } else {
                         $warehouseMaterials[$key] = new \stdClass();
                         $warehouseMaterials[$key]->contractorName = $item->contractorName;
+                        $warehouseMaterials[$key]->materialName = $item->materialName;
                         $warehouseMaterials[$key]->materialType = $item->materialType;
                         $warehouseMaterials[$key]->purchasePrice = $item->purchasePrice;
                         $warehouseMaterials[$key]->purchaseWeight = $item->purchaseWeight;
@@ -180,38 +208,61 @@ class DailyController extends AbstractActionController {
 
                 $dataA = $warehouseMaterials;
 
-                $data = array_map(function ($current) {
-                    $current = (array)$current;
-                    $totalPrice = 0;
-                    $totalWeight = 0;
-                    foreach ($current as $key => &$item) {
-                        if ($key == 'purchasePrice' || $key == 'warehousePrice')
-                            $totalPrice = bcadd($totalPrice, $item, 4);
-                        if ($key == 'purchaseWeight' || $key == 'warehouseWeight')
-                            $totalWeight = bcadd($totalWeight, $item, 4);
-                    }
-                    $current['totalPrice'] = $totalPrice;
-                    $current['totalWeight'] = $totalWeight;
-                    return $current;
-                }, $dataA);
+                $data = array_map(
+                    function ($current) {
+                        $current = (array)$current;
+                        $totalPrice = 0;
+                        $totalWeight = 0;
+                        foreach ($current as $key => &$item) {
+                            if ($key == 'purchasePrice' || $key == 'warehousePrice') {
+                                $totalPrice = bcadd($totalPrice, $item, 4);
+                            }
+                            if ($key == 'purchaseWeight' || $key == 'warehouseWeight') {
+                                $totalWeight = bcadd($totalWeight, $item, 4);
+                            }
+                        }
+                        $current['totalPrice'] = $totalPrice;
+                        $current['totalWeight'] = $totalWeight;
+                        return $current;
+                    }, $dataA
+                );
 
                 $viewModel->setVariable('materials', $data);
-                $viewModel->setVariable('customerDebts', $this->apiDbRepository->getCustomerDebtsPaginator(
-                    $company->getContractorId(), $date->format('d.m.Y')));
+                $viewModel->setVariable(
+                    'customerDebts', $this->apiDbRepository->getCustomerDebtsPaginator(
+                    $company->getContractorId(), $dateSub->format('d.m.Y')
+                )
+                );
 
-                $viewModel->setVariable('bankRecords', $this->recordManager->getBankAmountRowset(
-                    $company->getContractorId(), $date));
+                $viewModel->setVariable(
+                    'bankRecords', $this->recordManager->getBankAmountRowset(
+                    $company->getContractorId(), $dateSub
+                )
+                );
 
                 /* ------------------------- */
-                $this->prepayToProviderService->setDate($date);
-                $this->accountPayableService->setDate($date);
-                $this->prepayFromCustomerService->setDate($date);
-                $this->totalReceivableService->setDate($date);
+                $this->prepayToProviderService->setDate($dateSub);
+                $this->prepayToCarrierService->setDate($dateSub);
+                $this->accountPayableService->setDate($dateSub);
+                $this->prepayFromCustomerService->setDate($dateSub);
+                $this->totalReceivableService->setDate($dateSub);
+
+
+                $totalReceivable = $this->totalReceivableService->getRecords($company->getContractorId(), true);
+
+                $totalReceivable->setFilter(
+                    function ($current) {
+                        return (ContractorAbstract::TYPE_CARRIER != $current->offsetGet('contractor_type'));
+                    }
+                );
+
+                $viewModel->setVariable('checkingAccount', $this->checkingAccountService->getRecords($company->getContractorId(), $dateSub));
 
                 $viewModel->setVariable('prepayFromCustomer', $this->prepayFromCustomerService->getRecords($company->getContractorId()));
                 $viewModel->setVariable('prepayToProvider', $this->prepayToProviderService->getRecords($company->getContractorId()));
+                $viewModel->setVariable('prepayToCarrier', $this->prepayToCarrierService->getRecords($company->getContractorId()));
                 $viewModel->setVariable('accountsPayable', $this->accountPayableService->getRecords($company->getContractorId(), true));
-                $viewModel->setVariable('totalReceivable', $this->totalReceivableService->getRecords($company->getContractorId(), true));
+                $viewModel->setVariable('totalReceivable', $totalReceivable);
                 /* ------------------------- */
             }
 
@@ -223,8 +274,9 @@ class DailyController extends AbstractActionController {
     }
 
     /**
-     * @param int $companyId
+     * @param int            $companyId
      * @param \DateTime|null $date
+     *
      * @throws \Exception
      */
     public function getFinanceTendency(int $companyId, \DateTime $date = null) {
@@ -238,8 +290,9 @@ class DailyController extends AbstractActionController {
 
         $dataSource = $sql->prepareStatementForSqlObject($select)->execute();
 
-        if (!$dataSource instanceof ResultInterface)
+        if (!$dataSource instanceof ResultInterface) {
             throw new \Exception('Could not retreive finance tendency');
+        }
 
         $resultSet = new ResultSet();
         $resultSet->initialize($dataSource);
@@ -250,6 +303,7 @@ class DailyController extends AbstractActionController {
 
     /**
      * @param $plantId
+     *
      * @return array
      * @throws \Exception
      */
@@ -257,8 +311,11 @@ class DailyController extends AbstractActionController {
         $sql = new Sql($this->db);
         $select = $sql->select(['a' => 'warehouses']);
         $select->columns([]);
-        $select->join(['b' => 'warehouses_logs'], 'a.warehouse_id = b.warehouse_id', ['contractor_id', 'resource_price', 'resource_weight', 'direction']);
-        $select->join(['c' => 'materials'], 'b.resource_id = c.material_id', ['material_name']);
+        $select->join(
+            ['b' => 'warehouses_logs'], 'a.warehouse_id = b.warehouse_id', ['contractor_id', 'resource_price',
+                                                                            'resource_weight', 'direction']
+        );
+        $select->join(['c' => 'materials'], 'b.resource_id = c.material_id', ['material_id', 'material_name']);
         $select->join(['d' => 'material_types'], 'c.type_id = d.type_id', ['material_type' => 'name'], Join::JOIN_LEFT);
         $select->join(['e' => 'contractors'], 'b.contractor_id = e.contractor_id', ['contractor_name']);
         $select->where->equalTo('a.plant_id', $plantId);
@@ -270,8 +327,9 @@ class DailyController extends AbstractActionController {
 
         $dataSource = $sql->prepareStatementForSqlObject($select)->execute();
 
-        if (!$dataSource instanceof ResultInterface)
+        if (!$dataSource instanceof ResultInterface) {
             throw new \Exception('Could not retrieve leftovers for the warehouse');
+        }
 
         $resultSet = new ResultSet();
         $resultSet->initialize($dataSource);
@@ -279,9 +337,13 @@ class DailyController extends AbstractActionController {
         $data = [];
         /** @var \ArrayObject $item */
         foreach ($resultSet as $item) {
-            if (!key_exists(($index = 'i' . $item->offsetGet('contractor_id')), $data)) {
+            if (!key_exists(
+                ($index = 'i' . $item->offsetGet('contractor_id') . $item->offsetGet('material_id')), $data
+            )
+            ) {
                 $data[$index] = new \stdClass();
                 $data[$index]->contractorName = $item->offsetGet('contractor_name');
+                $data[$index]->materialName = $item->offsetGet('material_name');
                 $data[$index]->materialType = $item->offsetGet('material_type');
                 $data[$index]->purchasePrice = 0;
                 $data[$index]->purchaseWeight = 0;
@@ -291,11 +353,15 @@ class DailyController extends AbstractActionController {
                 $data[$index]->monthWeight = 0;
             }
             if (WarehouseLogEntity::DIRECTION_INPUT == $item->offsetGet('direction')) {
-                $data[$index]->warehousePrice = bcadd($data[$index]->warehousePrice, $item->offsetGet('resource_price'), 4);
-                $data[$index]->warehouseWeight = bcadd($data[$index]->warehouseWeight, $item->offsetGet('resource_weight'), 4);
+                $data[$index]->warehousePrice
+                    = bcadd($data[$index]->warehousePrice, $item->offsetGet('resource_price'), 4);
+                $data[$index]->warehouseWeight
+                    = bcadd($data[$index]->warehouseWeight, $item->offsetGet('resource_weight'), 4);
             } elseif (WarehouseLogEntity::DIRECTION_OUTPUT == $item->offsetGet('direction')) {
-                $data[$index]->warehousePrice = bcsub($data[$index]->warehousePrice, $item->offsetGet('resource_price'), 4);
-                $data[$index]->warehouseWeight = bcsub($data[$index]->warehouseWeight, $item->offsetGet('resource_weight'), 4);
+                $data[$index]->warehousePrice
+                    = bcsub($data[$index]->warehousePrice, $item->offsetGet('resource_price'), 4);
+                $data[$index]->warehouseWeight
+                    = bcsub($data[$index]->warehouseWeight, $item->offsetGet('resource_weight'), 4);
             }
         }
 
@@ -303,8 +369,9 @@ class DailyController extends AbstractActionController {
     }
 
     /**
-     * @param $plantId
+     * @param      $plantId
      * @param null $date
+     *
      * @return array
      * @throws \Exception
      */
@@ -312,8 +379,11 @@ class DailyController extends AbstractActionController {
         $sql = new Sql($this->db);
         $select = $sql->select(['a' => 'warehouses']);
         $select->columns([]);
-        $select->join(['b' => 'warehouses_logs'], 'a.warehouse_id = b.warehouse_id', ['contractor_id', 'resource_price', 'resource_weight', 'direction', 'created']);
-        $select->join(['c' => 'materials'], 'b.resource_id = c.material_id', ['material_name']);
+        $select->join(
+            ['b' => 'warehouses_logs'], 'a.warehouse_id = b.warehouse_id',
+            ['contractor_id', 'resource_price', 'resource_weight', 'direction', 'created']
+        );
+        $select->join(['c' => 'materials'], 'b.resource_id = c.material_id', ['material_id', 'material_name']);
         $select->join(['d' => 'material_types'], 'c.type_id = d.type_id', ['material_type' => 'name']);
         $select->join(['e' => 'contractors'], 'b.contractor_id = e.contractor_id', ['contractor_name']);
 
@@ -329,8 +399,9 @@ class DailyController extends AbstractActionController {
 
         $dataSource = $sql->prepareStatementForSqlObject($select)->execute();
 
-        if (!$dataSource instanceof ResultInterface)
+        if (!$dataSource instanceof ResultInterface) {
             throw new \Exception('Could not retrieve leftovers for the warehouse');
+        }
 
         $resultSet = new ResultSet();
         $resultSet->initialize($dataSource);
@@ -338,9 +409,13 @@ class DailyController extends AbstractActionController {
         $data = [];
         /** @var \ArrayObject $item */
         foreach ($resultSet as $item) {
-            if (!key_exists(($index = 'i' . $item->offsetGet('contractor_id')), $data)) {
+            if (!key_exists(
+                ($index = 'i' . $item->offsetGet('contractor_id') . $item->offsetGet('material_id')), $data
+            )
+            ) {
                 $data[$index] = new \stdClass();
                 $data[$index]->contractorName = $item->offsetGet('contractor_name');
+                $data[$index]->materialName = $item->offsetGet('material_name');
                 $data[$index]->materialType = $item->offsetGet('material_type');
                 $data[$index]->purchasePrice = 0;
                 $data[$index]->purchaseWeight = 0;
@@ -362,8 +437,9 @@ class DailyController extends AbstractActionController {
     }
 
     /**
-     * @param $companyId
+     * @param      $companyId
      * @param null $date
+     *
      * @return array
      * @throws \Exception
      */
@@ -371,7 +447,9 @@ class DailyController extends AbstractActionController {
         $sql = new Sql($this->db);
         $select = $sql->select(['a' => 'purchase_contracts']);
         $select->columns(['contractor_id' => 'provider_id']);
-        $select->join(['b' => 'purchase_wagons'], 'a.contract_id = b.contract_id', ['material_price', 'loading_weight']);
+        $select->join(
+            ['b' => 'purchase_wagons'], 'a.contract_id = b.contract_id', ['material_price', 'loading_weight']
+        );
 
         $select->join(['c' => 'materials'], 'a.material_id = c.material_id', ['material_id', 'material_name']);
         $select->join(['d' => 'material_types'], 'c.type_id = d.type_id', ['material_type' => 'name']);
@@ -381,37 +459,49 @@ class DailyController extends AbstractActionController {
         $select->where->equalTo('e.contractor_type', ContractorAbstract::TYPE_PROVIDER);
         //$select->where->equalTo('b.status', PurchaseWagonEntity::STATUS_LOADED);
         if ($date instanceof \DateTime) {
-            //$select->where->lessThanOrEqualTo('loading_date', $date->format('Y-m-d'));
+
 
             $select->where->nest()
                 ->lessThan('b.loading_date', 'b.unloading_date', Where::TYPE_IDENTIFIER, Where::TYPE_IDENTIFIER)
                 ->or
                 ->isNull('b.unloading_date');
-            $select->where->lessThanOrEqualTo('b.loading_date', $date->format('Y-m-d'));
+            $select->where->lessThanOrEqualTo('b.loading_date', $date->format('Y-m-d'))
+                ->and->nest()
+                ->greaterThan('b.unloading_date', $date->format('Y-m-d'))
+                ->or
+                ->isNull('b.unloading_date');
+            /*
+            */
+
+            //$select->group(['c.material_id']);
 
         }
 
+        //print_r($date);
+
+        //$select->group('b.wagon_id');
+
         $dataSource = $sql->prepareStatementForSqlObject($select)->execute();
 
-        if (!$dataSource instanceof ResultInterface)
+        if (!$dataSource instanceof ResultInterface) {
             throw new \Exception('Could not get the wagons with raw materials');
+        }
 
         $resultSet = new ResultSet();
         $resultSet->initialize($dataSource);
 
-//        echo "<pre>";
-//        print_r($resultSet->toArray());
-//        echo "</pre>";
-
-        //echo '<pre>'; print_r($resultSet->toArray()); exit;
-
+        //echo '<pre style="font-size:10px">'; print_r($resultSet->toArray()); exit;
 
         $data = [];
         /** @var \ArrayObject $item */
         foreach ($resultSet as $item) {
-            if (!key_exists(($index = 'i' . $item->offsetGet('contractor_id')), $data)) {
+            if (!key_exists(
+                ($index = 'i' . $item->offsetGet('contractor_id') . $item->offsetGet('material_id')), $data
+            )
+            ) {
                 $data[$index] = new \stdClass();
                 $data[$index]->contractorName = $item->offsetGet('contractor_name');
+                $data[$index]->materialName = $item->offsetGet('material_name');
                 $data[$index]->materialType = $item->offsetGet('material_type');
                 $data[$index]->purchasePrice = 0;
                 $data[$index]->purchaseWeight = 0;
@@ -423,6 +513,7 @@ class DailyController extends AbstractActionController {
 
             $data[$index]->purchasePrice = bcadd($data[$index]->purchasePrice, $item->offsetGet('material_price'), 4);
             $data[$index]->purchaseWeight = bcadd($data[$index]->purchaseWeight, $item->offsetGet('loading_weight'), 4);
+
         }
 
         return $data;

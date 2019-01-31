@@ -104,9 +104,13 @@
                     <tbody>
                     <?php /** @var \Contractor\Entity\ContractorAbstract $contractor */ ?>
                     <?php foreach ($this->paginator as $contractor): ?>
+                        <?php
+                        $routeEdit = sprintf('contractor%s/edit', ucwords($contractor->getContractorType()));
+                        $routeDelete = sprintf('contractor%s/delete', ucwords($contractor->getContractorType()));
+                        ?>
                         <tr>
                             <td class="text-left">
-                                <a href="<?= $this->url('contractorCommon/edit', ['id' => $contractor->getContractorId()]) ?>">
+                                <a href="<?= $this->url($routeEdit, ['id' => $contractor->getContractorId()]) ?>">
                                     <?= $contractor->getContractorName() ?>
                                 </a>
                                 <div class="hint"><?= $contractor->getPerson()->toString() ?></div>
@@ -124,14 +128,14 @@
                                     </button>
                                     <ul class="dropdown-list">
                                         <li>
-                                            <a href="<?= $this->url('contractorCommon/edit', ['id' => $contractor->getContractorId()]) ?>">
+                                            <a href="<?= $this->url($routeEdit, ['id' => $contractor->getContractorId()]) ?>">
                                                 <i class="fa fa-pencil fa-fw"></i>
                                                 <?= $this->translate('Edit contractor') ?>
                                             </a>
                                         </li>
                                         <li class="dropdown-list-separator"></li>
                                         <li>
-                                            <a href="<?= $this->url('contractorCommon/delete', ['id' => $contractor->getContractorId()]) ?>"
+                                            <a href="<?= $this->url($routeDelete, ['id' => $contractor->getContractorId()]) ?>"
                                                data-modal="confirm">
                                                 <i class="fa fa-trash fa-fw"></i><?= $this->translate('Delete contractor') ?>
                                             </a>
@@ -149,11 +153,6 @@
         <?php else: ?>
             <div class="layout-not-found">
                 <h3><?= $this->translate('No contractors') ?></h3>
-                <p><?= $this->translate('Do you want to add a new contractor?') ?></p>
-                <a href="<?= $this->url('contractorCommon/edit') ?>" class="btn btn-lg btn-success">
-                    <i class="fa fa-plus-circle fa-fw"></i>
-                    <?= $this->translate('Add new contractor') ?>
-                </a>
             </div>
         <?php endif ?>
     </div>

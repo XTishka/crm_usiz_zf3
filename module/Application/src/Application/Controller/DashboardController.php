@@ -2,10 +2,6 @@
 
 namespace Application\Controller;
 
-//use Application\Model\AccountsPayableService;
-//use Application\Model\AccountsReceivableService;
-//use Application\Model\CarriersReceivableService;
-//use Application\Model\CustomerPayableService;
 use Application\Model\CheckingAccountService;
 use Application\Model\Finance\AccountPayableService;
 use Application\Model\Finance\CharterCapitalService;
@@ -20,7 +16,6 @@ use Application\Model\Finance\PrepayToOtherService;
 use Application\Model\Finance\PrepayToPlantService;
 use Application\Model\Finance\PrepayToProviderService;
 use Application\Model\Finance\TotalReceivableService;
-//use Application\Model\ProvidersReceivableService;
 use Bank\Service\RecordManager;
 use Contractor\Entity\ContractorCompany;
 use Contractor\Entity\ContractorPlant;
@@ -31,6 +26,7 @@ use Manufacturing\Service\SkipManager;
 use Manufacturing\Service\WarehouseLogManager;
 use Zend\Http;
 use Zend\Mvc\Controller\AbstractActionController;
+use DateTime;
 use Zend\View\Model\ViewModel;
 
 class DashboardController extends AbstractActionController {
@@ -140,6 +136,11 @@ class DashboardController extends AbstractActionController {
      */
     protected $accountPayableService;
 
+    /**
+     * @var \Bank\Service\RecordManager
+     */
+    protected $bankRecordManager;
+
     public function __construct(
         CheckingAccountService $checkingAccountService,
         ContractorCompanyManager $companyManager,
@@ -161,7 +162,9 @@ class DashboardController extends AbstractActionController {
         DebtToProviderService $debtToProviderService,
         DebtToPlantService $debtToPlantService,
         DebtToOtherService $debtToOtherService,
-        AccountPayableService $accountPayableService
+        AccountPayableService $accountPayableService,
+
+        RecordManager $bankRecordManager
     ) {
 
 
@@ -169,25 +172,27 @@ class DashboardController extends AbstractActionController {
 
         $this->companyManager = $companyManager;
         //$this->financeManager = $financeManager;
-        $this->warehouseLogManager = $warehouseLogManager;
-        $this->furnaceSkipManager = $furnaceSkipManager;
+        $this->warehouseLogManager  = $warehouseLogManager;
+        $this->furnaceSkipManager   = $furnaceSkipManager;
         $this->purchaseWagonManager = $purchaseWagonManager;
-        $this->recordManager = $recordManager;
+        $this->recordManager        = $recordManager;
 
         $this->customerReceivableService = $customerReceivableService;
-        $this->prepayToProviderService = $prepayToProviderService;
-        $this->prepayToCarrierService = $prepayToCarrierService;
-        $this->prepayToPlantService = $prepayToPlantService;
-        $this->prepayToOtherService = $prepayToOtherService;
-        $this->totalReceivableService = $totalReceivableService;
+        $this->prepayToProviderService   = $prepayToProviderService;
+        $this->prepayToCarrierService    = $prepayToCarrierService;
+        $this->prepayToPlantService      = $prepayToPlantService;
+        $this->prepayToOtherService      = $prepayToOtherService;
+        $this->totalReceivableService    = $totalReceivableService;
 
-        $this->charterCapitalService = $charterCapitalService;
+        $this->charterCapitalService     = $charterCapitalService;
         $this->prepayFromCustomerService = $prepayFromCustomerService;
-        $this->debtToCarrierService = $debtToCarrierService;
-        $this->debtToProviderService = $debtToProviderService;
-        $this->debtToPlantService = $debtToPlantService;
-        $this->debtToOtherService = $debtToOtherService;
-        $this->accountPayableService = $accountPayableService;
+        $this->debtToCarrierService      = $debtToCarrierService;
+        $this->debtToProviderService     = $debtToProviderService;
+        $this->debtToPlantService        = $debtToPlantService;
+        $this->debtToOtherService        = $debtToOtherService;
+        $this->accountPayableService     = $accountPayableService;
+
+        $this->bankRecordManager = $bankRecordManager;
     }
 
     public
@@ -228,9 +233,11 @@ class DashboardController extends AbstractActionController {
         $messenger = $this->plugin('FlashMessenger');
 
         $materials = $this->warehouseLogManager->getMaterialBalances($company->getPlantId());
-        $products = $this->warehouseLogManager->getProductBalances($company->getPlantId());
+        $products  = $this->warehouseLogManager->getProductBalances($company->getPlantId());
 
         $furnaces = $this->furnaceSkipManager->getFurnaceLogByPlantId($company->getPlantId());
+
+        $furnaceMaterials = $this->furnaceSkipManager->getFurnaceDataByPlantId($company->getPlantId());
 
         //echo '<pre>'; print_r($times); echo '</pre>'; echo 'Время выполнения скрипта: '.(microtime(true) - $start).' сек.';
 
@@ -241,6 +248,7 @@ class DashboardController extends AbstractActionController {
         $viewModel->setVariable('products', $products);
         $viewModel->setVariable('messenger', $messenger);
         $viewModel->setVariable('furnaces', $furnaces);
+        $viewModel->setVariable('furnaceMaterials', $furnaceMaterials);
         $viewModel->setVariable('companyId', $companyId);
         $viewModel->setVariable('expectedMaterials', $expectedMaterials);
         $viewModel->setVariable('expectedWagons', $expectedWagons);
@@ -252,39 +260,52 @@ class DashboardController extends AbstractActionController {
      * @return ViewModel
      * @throws \Exception
      */
-    public
-    function financeAction() {
+    public function financeAction() {
         $companyId = $this->params()->fromRoute('company');
-        $company = $this->companyManager->getContractorById($companyId);
+        $company   = $this->companyManager->getContractorById($companyId);
         $messenger = $this->plugin('FlashMessenger');
 
         if ($date = $this->params()->fromQuery('date')) {
             $date = \DateTime::createFromFormat('d.m.Y', $date);
+            $dateSub = clone $date;
+            $dateSub->sub(new \DateInterval('P1D'));
 
-            $this->customerReceivableService->setDate($date);
-            $this->prepayToProviderService->setDate($date);
-            $this->prepayToCarrierService->setDate($date);
-            $this->prepayToPlantService->setDate($date);
-            $this->prepayToOtherService->setDate($date);
-            $this->totalReceivableService->setDate($date);
+            $this->customerReceivableService->setDate($dateSub);
+            $this->prepayToProviderService->setDate($dateSub);
+            $this->prepayToCarrierService->setDate($dateSub);
+            $this->prepayToPlantService->setDate($dateSub);
+            $this->prepayToOtherService->setDate($dateSub);
+            $this->totalReceivableService->setDate($dateSub);
 
-            $this->charterCapitalService->setDate($date);
-            $this->prepayFromCustomerService->setDate($date);
-            $this->debtToCarrierService->setDate($date);
-            $this->debtToProviderService->setDate($date);
-            $this->debtToPlantService->setDate($date);
-            $this->debtToOtherService->setDate($date);
-            $this->accountPayableService->setDate($date);
-        } else {
-            $date = null;
+            $this->charterCapitalService->setDate($dateSub);
+            $this->prepayFromCustomerService->setDate($dateSub);
+            $this->debtToCarrierService->setDate($dateSub);
+            $this->debtToProviderService->setDate($dateSub);
+            $this->debtToPlantService->setDate($dateSub);
+            $this->debtToOtherService->setDate($dateSub);
+            $this->accountPayableService->setDate($dateSub);
+        }
+        else {
+            $dateSub = new DateTime();
+            $dateSub->sub(new \DateInterval('P1D'));
+        }
+
+
+        $bankAmountRowset = $this->bankRecordManager->getBankAmountRowset($companyId, $dateSub);
+
+        $bankTotalSum = 0;
+        foreach ($bankAmountRowset as $amount) {
+            $bankTotalSum = bcadd($bankTotalSum, $amount->offsetGet('amount'), 4);
         }
 
         $viewModel = new ViewModel();
         $viewModel->setVariable('company', $company);
         $viewModel->setVariable('messenger', $messenger);
-        $viewModel->setVariable('warehouseBalance', $this->warehouseLogManager->getTotalMaterialBalances($company->getPlantId(), $date));
-        $viewModel->setVariable('expectedMaterials', $this->purchaseWagonManager->getExpectedMaterialWeight($companyId, $date));
-        $viewModel->setVariable('checkingAccount', $this->checkingAccountService->getRecords($companyId, $date));
+        $viewModel->setVariable('warehouseBalance', $this->warehouseLogManager->getTotalMaterialBalances($company->getPlantId(), $dateSub));
+        $viewModel->setVariable('expectedMaterials', $this->purchaseWagonManager->getExpectedMaterialWeight($companyId, $dateSub));
+        $viewModel->setVariable('checkingAccount', $this->checkingAccountService->getRecords($companyId, $dateSub));
+
+        $viewModel->setVariable('bankTotalSum', $bankTotalSum);
         /* -------------------------- */
 
         $viewModel->setVariable('customerReceivableContainer', $this->customerReceivableService->getRecords($companyId));

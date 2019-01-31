@@ -2,8 +2,10 @@
 
 namespace Reports\Controller;
 
+use Application\Model\CheckingAccountService;
 use Application\Model\Finance\AccountPayableService;
 use Application\Model\Finance\PrepayFromCustomerService;
+use Application\Model\Finance\PrepayToCarrierService;
 use Application\Model\Finance\PrepayToProviderService;
 use Application\Model\Finance\TotalReceivableService;
 use Application\Service\Repository\ApiDb;
@@ -20,23 +22,27 @@ class DailyControllerFactory implements FactoryInterface {
         $db = $container->get(Adapter::class);
         $accountPayableService = $container->get(AccountPayableService::class);
         $totalReceivableService = $container->get(TotalReceivableService::class);
+        $checkingAccountService = $container->get(CheckingAccountService::class);
         $prepayFromCustomerService = $container->get(PrepayFromCustomerService::class);
         $dailyFilterForm = $container->get('FormElementManager')->get(DailyFilterForm::class);
         $contractorCompanyManager = $container->get(ContractorCompanyManager::class);
         $apiDbRepository = $container->get(ApiDb::class);
         $recordManager = $container->get(RecordManager::class);
         $prepayToProviderService = $container->get(PrepayToProviderService::class);
+        $prepayToCarrierService = $container->get(PrepayToCarrierService::class);
         return new DailyController(
             $db,
             $accountPayableService,
             $totalReceivableService,
-            //$checkingAccountService,
+            $checkingAccountService,
             $prepayFromCustomerService,
             $dailyFilterForm,
             $contractorCompanyManager,
             $apiDbRepository,
             $recordManager,
-            $prepayToProviderService);
+            $prepayToProviderService,
+            $prepayToCarrierService
+        );
     }
 
 }

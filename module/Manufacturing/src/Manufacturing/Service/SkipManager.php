@@ -30,17 +30,36 @@ class SkipManager {
 
     /**
      * SkipManager constructor.
+     *
      * @param Repository\DatabaseSkip $databaseSkipRepository
      * @param Repository\FurnaceDb    $furnaceDbRepository
      * @param WarehouseLogManager     $warehouseLogManager
      */
-    public function __construct(Repository\DatabaseSkip $databaseSkipRepository, Repository\FurnaceDb $furnaceDbRepository, WarehouseLogManager $warehouseLogManager) {
+    public function __construct(
+        Repository\DatabaseSkip $databaseSkipRepository,
+        Repository\FurnaceDb $furnaceDbRepository,
+        WarehouseLogManager $warehouseLogManager
+    ) {
         $this->databaseSkipRepository = $databaseSkipRepository;
-        $this->furnaceDbRepository = $furnaceDbRepository;
-        $this->warehouseLogManager = $warehouseLogManager;
+        $this->furnaceDbRepository    = $furnaceDbRepository;
+        $this->warehouseLogManager    = $warehouseLogManager;
     }
 
 
+    public function getFurnaceDataByPlantId($plantId, $date = null) {
+        if ($date) {
+            $date = DateTime::createFromFormat('m.Y', $date);
+        }
+        return $this->databaseSkipRepository->fetchMaterialsData($plantId, $date);
+    }
+
+    /**
+     * @param      $plantId
+     * @param null $date
+     *
+     * @return array
+     * @throws \Exception
+     */
     public function getFurnaceLogByPlantId($plantId, $date = null) {
 
         $furnaces = array_filter($this->furnaceDbRepository->fetchFurnacesArray(), function ($furnace) use ($plantId) {
@@ -49,21 +68,22 @@ class SkipManager {
 
         if ($date) {
             $date = DateTime::createFromFormat('d.m.Y', sprintf('01.%s', $date));
-        } else {
+        }
+        else {
             $date = new DateTime();
         }
 
         //$date = $date ? DateTime::createFromFormat('d.m.Y', $date) : new DateTime();
 
         $date->setDate($date->format('Y'), $date->format('m'), $date->format('t'));
-        
+
         $thisDate = new DateTime();
 
         if ($date > $thisDate) {
             $date->setDate($date->format('Y'), $date->format('m'), $thisDate->format('d'));
         }
         $dateCurrent = ($date)->setTime(0, 0, 0, 0);
-        $dateEnd = (clone $dateCurrent)->setDate($dateCurrent->format('Y'), $dateCurrent->format('m'), 1);
+        $dateEnd     = (clone $dateCurrent)->setDate($dateCurrent->format('Y'), $dateCurrent->format('m'), 1);
 
         $generatedArray = [];
         foreach ($furnaces as $key => $furnace) {
@@ -73,7 +93,7 @@ class SkipManager {
         $data = [];
 
         while ($dateEnd <= $dateCurrent) {
-            $dateCurrentClone = clone $dateCurrent;
+            $dateCurrentClone                    = clone $dateCurrent;
             $data[$dateCurrent->format('Y-m-d')] = [$dateCurrentClone] + $generatedArray;
             $dateCurrent->sub(new DateInterval('P1D'));
         }
@@ -81,8 +101,8 @@ class SkipManager {
         $header = ['Load date'];
         foreach ($furnaces as $furnaceNumber => $option) {
             $furnaceNumber += 1;
-            $header[] = $option['furnace_name'];
-            $skips = $this->databaseSkipRepository->fetchSkipLogsArray($option['furnace_id'], $dateEnd);
+            $header[]      = $option['furnace_name'];
+            $skips         = $this->databaseSkipRepository->fetchSkipLogsArray($option['furnace_id'], $dateEnd);
             foreach ($skips as &$skip) {
                 if (key_exists($skip['date'], $data) && key_exists($furnaceNumber, $data[$skip['date']])) {
                     $data[$skip['date']][$furnaceNumber] = [
@@ -107,6 +127,7 @@ class SkipManager {
 
     /**
      * @param $skipId
+     *
      * @return SkipCommonEntity
      * @throws ErrorException
      */
@@ -117,6 +138,7 @@ class SkipManager {
 
     /**
      * @param SkipCommonEntity $object
+     *
      * @return Result
      */
     public function saveSkip(SkipCommonEntity $object) {
@@ -153,7 +175,8 @@ class SkipManager {
                     $materialTotalWeight = bcdiv(bcmul($material->getWeight(), 100, 4), (100 - $material->getDropout()), 4);
 
                     $warehouseMaterialLog->setResourceWeight($materialTotalWeight);
-                } else {
+                }
+                else {
                     $warehouseMaterialLog->setResourceWeight($material->getWeight());
                 }
 

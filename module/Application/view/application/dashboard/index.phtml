@@ -362,6 +362,48 @@
                         </tfoot>
                         </tbody>
                     </table>
+
+                    <?php if ($this->furnaceMaterials->count()): ?>
+                        <table class="table-data">
+                            <thead>
+                            <tr>
+                                <th><?= $this->translate('Material') ?></th>
+                                <th><?= $this->translate('Material, tons') ?></th>
+                                <th><?= $this->translate('Dropout, tons') ?></th>
+                                <th><?= $this->translate('Total, tons') ?></th>
+                                <th><?= $this->translate('Product, tons') ?></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <?php foreach ($this->furnaceMaterials as $current): ?>
+                                <tr>
+                                    <td>
+                                        <?= $this->escapeHtml($current['material_name']) ?>
+                                        <div class="hint"><?= $this->escapeHtml($current['contractor_name']) ?></div>
+                                    </td>
+                                    <td>
+                                        <?= $this->numberFormat($current['weight'], NumberFormatter::DECIMAL, NumberFormatter::TYPE_DEFAULT, null, 3,
+                                            [NumberFormatter::POSITIVE_SUFFIX => sprintf(' %s.', $this->translate('tons'))]) ?>
+                                    </td>
+                                    <td>
+                                        <?= $this->numberFormat($current['dropout_weight'], NumberFormatter::DECIMAL, NumberFormatter::TYPE_DEFAULT, null, 3,
+                                            [NumberFormatter::POSITIVE_SUFFIX => sprintf(' %s.', $this->translate('tons'))]) ?>
+                                    </td>
+                                    <td>
+                                        <?php $totalMaterial = bcadd($current['dropout_weight'], $current['weight'], 4) ?>
+                                        <?= $this->numberFormat($totalMaterial, NumberFormatter::DECIMAL, NumberFormatter::TYPE_DEFAULT, null, 3,
+                                            [NumberFormatter::POSITIVE_SUFFIX => sprintf(' %s.', $this->translate('tons'))]) ?>
+                                    </td>
+                                    <td>
+                                        <?= $this->numberFormat($current['product_weight'], NumberFormatter::DECIMAL, NumberFormatter::TYPE_DEFAULT, null, 3,
+                                            [NumberFormatter::POSITIVE_SUFFIX => sprintf(' %s.', $this->translate('tons'))]) ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach ?>
+                            </tbody>
+                        </table>
+                    <?php endif ?>
+
                     <table class="table-data">
                         <tbody>
                         <tr>
@@ -404,7 +446,7 @@ $('#skipDatePicker').datepicker({
     dateFormat: 'mm.yyyy',
     onSelect: function(formattedDate, date, inst) {
         $('.dropdown > .dropdown-list').slideUp();
-        let skipContents = $('#skipContents');
+        var skipContents = $('#skipContents');
         $.ajax('{$this->url('furnace/api', ['id' => $company->getContractorId()])}', {
             data      : {date: formattedDate},
             type      : 'get',
