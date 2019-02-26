@@ -25,9 +25,9 @@ class RecordEntity {
     protected $date;
 
     /**
-     * @var float
+     * @var float|null
      */
-    protected $amount = 0.00;
+    protected $amount = null;
 
     /**
      * @var \DateTime
@@ -98,9 +98,9 @@ class RecordEntity {
     }
 
     /**
-     * @return float
+     * @return float|null
      */
-    public function getAmount(): float {
+    public function getAmount(): ?float {
         return $this->amount;
     }
 

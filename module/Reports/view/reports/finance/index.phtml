@@ -102,7 +102,7 @@
 
                 <?php /** @var ArrayObject $row */ ?>
                 <?php foreach ($this->logs as $row): ?>
-                    <tr>
+                    <tr data-url="#">
                         <td class="text-left"><?= $this->escapeHtml($row->offsetGet('contractor_name')) ?>
                             <div class="hint"><?= $this->escapeHtml($row->offsetGet('comment')) ?></div>
                         </td>
@@ -228,5 +228,10 @@ $(document).ready(function() {
         dpEnd.selectDate(new Date(parseInt(endPts[2]), parseInt(endPts[1]) - 1, parseInt(endPts[0])));
     }
 })
+
+$('.table-hover tr[data-url] td:not(:last-child)').on('click', function(e) {
+  e.preventDefault();
+  window.location = $(this).closest('tr').data('url');
+});
 JS;
 echo $this->inlineScript()->captureEnd();

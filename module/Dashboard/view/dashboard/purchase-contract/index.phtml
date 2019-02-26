@@ -186,9 +186,5 @@ $.modalConfig({
     cancelText : '{$this->translate('Cancel')}',
     confirmText: '{$this->translate('Confirm')}'
 });
-$('.table-hover tr[data-url] td:not(:last-child)').on('click', function(e) {
-  e.preventDefault();
-  window.location = $(this).closest('tr').data('url');
-});
 JS;
 echo $this->inlineScript()->captureEnd();

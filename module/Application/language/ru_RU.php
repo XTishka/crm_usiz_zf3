@@ -3,6 +3,13 @@
 return [
     '' => '',
     '' => '',
+	'Add new provider contractor' => 'Добавить поставщика',
+    'Add new customer contractor' => 'Добавить покупателя',
+    'Add new additional contractor' => 'Добавить прочего контрагента',
+    'Add new corporate contractor' => 'Добавить корпоративного контрагента',
+    'Add new company contractor' => 'Добавить предприятие',
+    'Add new plant contractor' => 'Добавить завод',
+    'Add new consignee contractor' => 'Добавить грузополучателя',
     'Difference' => 'Прибыль / Убыток',
     'Prepay to carriers total values' => 'Всего',
     'Prepay to providers total values' => 'Всего',

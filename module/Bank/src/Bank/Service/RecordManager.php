@@ -41,9 +41,10 @@ class RecordManager {
 
     /**
      * RecordManager constructor.
-     * @param Adapter $adapter
+     *
+     * @param Adapter           $adapter
      * @param HydratorInterface $hydrator
-     * @param BankManager $bankManager
+     * @param BankManager       $bankManager
      */
     public function __construct(Adapter $adapter, HydratorInterface $hydrator, BankManager $bankManager) {
         $this->adapter = $adapter;
@@ -53,6 +54,7 @@ class RecordManager {
 
     /**
      * @param $companyId
+     *
      * @return int
      * @throws NotFoundException
      */
@@ -74,8 +76,9 @@ class RecordManager {
 
 
         $dataSource = $sql->prepareStatementForSqlObject($select)->execute();
-        if (!$dataSource->isQueryResult())
+        if (!$dataSource->isQueryResult()) {
             throw new NotFoundException('Unknown error. No records found');
+        }
         $resultSet = new ResultSet();
         $resultSet->initialize($dataSource);
 
@@ -88,8 +91,9 @@ class RecordManager {
     }
 
     /**
-     * @param $companyId
+     * @param                $companyId
      * @param \DateTime|null $date
+     *
      * @return ResultSet
      * @throws NotFoundException
      */
@@ -103,6 +107,7 @@ class RecordManager {
         $subSel = $sql->select(self::TABLE_RECORDS);
         $subSel->columns(['record_id', 'bank_id', 'date' => new Expression('MAX(date)')]);
         $subSel->where->equalTo('company_id', $companyId);
+        $subSel->where->isNotNull('amount');
         $subSel->where->lessThanOrEqualTo('date', $date->format('Y-m-d'));
         $subSel->group('bank_id');
 
@@ -112,12 +117,16 @@ class RecordManager {
         $select->join(['t3' => BankManager::TABLE_BANKS], 't1.bank_id = t3.bank_id', ['name']);
         $select->where->equalTo('company_id', $companyId);
 
+        //$select->group('t3.bank_id');
 
         $dataSource = $sql->prepareStatementForSqlObject($select)->execute();
-        if (!$dataSource->isQueryResult())
+        if (!$dataSource->isQueryResult()) {
             throw new NotFoundException('Unknown error. No records found');
+        }
         $resultSet = new ResultSet();
         $resultSet->initialize($dataSource);
+
+        //echo '<pre style="font-size:10px">'; print_r($resultSet->toArray()); exit;
 
         return $resultSet;
     }
@@ -126,6 +135,7 @@ class RecordManager {
      * @param      $companyId
      * @param null $start
      * @param null $end
+     *
      * @return array
      * @throws NotFoundException
      */
@@ -162,13 +172,16 @@ class RecordManager {
 
         $interval = new \DateInterval('P1D');
         for ($i = 0; $i <= $diff; ++$i) {
-            $bankIndexes = array_map(function ($bank) use ($iteratorDate) {
-                $bank['amount'] = 0;
-                $bank['class'] = 'amount-previous';
-                //$bank['date'] = $iteratorDate;
-                return $bank;
-            }, $bankIndexes);
-            $dates[$iteratorDate->format('Y-m-d')] = array_merge(['date' => $iteratorDate->format('d.m.Y')], $bankIndexes);
+            $bankIndexes = array_map(
+                function ($bank) use ($iteratorDate) {
+                    $bank['amount'] = null;
+                    $bank['class'] = 'amount-previous';
+                    //$bank['date'] = $iteratorDate;
+                    return $bank;
+                }, $bankIndexes
+            );
+            $dates[$iteratorDate->format('Y-m-d')]
+                = array_merge(['date' => $iteratorDate->format('d.m.Y')], $bankIndexes);
 
             //$totals[$iteratorDate->format('Y-m-d')]['total'] = 0;
 
@@ -178,6 +191,11 @@ class RecordManager {
 
         $records = $this->fetchRecordsLessThanOrEqualDate($companyId, $endDate);
 
+        //echo '<pre style="font-size:10px">';
+        //print_r($records->toArray());
+        //echo '</pre>';
+        //exit;
+
         $previousAmount = [];
         /** @var RecordEntity $record */
         foreach ($records as $record) {
@@ -186,17 +204,22 @@ class RecordManager {
 
             if (false == array_key_exists($bankIndex, $previousAmount)) {
                 $previousAmount[$bankIndex] = 0;
+            } else {
+                // Добавил эту штуку
+                $previousAmount[$bankIndex] = $record->getAmount();
             }
 
+            /*
             if (0 < $record->getAmount()) {
                 $previousAmount[$bankIndex] = $record->getAmount();
             }
+            */
 
 
             if (key_exists($record->getDate()->format('Y-m-d'), $dates) && key_exists($bankIndex, $dates[$dateIndex])) {
                 $dates[$dateIndex][$bankIndex] = [
                     'amount'    => $record->getAmount() ? $record->getAmount() : $previousAmount[$bankIndex],
-                    'class'     => $record->getAmount() ? 'amount-current' : 'amount-previous',
+                    'class'     => null !== $record->getAmount() ? 'amount-current' : 'amount-previous',
                     'bank_id'   => $record->getBankId(),
                     'date'      => $record->getDate(),
                     'record_id' => $record->getRecordId(),
@@ -205,9 +228,14 @@ class RecordManager {
 
         }
 
+        //echo '<pre style="font-size:10px">';
+        //print_r($dates);
+        //echo '</pre>';
+        //exit;
+
+
         $previousAmount = [];
         foreach ($dates as &$date) {
-            //echo '<pre style="font-size:10px">';print_r($date);echo '</pre>';
 
             $total = 0;
             foreach ($date as $key => &$bank) {
@@ -217,7 +245,7 @@ class RecordManager {
                         $previousAmount[$key] = 0;
                     }
 
-                    if (0 < $bank['amount']) {
+                    if (null !== $bank['amount']) {
                         $previousAmount[$key] = $bank['amount'];
                     }
 
@@ -240,9 +268,10 @@ class RecordManager {
     }
 
     /**
-     * @param int $companyId
+     * @param int       $companyId
      * @param \DateTime $start
      * @param \DateTime $end
+     *
      * @return HydratingResultSet
      * @throws NotFoundException
      */
@@ -255,16 +284,18 @@ class RecordManager {
         $select->where->lessThanOrEqualTo('date', $end->format('Y-m-d'));
         $select->order('date ASC');
         $dataSource = $sql->prepareStatementForSqlObject($select)->execute();
-        if (!$dataSource->isQueryResult())
+        if (!$dataSource->isQueryResult()) {
             throw new NotFoundException('Unknown error. No records found');
+        }
         $resultSet = new HydratingResultSet($this->hydrator, new RecordEntity());
         $resultSet->initialize($dataSource);
         return $resultSet;
     }
 
     /**
-     * @param int $companyId
+     * @param int       $companyId
      * @param \DateTime $dateTime
+     *
      * @return HydratingResultSet
      * @throws NotFoundException
      */
@@ -276,15 +307,18 @@ class RecordManager {
         $select->where->lessThanOrEqualTo('date', $dateTime->format('Y-m-d'));
         $select->order('date ASC');
         $dataSource = $sql->prepareStatementForSqlObject($select)->execute();
-        if (!$dataSource->isQueryResult())
+        if (!$dataSource->isQueryResult()) {
             throw new NotFoundException('Unknown error. No records found');
+        }
         $resultSet = new HydratingResultSet($this->hydrator, new RecordEntity());
         $resultSet->initialize($dataSource);
+
         return $resultSet;
     }
 
     /**
      * @param int $companyId
+     *
      * @return Paginator
      * @throws NotFoundException
      */
@@ -295,8 +329,9 @@ class RecordManager {
         $select->where->equalTo('company_id', $companyId);
         $select->order('date DESC');
         $dataSource = $sql->prepareStatementForSqlObject($select)->execute();
-        if (!$dataSource->isQueryResult())
+        if (!$dataSource->isQueryResult()) {
             throw new NotFoundException('Unknown error. No records found');
+        }
 
         $resultSet = new HydratingResultSet($this->hydrator, new RecordEntity());
         $paginator = new Paginator(new DbSelect($select, $sql, $resultSet));
@@ -305,6 +340,7 @@ class RecordManager {
 
     /**
      * @param $recordId
+     *
      * @return RecordEntity
      * @throws NotFoundException
      */
@@ -314,8 +350,9 @@ class RecordManager {
         $select = $sql->select(self::TABLE_RECORDS);
         $select->where->equalTo('record_id', $recordId);
         $dataSource = $sql->prepareStatementForSqlObject($select)->execute();
-        if (!$dataSource->isQueryResult() || !$dataSource->count())
+        if (!$dataSource->isQueryResult() || !$dataSource->count()) {
             throw new NotFoundException('No records found');
+        }
         $resultSet = new HydratingResultSet($this->hydrator, new RecordEntity());
         $resultSet->initialize($dataSource);
         /** @var RecordEntity $recordEntity */
@@ -325,6 +362,7 @@ class RecordManager {
 
     /**
      * @param RecordEntity $recordEntity
+     *
      * @return RecordEntity
      * @throws SaveErrorException
      */
@@ -342,16 +380,19 @@ class RecordManager {
             $action->values($data);
         }
         $result = $sql->prepareStatementForSqlObject($action)->execute();
-        if (!$result->getAffectedRows())
+        if (!$result->getAffectedRows()) {
             throw new SaveErrorException('Unknown error. The record data was not saved');
-        if ($recordId = $result->getGeneratedValue())
+        }
+        if ($recordId = $result->getGeneratedValue()) {
             $recordEntity->setRecordId($recordId);
+        }
         return $recordEntity;
     }
 
 
     /**
      * @param int $recordId
+     *
      * @throws DeleteErrorException
      */
     public function deleteRecord(int $recordId) {
@@ -360,14 +401,16 @@ class RecordManager {
         $action = $sql->delete();
         $action->where->equalTo('record_id', $recordId);
         $result = $sql->prepareStatementForSqlObject($action)->execute();
-        if (!$result->getAffectedRows())
+        if (!$result->getAffectedRows()) {
             throw new DeleteErrorException('Unknown error. The record data was not deleted');
+        }
         return;
     }
 
 
     /**
      * @param $file
+     *
      * @return Result
      * @throws \Exception
      */
@@ -388,7 +431,9 @@ class RecordManager {
 
             foreach ($sheet->getRowIterator() as $key => $row) {
                 $rowIndex = $row->getRowIndex();
-                if ($rowIndex < 2) continue;
+                if ($rowIndex < 2) {
+                    continue;
+                }
 
                 $bankName = trim($sheet->getCell(sprintf('A%d', $rowIndex))->getValue());
 

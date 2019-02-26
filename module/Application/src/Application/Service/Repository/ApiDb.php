@@ -131,6 +131,7 @@ class ApiDb extends AbstractDb {
         $subSel = $sql->select(RecordManager::TABLE_RECORDS);
         $subSel->columns(['record_id', 'bank_id', 'date' => new Expression('MAX(date)')]);
         $subSel->where->equalTo('company_id', $companyId);
+        $subSel->where->isNotNull('amount');
         $subSel->where->lessThanOrEqualTo('date', $dateSub->format('Y-m-d'));
         $subSel->group('bank_id');
 
@@ -138,8 +139,9 @@ class ApiDb extends AbstractDb {
         $select->columns(['amount' => new Expression('COALESCE(amount, 0)')]);
         $select->join(['t2' => $subSel], 't1.bank_id = t2.bank_id AND t1.date = t2.date');
         $select->join(['t3' => BankManager::TABLE_BANKS], 't1.bank_id = t3.bank_id', ['name'], Join::JOIN_INNER);
-        $select->where->greaterThan('amount', 0);
+        $select->where->isNotNull('amount');
         $select->where->equalTo('company_id', $companyId);
+        $select->order('amount DESC');
 
         /*
         $select = $sql->select(['a' => BankManager::TABLE_BANKS]);

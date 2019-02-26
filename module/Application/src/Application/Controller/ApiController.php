@@ -222,7 +222,7 @@ class ApiController extends AbstractActionController {
         $companyId = $this->params()->fromRoute('company');
         $providerId = $this->params()->fromRoute('contractor');
         $paginator = $this->apiDbRepository->getProviderTransactionsPaginator($companyId, $providerId);
-        $paginator->setItemCountPerPage(100);
+        $paginator->setItemCountPerPage(1000);
         $viewModel = new ViewModel();
         $viewModel->setTerminal(true);
         $viewModel->setVariable('paginator', $paginator);
@@ -233,7 +233,7 @@ class ApiController extends AbstractActionController {
         $companyId = $this->params()->fromRoute('company');
         $customerId = $this->params()->fromRoute('contractor');
         $paginator = $this->apiDbRepository->getCustomerTransactionsPaginator($companyId, $customerId);
-        $paginator->setItemCountPerPage(100);
+        $paginator->setItemCountPerPage(1000);
         $viewModel = new ViewModel();
         $viewModel->setTerminal(true);
         $viewModel->setVariable('paginator', $paginator);
@@ -244,7 +244,7 @@ class ApiController extends AbstractActionController {
         $companyId = $this->params()->fromRoute('company');
         $carrierId = $this->params()->fromRoute('contractor');
         $paginator = $this->apiDbRepository->getCarrierTransactionsPaginator($companyId, $carrierId);
-        $paginator->setItemCountPerPage(100);
+        $paginator->setItemCountPerPage(1000);
         $viewModel = new ViewModel();
         $viewModel->setTerminal(true);
         $viewModel->setVariable('paginator', $paginator);
@@ -255,7 +255,7 @@ class ApiController extends AbstractActionController {
         $companyId = $this->params()->fromRoute('company');
         $additionalId = $this->params()->fromRoute('contractor');
         $paginator = $this->apiDbRepository->getAdditionalTransactionsPaginator($companyId, $additionalId);
-        $paginator->setItemCountPerPage(100);
+        $paginator->setItemCountPerPage(1000);
         $viewModel = new ViewModel();
         $viewModel->setTerminal(true);
         $viewModel->setVariable('paginator', $paginator);
@@ -266,7 +266,7 @@ class ApiController extends AbstractActionController {
         $companyId = $this->params()->fromRoute('company');
         $corporateId = $this->params()->fromRoute('contractor');
         $paginator = $this->apiDbRepository->getCorporateTransactionsPaginator($companyId, $corporateId);
-        $paginator->setItemCountPerPage(100);
+        $paginator->setItemCountPerPage(1000);
         $viewModel = new ViewModel();
         $viewModel->setTerminal(true);
         $viewModel->setVariable('paginator', $paginator);
@@ -277,7 +277,7 @@ class ApiController extends AbstractActionController {
         $companyId = $this->params()->fromRoute('company');
         $plantId = $this->params()->fromRoute('plant');
         $paginator = $this->apiDbRepository->getPlantTransactionsPaginator($companyId, $plantId);
-        $paginator->setItemCountPerPage(100);
+        $paginator->setItemCountPerPage(1000);
         $viewModel = new ViewModel();
         $viewModel->setTerminal(true);
         $viewModel->setVariable('paginator', $paginator);
@@ -288,7 +288,7 @@ class ApiController extends AbstractActionController {
         $companyId = $this->params()->fromRoute('company');
         $plantId = $this->params()->fromRoute('plant');
         $paginator = $this->apiDbRepository->getCompanyTransactionsPaginator($plantId, $companyId);
-        $paginator->setItemCountPerPage(100);
+        $paginator->setItemCountPerPage(1000);
         $viewModel = new ViewModel();
         $viewModel->setTerminal(true);
         $viewModel->setVariable('paginator', $paginator);
